@@ -19,7 +19,7 @@ class Interface():
                     running = False
 
             # fill the screen with a color to wipe away anything from last frame
-            screen.fill("purple")
+            screen.fill("blue")
 
             # RENDER YOUR GAME HERE
 
