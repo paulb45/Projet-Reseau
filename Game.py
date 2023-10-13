@@ -1,8 +1,11 @@
+import Grid
+import bob
+import random
 class GAME():
     def __init__(self,quantity_food,nb_tick_day,P0,grid,nb_day):
         self.quantity_food=quantity_food
         self.nb_tick_day=nb_tick_day
-        self.P0=P0
+        self.P0=P0 #nombre des bobs a initialiser
         self.grid=grid
         self.nb_day=nb_day
     def get_quantity_food(self):
@@ -26,8 +29,16 @@ class GAME():
     def set_nb_day(self, nv_nb_day):
         self.nb_day = nv_nb_day 
         
-    def init_bobs():
-        pass
+    def init_bobs(self):
+        for i in range(self.P0):
+            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
+            name = f"Bob{i + 1}" #nommer "Bob1" "Bob2" ...
+            name= bob()
+            self.grid.tiles[(x,y)].append(name)
+            
+        
+        
+        
     def spawn_food():
         pass
     def bob_paly():
