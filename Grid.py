@@ -1,4 +1,4 @@
-class Grid():
+class GRID():
     def __init__(self,tiles):
         self.tiles=tiles
     def scan_around(position, distance):
