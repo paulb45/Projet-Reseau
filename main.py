@@ -1,3 +1,3 @@
 from graphic.interface import Interface
-
-Interface()
+width, height = 1280, 720
+Interface(width, height)

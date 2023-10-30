@@ -1,31 +1,44 @@
 import pygame
+import sys
 
 class Interface():
-    def __init__(self):
+    def __init__(self, width, height):
+        pygame.init()
+        self.initialise_window(width, height)
+        self.clock = pygame.time.Clock()
+        self.max_framerate = 60
         self.run()
 
-    def run(self):
-        # pygame setup
-        pygame.init()
-        screen = pygame.display.set_mode((1280, 720))
-        clock = pygame.time.Clock()
-        running = True
+    def initialise_window(self, width, height):
+        self.screen = pygame.display.set_mode((width, height))
+        pygame.display.set_caption("Game Of Life")
 
-        while running:
-            # poll for events
-            # pygame.QUIT event means the user clicked X to close your window
+
+    def close_window(self):
+        pygame.quit()
+        sys.exit()
+
+
+    def run(self):
+        while True:
+
+            # Faire une fonction event_handler ?
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    self.close_window()
 
-            # fill the screen with a color to wipe away anything from last frame
-            screen.fill("blue")
+            self.screen.fill("blue")
 
             # RENDER YOUR GAME HERE
 
             # flip() the display to put your work on screen
             pygame.display.flip()
 
-            clock.tick(60)  # limits FPS to 60
+            self.clock.tick(self.max_framerate)  # limits FPS to 60
 
-        pygame.quit()
+
+
+# Permet de lancer une instance uniquement si on exécute interface.py
+# Ne l'éxecute pas lors d'un import ! (évite des tests douteux dans le main.py)
+if __name__ == "__main__":
+    Interface(1280, 720)
