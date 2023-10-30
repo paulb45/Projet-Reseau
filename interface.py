@@ -1,13 +1,14 @@
 import pygame
 import sys
+from objectSprite import SpritesGestion
 
 class Interface():
     def __init__(self, width, height):
         pygame.init()
         self.initialise_window(width, height)
+        self.sprites = SpritesGestion()
         self.clock = pygame.time.Clock()
         self.max_framerate = 60
-        self.run()
 
     def initialise_window(self, width, height):
         self.screen = pygame.display.set_mode((width, height))
@@ -21,7 +22,6 @@ class Interface():
 
     def run(self):
         while True:
-
             # Faire une fonction event_handler ?
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -30,7 +30,7 @@ class Interface():
             self.screen.fill("blue")
 
             # RENDER YOUR GAME HERE
-
+            self.screen.blit(self.sprites.grass_tile ,(100,100))
             # flip() the display to put your work on screen
             pygame.display.flip()
 
@@ -41,4 +41,4 @@ class Interface():
 # Permet de lancer une instance uniquement si on exécute interface.py
 # Ne l'éxecute pas lors d'un import ! (évite des tests douteux dans le main.py)
 if __name__ == "__main__":
-    Interface(1280, 720)
+    Interface(1280, 720).run()

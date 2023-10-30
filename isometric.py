@@ -19,4 +19,3 @@ class Isometric():
 if __name__ == '__main__':
     # !!! En faisant la convertion on perd une très légère précision !!!
     assert all(  np.allclose([i,j], Isometric.cart_to_iso(Isometric.iso_to_cart((i,j)))) for i, j in np.random.rand(100,2) )
-
