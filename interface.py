@@ -1,6 +1,7 @@
 import pygame
 import sys
 from objectSprite import SpritesGestion
+from gameView import GameView
 
 class Interface():
     def __init__(self, width, height):
@@ -27,10 +28,10 @@ class Interface():
                 if event.type == pygame.QUIT:
                     self.close_window()
 
-            self.screen.fill("blue")
-
+            self.screen.fill("black")
+            GameView.generate_ground(self.screen, self.sprites.grass_tile)
             # RENDER YOUR GAME HERE
-            self.screen.blit(self.sprites.grass_tile ,(100,100))
+
             # flip() the display to put your work on screen
             pygame.display.flip()
 
