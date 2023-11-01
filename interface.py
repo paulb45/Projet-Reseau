@@ -10,7 +10,6 @@ class Interface():
         self.clock = pygame.time.Clock()
         self.max_framerate = 60
 
-        self.sprite_gestion = SpritesGestion()
         self.load_images()
 
     def initialise_window(self, width, height):
@@ -23,8 +22,8 @@ class Interface():
         sys.exit()
 
     def load_images(self):
-        self.tileset = self.sprite_gestion.get_image('Tileset.png')
-        self.grass_tile = self.sprite_gestion.cut_in_image('Tileset.png', (0,0))
+        self.tileset = SpritesGestion.load_image('Tileset.png')
+        self.grass_tile = SpritesGestion.cut_in_image('Tileset.png', (0,0))
 
 
     def run(self):
