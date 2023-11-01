@@ -42,4 +42,4 @@ class Interface():
 # Permet de lancer une instance uniquement si on exécute interface.py
 # Ne l'éxecute pas lors d'un import ! (évite des tests douteux dans le main.py)
 if __name__ == "__main__":
-    Interface(3000, 720).run()
+    Interface(1280, 720).run()
