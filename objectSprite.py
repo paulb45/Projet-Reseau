@@ -5,7 +5,19 @@ class SpritesGestion():
     _images = {}
 
     @staticmethod
-    def load_image(image_path: str):
+    def get_top_position(image: pygame.image, pos: tuple) -> tuple:
+        pos[0] -= image.get_width()/2
+        return pos
+    
+    @staticmethod
+    def get_middle_of_tile(tile: pygame.image, pos: tuple) -> tuple:
+        # Retourne le milieu de la face supérieur, pas le milieu géométrique de l'image !
+        pos = SpritesGestion.get_top_position(tile, pos)
+        pos[1] -= tile.get_height()/4
+        return pos
+
+    @staticmethod
+    def load_image(image_path: str) -> pygame.image:
         if image_path in SpritesGestion._images:
             return SpritesGestion._images[image_path]
         try:
