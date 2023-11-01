@@ -15,7 +15,7 @@ class Isometric():
     
     @staticmethod
     def cart_to_iso(pos: tuple) -> list:
-        return Isometric.apply_x_offset(Isometric.transfer_cart_to_iso @ pos)
+        return Isometric.transfer_cart_to_iso @ pos
     
     @staticmethod
     def iso_to_cart(pos: tuple) -> list:
