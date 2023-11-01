@@ -7,9 +7,11 @@ class Interface():
     def __init__(self, width, height):
         pygame.init()
         self.initialise_window(width, height)
-        self.sprites = SpritesGestion()
         self.clock = pygame.time.Clock()
         self.max_framerate = 60
+
+        self.sprite_gestion = SpritesGestion()
+        self.load_images()
 
     def initialise_window(self, width, height):
         self.screen = pygame.display.set_mode((width, height))
@@ -20,6 +22,10 @@ class Interface():
         pygame.quit()
         sys.exit()
 
+    def load_images(self):
+        self.tileset = self.sprite_gestion.get_image('Tileset.png')
+        self.grass_tile = self.sprite_gestion.cut_in_image('Tileset.png', (0,0))
+
 
     def run(self):
         while True:
@@ -29,7 +35,7 @@ class Interface():
                     self.close_window()
 
             self.screen.fill("black")
-            GameView.generate_ground(self.screen, self.sprites.grass_tile)
+            GameView.generate_ground(self.screen, self.grass_tile)
             # RENDER YOUR GAME HERE
 
             # flip() the display to put your work on screen

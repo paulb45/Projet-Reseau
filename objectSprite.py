@@ -3,13 +3,37 @@ from config import *
 
 class SpritesGestion():
     def __init__(self):
-        self.sprite_path = "graphic/sprites/"
-        self.y_offset = 1
-        self.load_sprites()
+        self.images = {}
+        
+    def __init__(self):
+        self.images = {}
 
-    def load_sprites(self):
-        self.tileset = pygame.image.load(f"{self.sprite_path}Tileset.png").convert_alpha()
-        self.grass_tile = self.tileset.subsurface([0, self.y_offset, tile_size, tile_size + self.y_offset])
+    def load_image(self, image_path: str):
+        try:
+            image = pygame.image.load(f"{sprite_path}{image_path}").convert_alpha()
+            self.images[image_path] = image
+        except pygame.error as e:
+            print(f"Impossible de charger l'image '{image_path}': {e}")
+            return None
+
+    def get_image(self, image_path: str) -> pygame.image:
+        if image_path in self.images:
+            return self.images[image_path]
+        else:
+            return self.load_image(image_path)
+        
+    def cut_in_image(self, image_path: str, pos: tuple) -> pygame.Surface:
+        # Retourne l'image à la i ème ligne, j ème colonne  -> pos = (i, j)
+        return self.images[image_path].subsurface(
+                [
+                    pos[0]*tile_size + tileset_x_offset, 
+                    pos[1]*tile_size + tileset_y_offset, 
+                    (pos[0]+1)*tile_size + tileset_x_offset,
+                    (pos[1]+1)*tile_size + tileset_y_offset
+                ]
+            )
+        
+    
 
 
 if __name__ == '__main__':
