@@ -9,7 +9,7 @@ class GameView():
     @staticmethod
     def place_tile(surface: pygame.Surface, tile: pygame.image, pos: tuple):
         pos_iso = Isometric.cart_to_iso(pos)
-        surface.blit(tile, SpritesGestion.get_top_position(tile, pos_iso))
+        surface.blit(tile, SpritesGestion.place_top_position(tile, pos_iso))
 
     @staticmethod
     def generate_ground(surface: pygame.Surface, tile: pygame.image):
