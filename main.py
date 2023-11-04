@@ -1,6 +1,6 @@
 import pygame
 import sys
-from interface import Interface
+from graphic.interface import Interface
 from config import *
 
 pygame.init()

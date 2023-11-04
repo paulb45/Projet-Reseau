@@ -1,6 +1,6 @@
 import pygame
-from objectSprite import SpritesGestion
-from gameView import GameView
+from graphic.objectSprite import SpritesGestion
+from graphic.gameView import GameView
 
 class Interface(pygame.Surface):
     def __init__(self, size, flags=0):
@@ -18,4 +18,4 @@ class Interface(pygame.Surface):
 # Permet de lancer une instance uniquement si on exécute interface.py
 # Ne l'éxecute pas lors d'un import ! (évite des tests douteux dans le main.py)
 if __name__ == "__main__":
-    Interface(1280, 720).run()
+    pass

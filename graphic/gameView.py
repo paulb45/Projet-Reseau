@@ -1,7 +1,10 @@
 import pygame
+from graphic.isometric import Isometric
+from graphic.objectSprite import SpritesGestion
+
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
-from isometric import Isometric
-from objectSprite import SpritesGestion
 
 class GameView():
 
