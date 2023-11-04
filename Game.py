@@ -1,4 +1,5 @@
 import Grid
+import Food
 import bob
 import random
 class GAME():
@@ -28,24 +29,22 @@ class GAME():
         self.grid = nv_grid
     def set_nb_day(self, nv_nb_day):
         self.nb_day = nv_nb_day 
-        
     def init_bobs(self):
         for i in range(self.P0):
             x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
             name = f"Bob{i + 1}" #nommer "Bob1" "Bob2" ...
             name= bob()
-            self.grid.tiles[(x,y)].append(name)
-            
-        
-        
-        
-    def spawn_food():
-        pass
+            self.grid.tiles[(x,y)].append(name)    
+    def spawn_food(self, position):
+        x,y = position
+        if 0 <= x < self.N and 0 <= y < self.M:
+            food = Food()
+            self.grid.tiles[(x,y)].append(food)
     def bob_paly():
         pass
     def destroy_object(obj):
         pass
     def day_play():
         pass
-    def create_bob(Bob, position):
-        pass
+    def create_bob(self,Bob, x,y):
+        self.grid.tiles[(x,y)].append(Bob)

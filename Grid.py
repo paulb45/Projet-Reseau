@@ -14,8 +14,26 @@ class GRID():
         self.M = nv_M
     
 
-    def scan_around(position, distance):
-        pass
+    def scan_around(self,position, distance):
+        x, y = position
+        positions_disponibles = []
+
+        for i in range(-distance, distance + 1):
+            for j in range(-distance, distance + 1):
+                new_x = x + i
+                new_y = y + j
+
+                # Vérification que la nouvelle position est à l'intérieur de la grille
+                # et que x et y diffèrent, excluant ainsi la diagonale lorsque la distance vaut 1
+                if distance == 1:
+                    if 0 <= new_x < self.N and 0 <= new_y < self.N and (new_x != x or new_y != y):
+                        positions_disponibles.append((new_x, new_y))
+                else : 
+                    if 0 <= new_x < self.N and 0 <= new_y < self.N :
+                        positions_disponibles.append((new_x, new_y))
+
+        return positions_disponibles
+            
     def get_position(self,obj):
         for key, bobs in self.grid.items():
             for bob in bobs:
