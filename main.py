@@ -23,7 +23,7 @@ while True:
     window.fill("black")
     
     # RENDER YOUR GAME HERE
-    screen.render_game(screen.grass_tile)
+    screen.render_game()
     window.blit(screen, (0,0))
 
 

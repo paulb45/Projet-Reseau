@@ -7,22 +7,20 @@ class SpritesGestion():
     _images = {}
 
     @staticmethod
-    def place_top_position(image: pygame.image, pos: tuple) -> tuple:
-        pos[0] -= image.get_width()/2
+    def place_top_position(pos: tuple) -> tuple:
+        pos[0] -= tile_size/2
         return pos
     
     @staticmethod
-    def place_bottom_posion(tile: pygame.image, pos: tuple) -> tuple:
-        # Retourne le milieu de la face supérieur, pas le milieu géométrique de l'image !
-        pos = SpritesGestion.get_top_position(tile, pos)
-        pos[1] += tile.get_height()
+    def place_bottom_position(image: pygame.image, pos: tuple) -> tuple:
+        pos = SpritesGestion.place_top_position(pos)
+        pos[1] += tile_size/4 - image.get_height()
         return pos
     
     @staticmethod
-    def get_middle_of_tile(tile: pygame.image, pos: tuple) -> tuple:
+    def get_middle_of_tile(pos: tuple) -> tuple:
         # Retourne le milieu de la face supérieur, pas le milieu géométrique de l'image !
-        pos = SpritesGestion.get_top_position(tile, pos)
-        pos[1] += tile.get_height()/4
+        pos += tile_size/2, tile_size/4
         return pos
 
     @staticmethod
