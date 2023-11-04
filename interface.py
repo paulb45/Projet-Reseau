@@ -1,5 +1,4 @@
 import pygame
-import sys
 from objectSprite import SpritesGestion
 from gameView import GameView
 

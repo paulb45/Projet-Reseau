@@ -1,4 +1,3 @@
-from collections import defaultdict
 import pygame
 from config import *
 from isometric import Isometric
