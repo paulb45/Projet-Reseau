@@ -24,8 +24,9 @@ class CameraController:
         self.position_camera_x = 0
         self.position_camera_y = 0
 
-        # taille en largeur que représente le zoom
+        # taille en largeur et longueur que représente le zoom
         self.zoom_map_width = 0
+        self.zoom_map_height = 0
 
         # rapport entre la hauteur et la largeur de l'écran
         self.aspect_ratio = 0
@@ -37,22 +38,29 @@ class CameraController:
             self.zoom_map_width = config.tile_size * 20
         else:
             self.zoom_map_width = config.tile_size * config.N
+
+        self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
+
+        # calcul de la posistion du point de vu, au milieu par défaut
+        self.position_camera_x = (self.main_surface.get_width() // 2) - (self.zoom_map_width // 2)
+        self.position_camera_y = (self.main_surface.get_height() // 2) - (self.zoom_map_height // 2)
          
 
     def get_viewpoint(self) -> Surface:
-        # calcul de la posistion du point de vu, au milieu par défaut
-        self.position_camera_x = (self.main_surface.get_width() // 2) - (self.zoom_map_width // 2)
-        self.position_camera_y = (self.main_surface.get_height() // 2) - ((int(self.zoom_map_width * self.aspect_ratio)) // 2)
+        """Obtenir et calculer le ponit de vu
 
+        Returns:
+            Surface: surface à afficher à l'écran
+        """
         # on prend la sous surface
         subview = self.main_surface.subsurface(Rect(self.position_camera_x, 
                                                     self.position_camera_y, 
                                                     self.zoom_map_width, 
-                                                    int(self.zoom_map_width * self.aspect_ratio)))
+                                                    self.zoom_map_height))
 
         # on adapte la sous-surface à la taille de la fenetre
         self.viewpoint = transform.scale(subview, config.window_size)
-        
+
         return self.viewpoint
 
 
@@ -71,19 +79,39 @@ class CameraController:
 
 
     def move_right(self):
-        self.position_camera_x += config.tile_size
+        """mouvement de la caméra d'une case vers la droite
+        """
+        position_camera_x_next = self.position_camera_x + config.tile_size
+
+        if not ((position_camera_x_next + self.zoom_map_width) >= self.main_surface.get_width()):
+            self.position_camera_x = position_camera_x_next
 
 
     def move_left(self):
-        self.position_camera_x -= config.tile_size
+        """mouvement de la caméra d'une case vers la gauche
+        """
+        position_camera_x_next = self.position_camera_x - config.tile_size
+
+        if not (position_camera_x_next < 0):
+            self.position_camera_x = position_camera_x_next
 
 
-    def move_top(self):
-        self.position_camera_y -= config.tile_size // 2
+    def move_up(self):
+        """mouvement de la caméra d'une case vers le haut
+        """
+        position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
+
+        if not (position_camera_y_next < 0):
+            self.position_camera_y = position_camera_y_next
 
 
-    def move_bottom(self):
-        self.position_camera_y += config.tile_size // 2
+    def move_down(self):
+        """mouvement de la caméra d'une case vers le bas
+        """
+        position_camera_y_next = self.position_camera_y + (config.tile_size // 2)
+
+        if not ((position_camera_y_next + self.zoom_map_height) >= self.main_surface.get_height()):
+            self.position_camera_y = position_camera_y_next
 
 
 
@@ -100,7 +128,9 @@ if __name__ == '__main__':
 
     screen = Interface(config.window_size)
 
-    screen.render_game(screen.grass_tile)
+    screen.render_game()
+
+    camera = CameraController(screen)
 
     while True:
         # Faire une fonction event_handler ?
@@ -109,9 +139,17 @@ if __name__ == '__main__':
                 pygame.quit()
                 sys.exit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    camera.move_left()
+                elif event.key == pygame.K_RIGHT:
+                    camera.move_right()
+                elif event.key == pygame.K_UP:
+                    camera.move_up()
+                elif event.key == pygame.K_DOWN:
+                    camera.move_down()
+
         window.fill("black")
-        
-        camera = CameraController(screen)
 
         window.blit(camera.get_viewpoint(), (0,0))
 
