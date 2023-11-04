@@ -1,6 +1,5 @@
 import pygame
 import sys
-from gameView import GameView # Faire en sorte de ne plus avoir besoin de GameView que dans interface
 from interface import Interface
 from config import *
 
@@ -24,7 +23,7 @@ while True:
     window.fill("black")
     
     # RENDER YOUR GAME HERE
-    GameView.generate_ground(screen, screen.grass_tile)
+    screen.render_game(screen.grass_tile)
     window.blit(screen, (0,0))
 
 
