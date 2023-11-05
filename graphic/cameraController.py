@@ -145,6 +145,8 @@ class CameraController:
 
 if __name__ == '__main__':
     import pygame
+    import time
+
     from interface import Interface
 
     pygame.init()
@@ -159,6 +161,8 @@ if __name__ == '__main__':
     screen.render_game()
 
     camera = CameraController(screen)
+
+    move_mouse_timer = time.time()
 
     while True:
         # Faire une fonction event_handler ?
@@ -181,6 +185,21 @@ if __name__ == '__main__':
                 elif event.key == pygame.K_m:
                     camera.zoom_out()
 
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        # réduire la vitesse de déplacement avec la souris
+        if (time.time() - move_mouse_timer) >= .02:
+            # voir où est le curseur de la souris
+            if (mouse_x < 10):
+                camera.move_left()
+            if (mouse_x > (config.window_size[0] - 10)):
+                camera.move_right()
+            if (mouse_y < 10):
+                camera.move_up()
+            if (mouse_y > (config.window_size[1] - 10)):
+                camera.move_down()
+
+            move_mouse_timer = time.time()
 
         window.fill("black")
 
