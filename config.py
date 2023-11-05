@@ -8,3 +8,6 @@ max_framerate = 60
 sprite_path = "sprites/"
 tileset_x_offset, tileset_y_offset = 0, 1
 tile_size = 16
+
+# activation ou non du déplacement avec le curseur de la souris sur les bords de la fenètre
+move_with_mouse = True

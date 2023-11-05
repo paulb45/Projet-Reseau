@@ -41,21 +41,22 @@ while True:
             elif event.key == pygame.K_m:
                 camera.zoom_out()
 
-    # réduire la vitesse de déplacement avec la souris
-    if (time.time() - move_mouse_timer) >= .02:
-        mouse_x, mouse_y = pygame.mouse.get_pos()
+    if move_with_mouse:
+        # réduire la vitesse de déplacement avec la souris
+        if (time.time() - move_mouse_timer) >= .02:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        # voir où est le curseur de la souris
-        if (mouse_x < 10):
-            camera.move_left()
-        if (mouse_x > (window_size[0] - 10)):
-            camera.move_right()
-        if (mouse_y < 10):
-            camera.move_up()
-        if (mouse_y > (window_size[1] - 10)):
-            camera.move_down()
+            # voir où est le curseur de la souris
+            if (mouse_x < 10):
+                camera.move_left()
+            if (mouse_x > (window_size[0] - 10)):
+                camera.move_right()
+            if (mouse_y < 10):
+                camera.move_up()
+            if (mouse_y > (window_size[1] - 10)):
+                camera.move_down()
 
-        move_mouse_timer = time.time()
+            move_mouse_timer = time.time()
     
     # RENDER YOUR GAME HERE
     screen.render_game()
