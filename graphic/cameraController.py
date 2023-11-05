@@ -4,6 +4,11 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import config
 
+# TODO A IMPLEMENTER
+def is_coordinate_in_map(x, y) -> bool:
+    return True
+# TODO A IMPLEMENTER
+
 class CameraController:
 
     def __init__(self, main_surface:Surface):
@@ -70,6 +75,7 @@ class CameraController:
         self.aspect_ratio = config.window_size[1] / config.window_size[0]
 
 
+    # TODO implémenter la vérif de sorti de map
     def zoom_in(self):
         """zoom vers l'avant de la caméra, de 2 cases. On ne peux pas zoomer sur plus petit que 4 cases de large
         """
@@ -111,7 +117,9 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x + config.tile_size
 
-        if not ((position_camera_x_next + self.zoom_map_width) >= self.main_surface.get_width()):
+        if (((position_camera_x_next + self.zoom_map_width) < self.main_surface.get_width()) 
+            and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
+                or is_coordinate_in_map(position_camera_x_next, self.position_camera_y + self.zoom_map_height))):
             self.position_camera_x = position_camera_x_next
 
 
@@ -120,7 +128,9 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x - config.tile_size
 
-        if not (position_camera_x_next < 0):
+        if ((position_camera_x_next >= 0)
+            and (is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
+                or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y + self.zoom_map_height))):
             self.position_camera_x = position_camera_x_next
 
 
@@ -129,7 +139,9 @@ class CameraController:
         """
         position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
 
-        if not (position_camera_y_next < 0):
+        if ((position_camera_y_next >= 0)
+            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
+                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
             self.position_camera_y = position_camera_y_next
 
 
@@ -138,7 +150,9 @@ class CameraController:
         """
         position_camera_y_next = self.position_camera_y + (config.tile_size // 2)
 
-        if not ((position_camera_y_next + self.zoom_map_height) >= self.main_surface.get_height()):
+        if (((position_camera_y_next + self.zoom_map_height) < self.main_surface.get_height())
+            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next + self.zoom_map_height)
+                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next + self.zoom_map_height))):
             self.position_camera_y = position_camera_y_next
 
 
