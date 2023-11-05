@@ -70,12 +70,40 @@ class CameraController:
         self.aspect_ratio = config.window_size[1] / config.window_size[0]
 
 
-    def zoom_in(self) -> Surface:
-        pass
+    def zoom_in(self):
+        """zoom vers l'avant de la caméra, de 2 cases. On ne peux pas zoomer sur plus petit que 4 cases de large
+        """
+        # rétressiement de la zone affiché
+        zoom_map_width_next = self.zoom_map_width - config.tile_size * 2
+
+        if not (zoom_map_width_next <= (config.tile_size * 4)):
+            self.zoom_map_width = zoom_map_width_next
+            self.zoom_map_height -= config.tile_size
+
+            # le zoom se fait au milieu par rapport au zoom précédent
+            self.move_right()
+            self.move_down()
 
 
-    def zoom_out(self) -> Surface:
-        pass
+    def zoom_out(self):
+        """zoom vers l'arrière de la caméra, de 2 cases
+        """
+        # le dezoom est un poil plus complex au niveau des vérifications
+        zoom_map_width_next = self.zoom_map_width + config.tile_size * 2
+        zoom_map_height_next = self.zoom_map_height + config.tile_size
+        position_camera_x_next = self.position_camera_x - config.tile_size
+        position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
+
+        if  ((position_camera_x_next >= 0) and (position_camera_y_next >= 0)
+            and (position_camera_x_next + zoom_map_width_next <= self.main_surface.get_width()) 
+            and (position_camera_y_next + zoom_map_height_next <= self.main_surface.get_height())):
+            # agrandissement de la zone affiché
+            self.zoom_map_width = zoom_map_width_next
+            self.zoom_map_height = zoom_map_height_next
+
+            # le dezoom se replace sur le milieu du zoom précédent
+            self.position_camera_x = position_camera_x_next
+            self.position_camera_y = position_camera_y_next
 
 
     def move_right(self):
@@ -148,6 +176,11 @@ if __name__ == '__main__':
                     camera.move_up()
                 elif event.key == pygame.K_DOWN:
                     camera.move_down()
+                elif event.key == pygame.K_p:
+                    camera.zoom_in()
+                elif event.key == pygame.K_m:
+                    camera.zoom_out()
+
 
         window.fill("black")
 
