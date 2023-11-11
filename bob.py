@@ -18,17 +18,20 @@ class Bob():
         return self.mass
     def  get_memory(self):
         return self.memory
-    def get_Emax(self):
-        return self.Emax
+    @classmethod
+    def get_Emax(cls):
+        return cls.Emax
     def get_E(self):
         return self.E
-    def get_Emother(self):
-        return self.Emother
+    @classmethod
+    def get_Emother(cls):
+        return cls.Emother
     
     def get_last_move(self):
         return self.last_move
-    def get_Echild(self):
-        return self.Echild
+    @classmethod
+    def get_Echild(cls):
+        return cls.Echild
     #setter
     def set_speed(self,spd):
         self.speed=spd
@@ -45,11 +48,12 @@ class Bob():
         self.last_move=lst_mv
     def set_speed_buff(self,spd_buff):
         self.speed_buff
-        
-    def set_Emother(self,E):
-        self.Emother=E    
-    def set_Echild(self,E):
-        self.Echild=E    
+    @classmethod    
+    def set_Emother(cls,E):
+        cls.Emother=E
+    @classmethod        
+    def set_Echild(cls,E):
+        cls.Echild=E    
     def move(self,dict)->tuple:
         """Déplace Bob en choisissant aléatoirement une direction (horizontale ou verticale) pour éviter les mouvement en diagonal
            au moment du mouvement s'il trouve du food il va la manger s'il trouve un autre bob il va l'attaquer 
@@ -71,13 +75,13 @@ class Bob():
             if(isinstance(Bob,i)):self.eat(i)
         return coord
         
+
     def eat(self,food: Food)->None:
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
             food (FOOD): la nourriture que bob va manger
         """
-               
         self.E+=food.energy
         if(self.E>self.Emax):
             food.energy=self.E-self.Emax
@@ -90,8 +94,9 @@ class Bob():
         """
         return self.E <=0
     def parthenogenesis():pass
-    def attack(self,target):
+    
+    def attack(self,target)->None:
         if(self.E==self.Emax):
             self.E=self.Emax-self.Emother
             bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
-            bebe_bob.last_move=self.last_move                                   
+            bebe_bob.last_move=self.last_move    
