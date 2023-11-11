@@ -67,11 +67,11 @@ class Bob():
         self.last_move[0]+=coord[0]
         self.last_move[1]+=coord[1]
         for i in dict[self.last_move]:
-            if(isinstance(BOB,i)):self.attack(i)
-            if(isinstance(FOOD,i)):self.eat(i)
+            if(isinstance(Bob,i)):self.attack(i)
+            if(isinstance(Bob,i)):self.eat(i)
         return coord
         
-    def eat(self,food: FOOD)->None:
+    def eat(self,food: Food)->None:
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
@@ -93,5 +93,5 @@ class Bob():
     def attack(self,target):
         if(self.E==self.Emax):
             self.E=self.Emax-self.Emother
-            bebe_bob= BOB(self.speed,self.mass,self.Echild,self.speed_buff)
+            bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
             bebe_bob.last_move=self.last_move                                   
