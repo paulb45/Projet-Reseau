@@ -40,8 +40,22 @@ class GAME():
         if 0 <= x < self.N and 0 <= y < self.M:
             food = Food()
             self.grid.tiles[(x,y)].append(food)
-    def bob_paly():
-        pass
+    def bob_play(self):
+        for key, bobs in self.grid.tiles.items():
+            for bob in bobs: 
+                if isinstance(bob, bob.BOB): #Vérification si bob est une instance de la classe BOB
+                    position = self.grid.get_position(bob)
+                    available_positions = self.grid.scan_around(position, 1) #les places disponibles pour se déplacer 
+                if available_positions:
+                    #déterminer le mouvement
+                    move_direction = bob.move(self.grid.tiles)
+                    new_position = (position[0] + move_direction[0], position[1] + move_direction[1]) #calcule de la nouvelle position
+                    self.grid.tiles[position].remove(bob) #suppression de la dernière position
+                    self.grid.tiles[new_position].append(bob) #ajouter le bob pour la nouvelle position
+                    bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
+                    
+                    
+        
     def destroy_object(obj):
         pass
     def day_play():
