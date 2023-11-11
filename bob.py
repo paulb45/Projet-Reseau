@@ -1,6 +1,6 @@
-from Food import FOOD
+from food import Food
 import random as rd 
-class BOB():
+class Bob():
     Emax=200
     Emother=150
     Echild=50
