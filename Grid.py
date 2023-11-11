@@ -1,4 +1,4 @@
-class GRID():
+class Grid():
     def __init__(self,N,M,tiles):
         self.tiles=tiles
         self.N=N

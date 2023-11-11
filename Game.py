@@ -1,8 +1,7 @@
-import Grid
-import Food
-import bob
+import grid, food, bob
 import random
-class GAME():
+
+class Game():
     def __init__(self,quantity_food,nb_tick_day,P0,grid,nb_day):
         self.quantity_food=quantity_food
         self.nb_tick_day=nb_tick_day
@@ -38,7 +37,7 @@ class GAME():
     def spawn_food(self, position):
         x,y = position
         if 0 <= x < self.N and 0 <= y < self.M:
-            food = Food()
+            food = food.Food()
             self.grid.tiles[(x,y)].append(food)
     def bob_paly():
         pass
