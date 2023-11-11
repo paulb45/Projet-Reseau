@@ -1,6 +1,6 @@
-from Food import FOOD
+from food import Food
 import random as rd 
-class BOB():
+class Bob():
     Emax=200
     Emother=150
     Echild=50
@@ -51,6 +51,14 @@ class BOB():
     def set_Echild(self,E):
         self.Echild=E    
     def move(self,dict)->tuple:
+        """Déplace Bob en choisissant aléatoirement une direction (horizontale ou verticale) pour éviter les mouvement en diagonal
+           au moment du mouvement s'il trouve du food il va la manger s'il trouve un autre bob il va l'attaquer 
+
+        Args:
+            dict :"coord":les objets qui se trouvent dans ces coord (BOB,FOOD) 
+        Returns:
+            tuple: les nouveaux coordonnées(x,y)
+        """
         choix=rd.choice(['horizontal','vertical'])
         if(choix=='horizontal'):
             coord=(rd.randint(-self.speed,self.speed+1),0)
@@ -59,20 +67,31 @@ class BOB():
         self.last_move[0]+=coord[0]
         self.last_move[1]+=coord[1]
         for i in dict[self.last_move]:
-            if(isinstance(BOB,i)):self.attack(i)
-            if(isinstance(FOOD,i)):self.eat(i)
+            if(isinstance(Bob,i)):self.attack(i)
+            if(isinstance(Bob,i)):self.eat(i)
         return coord
         
-    def eat(self,food: FOOD)->None:       
+    def eat(self,food: Food)->None:
+        """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
+
+        Args:
+            food (FOOD): la nourriture que bob va manger
+        """
+               
         self.E+=food.energy
         if(self.E>self.Emax):
             food.energy=self.E-self.Emax
             self.E=self.Emax
     def is_dead(self)->bool:
-        self.E <=0
+        """vérifie si Bob mort ou non
+
+        Returns:
+            bool: true si BOB est mort non sinon 
+        """
+        return self.E <=0
     def parthenogenesis():pass
     def attack(self,target):
         if(self.E==self.Emax):
             self.E=self.Emax-self.Emother
-            bebe_bob= BOB(self.speed,self.mass,self.Echild,self.speed_buff)
+            bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
             bebe_bob.last_move=self.last_move                                   
