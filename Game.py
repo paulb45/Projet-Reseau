@@ -1,4 +1,4 @@
-import grid, food, bob
+import Grid, Food, bob
 import random
 
 class Game():
@@ -53,11 +53,15 @@ class Game():
                     self.grid.tiles[new_position].append(bob) #ajouter le bob pour la nouvelle position
                     bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
                     
-                    
+    def destroy_object(self,obj):
+         for items in self.grid.tiles.values():
+                if obj in items:
+                    items.remove(obj)
+    def day_play(self):
+        for day in range(self.nb_day):
+            self.init_bobs()
+            for tick in range(self.nb_tick_day):
+                self.bob_play
         
-    def destroy_object(obj):
-        pass
-    def day_play():
-        pass
     def create_bob(self,Bob, x,y):
         self.grid.tiles[(x,y)].append(Bob)
