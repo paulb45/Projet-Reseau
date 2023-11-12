@@ -1,4 +1,4 @@
-from Food import Food
+from food import Food
 import random as rd 
 class Bob():
     Emax=200
@@ -93,10 +93,12 @@ class Bob():
             bool: true si BOB est mort non sinon 
         """
         return self.E <=0
-    def parthenogenesis():pass
-    
-    def attack(self,target)->None:
-        if(self.E==self.Emax):
+    def parthenogenesis(self):
+        """_summary_
+        """
+        if(self.E>=self.Emax):
             self.E=self.Emax-self.Emother
             bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
-            bebe_bob.last_move=self.last_move    
+            bebe_bob.last_move=self.last_move 
+    
+    def attack(self,target)->None:pass

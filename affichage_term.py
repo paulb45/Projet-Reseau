@@ -6,11 +6,11 @@ from config import N, M
 
 #N est la largeur (taille de l'axe x de la grille)
 #M est la hauteur (taille de l'axe y de la grille)
-"""
+
 grid = defaultdict(lambda:0, {
         (1,1): Bob(), (2,2): Food(), (3,3): [Bob(), Food()],
       (7,5):[Bob(),Bob(),Food(),Bob()],(5,5):[Food(),Food()]})
-"""
+
 
 def affiche_map(grid):
     space = 5
