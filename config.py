@@ -11,3 +11,6 @@ tile_size = 16
 
 # activation ou non du déplacement avec le curseur de la souris sur les bords de la fenètre
 move_with_mouse = False
+
+# taille sur les bords de l'écran pour le déplacement au curseur
+size_move_border = 50

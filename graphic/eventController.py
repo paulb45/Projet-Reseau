@@ -49,13 +49,13 @@ class EventController:
             # réduire la vitesse de déplacement avec la souris
             if (time.time() - self.move_mouse_timer) >= .02:
                 # voir où est le curseur de la souris
-                if (mouse_x < 10):
+                if (mouse_x < config.size_move_border):
                     self.camera.move_left()
-                if (mouse_x > (config.window_size[0] - 10)):
+                if (mouse_x > (config.window_size[0] - config.size_move_border)):
                     self.camera.move_right()
-                if (mouse_y < 10):
+                if (mouse_y < config.size_move_border):
                     self.camera.move_up()
-                if (mouse_y > (config.window_size[1] - 10)):
+                if (mouse_y > (config.window_size[1] - config.size_move_border)):
                     self.camera.move_down()
 
                 self.move_mouse_timer = time.time()
