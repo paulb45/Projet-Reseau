@@ -186,18 +186,21 @@ if __name__ == '__main__':
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    camera.move_left()
-                elif event.key == pygame.K_RIGHT:
-                    camera.move_right()
-                elif event.key == pygame.K_UP:
-                    camera.move_up()
-                elif event.key == pygame.K_DOWN:
-                    camera.move_down()
-                elif event.key == pygame.K_p:
+                if event.key == pygame.K_p:
                     camera.zoom_in()
                 elif event.key == pygame.K_m:
                     camera.zoom_out()
+
+        keystate = pygame.key.get_pressed()
+
+        if keystate[pygame.K_LEFT]:
+            camera.move_left()
+        if keystate[pygame.K_RIGHT]:
+            camera.move_right()
+        if keystate[pygame.K_UP]:
+            camera.move_up()
+        if keystate[pygame.K_DOWN]:
+            camera.move_down()
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
