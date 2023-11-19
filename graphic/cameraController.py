@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
     clock = pygame.time.Clock()
 
-    screen = Interface(config.window_size)
+    screen = Interface(config.screen_size)
 
     screen.render_game()
 

@@ -14,7 +14,7 @@ class Isometric():
 
     @staticmethod
     def apply_x_offset(pos: tuple) -> tuple:
-        return pos - (tile_size/2, 0)
+        return pos + (screen_size[0]//2, 0)
     
     @staticmethod
     def cart_to_iso(pos: tuple) -> list:
@@ -24,6 +24,9 @@ class Isometric():
     def iso_to_cart(pos: tuple) -> list:
         return Isometric.transfer_iso_to_cart @ pos
     
+    @staticmethod
+    def iso_to_print(pos: tuple):
+        return Isometric.apply_x_offset(pos)
     
 
 if __name__ == '__main__':

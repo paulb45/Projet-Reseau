@@ -3,6 +3,7 @@ import sys
 import time
 
 from graphic.interface import Interface
+from graphic.gameView import GameView
 from graphic.cameraController import CameraController
 from graphic.eventController import EventController
 from config import *
@@ -16,12 +17,13 @@ pygame.display.set_caption("Game Of Life")
 
 clock = pygame.time.Clock()
 
-screen = Interface(window_size)
+screen = Interface(screen_size)
 
 camera = CameraController(screen)
 
 eventController = EventController(camera)
 
+GameView.place_interface_in_middle(screen, window)
 while True:
     eventController.run_events()
     

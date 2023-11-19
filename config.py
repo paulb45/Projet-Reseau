@@ -1,4 +1,5 @@
 from collections import defaultdict
+import numpy as np
 N=100
 M=100
 map = defaultdict(lambda:0)
@@ -14,3 +15,6 @@ move_with_mouse = False
 
 # taille sur les bords de l'écran pour le déplacement au curseur
 size_move_border = 50
+
+screen_size = [ np.ceil(tile_size*(N+M)/2) for _ in range(2)]
+print(screen_size)

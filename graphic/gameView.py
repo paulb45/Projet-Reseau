@@ -11,7 +11,7 @@ class GameView():
     @staticmethod
     def place_tile(surface: pygame.Surface, tile: pygame.image, pos: tuple):
         pos_iso = Isometric.cart_to_iso(pos)
-        surface.blit(tile, SpritesGestion.place_top_position(pos_iso))
+        surface.blit(tile, SpritesGestion.place_top_position(Isometric.iso_to_print(pos_iso)))
 
     @staticmethod
     def generate_ground(surface: pygame.Surface, tile: pygame.image):
@@ -25,6 +25,12 @@ class GameView():
         # Fonctionne pas encore
         pos_iso = Isometric.cart_to_iso(pos)
         foot_pos = SpritesGestion.place_bottom_position(sprite, pos_iso)
-        surface.blit(sprite, foot_pos)
-    
+        surface.blit(sprite, Isometric.iso_to_print(foot_pos))
 
+    @staticmethod
+    def place_interface_in_middle(interface, window):
+        window_center = (window_size[0] // 2, window_size[1] // 2)
+        interface_center = (screen_size[0] //2, screen_size[1] // 2)
+        offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
+        print(offset_to_place)
+        window.blit(interface, offset_to_place)
