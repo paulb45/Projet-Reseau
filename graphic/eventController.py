@@ -22,14 +22,21 @@ class EventController:
         """Méthode pour vérifier la présente de chaque évènement, et appeler les actions qui leurs sont associés
         """
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     self.camera.zoom_in()
                 elif event.key == pygame.K_m:
+                    self.camera.zoom_out()
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 4:
+                    self.camera.zoom_in()
+                elif event.button == 5:
                     self.camera.zoom_out()
 
         keystate = pygame.key.get_pressed()
