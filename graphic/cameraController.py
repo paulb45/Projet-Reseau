@@ -46,7 +46,7 @@ class CameraController:
 
         self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
 
-        # calcul de la posistion du point de vu, au milieu par défaut
+        # calcul de la position du point de vue, au milieu par défaut
         self.position_camera_x = (self.main_surface.get_width() // 2) - (self.zoom_map_width // 2)
         self.position_camera_y = (self.main_surface.get_height() // 2) - (self.zoom_map_height // 2)
          
@@ -117,7 +117,7 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x + config.tile_size
 
-        if (((position_camera_x_next + self.zoom_map_width) < self.main_surface.get_width()) 
+        if (((position_camera_x_next + self.zoom_map_width) <= self.main_surface.get_width()) 
             and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
                 or is_coordinate_in_map(position_camera_x_next, self.position_camera_y + self.zoom_map_height))):
             self.position_camera_x = position_camera_x_next
@@ -140,8 +140,8 @@ class CameraController:
         position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
 
         if ((position_camera_y_next >= 0)
-            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
-                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
+            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next + self.zoom_map_height)
+                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next + self.zoom_map_height))):
             self.position_camera_y = position_camera_y_next
 
 
@@ -150,9 +150,9 @@ class CameraController:
         """
         position_camera_y_next = self.position_camera_y + (config.tile_size // 2)
 
-        if (((position_camera_y_next + self.zoom_map_height) < self.main_surface.get_height())
-            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next + self.zoom_map_height)
-                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next + self.zoom_map_height))):
+        if (((position_camera_y_next + self.zoom_map_height) <= self.main_surface.get_height())
+            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
+                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
             self.position_camera_y = position_camera_y_next
 
 
