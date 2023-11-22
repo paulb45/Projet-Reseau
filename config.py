@@ -16,5 +16,5 @@ move_with_mouse = False
 # taille sur les bords de l'écran pour le déplacement au curseur
 size_move_border = 50
 
-screen_size = [ np.ceil(tile_size*(N+M)/2) for _ in range(2)]
+screen_size = [ np.ceil(tile_size*(N+M)/2) / i for i in range(1,3)]
 print(screen_size)
