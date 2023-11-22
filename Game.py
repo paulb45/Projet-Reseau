@@ -91,8 +91,12 @@ class GAME():
         del obj
     def day_play(self):
         """chaque jour d=100 ticks
-           chaque jours f=200 points de nourriture
-           Ef=100 energie de la nourriture
+          - chaque jours f=200 points de nourriture
+          - Ef=100 energie de la nourriture
+          - à la fin de la journée tout les foods restantes disparaiteront
+          - à chaque mov le Ebob-1
+          - 
+            
         """
         tick=self.set_nb_tick_day(self.nb_tick_day)
         fd_quantity=self.set_quantity_food(self.get_quantity_food)
