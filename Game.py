@@ -71,6 +71,7 @@ class GAME():
             self.grid.tiles[(x,y)].append(Food(self.init_energy_food)) 
         
     def bob_play(self):
+        # tuer le bob si n as pas de l'energie sinon move
         for bobs in self.grid.tiles.items():
             for bob in bobs: 
                 if isinstance(bob,Bob): #Vérification si bob est une instance de la classe BOB
@@ -78,25 +79,28 @@ class GAME():
                     available_positions = self.grid.scan_around(position, bob.speed) #les places disponibles pour se déplacer 
                 if available_positions:
                     new_position = bob.move(self.grid.tiles)
+                    bob.parthenogenesis()
                     self.grid.tiles[position].remove(bob) #suppression de la dernière position
                     self.grid.tiles[new_position].append(bob) #ajouter le bob pour la nouvelle position
                     bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
-        
+        #verification du chnagement de la place pour faire -1 à l'energie
     def destroy_object(obj):
         """_Destroys the given object.__
 
         Args:
             obj (food / bob): 
         """
+        
         del obj
     def day_play(self):
         """chaque jour d=100 ticks
           - chaque jours f=200 points de nourriture
           - Ef=100 energie de la nourriture
+          
           - à la fin de la journée tout les foods restantes disparaiteront
-          - à chaque mov le Ebob-1
           - 
-            
+          - si Ebob inf à 0 le bob mort
+          - ajouter dict contient(nb morts, nb parthenogenesis) keys jour_i
         """
         tick=self.set_nb_tick_day(self.nb_tick_day)
         fd_quantity=self.set_quantity_food(self.get_quantity_food)

@@ -56,7 +56,8 @@ class Bob():
         cls.Echild=E    
     def move(self,dict)->tuple:
         #TODO
-        #QUAN IL REste des foods
+        #Il peut alors rester immobile tant qu'il y a de la nourriture, mais chaque tic passé immobile consomme quand même 0.5 d'énergie.
+        #- lorsque plus d'un bob dans la meme case un seul prend la nourriture
         """Déplace Bob en choisissant aléatoirement une direction (horizontale ou verticale) pour éviter les mouvement en diagonal
            au moment du mouvement s'il trouve du food il va la manger s'il trouve un autre bob il va l'attaquer 
 
@@ -102,5 +103,6 @@ class Bob():
             self.E=self.Emax-self.Emother
             bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
             bebe_bob.last_move=self.last_move 
+            #ajouter le nouveau bob dans le dictionnaire
     
     def attack(self,target)->None:pass
