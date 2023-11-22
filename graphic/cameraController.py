@@ -148,10 +148,10 @@ class CameraController:
     def move_down(self):
         """mouvement de la caméra d'une case vers le bas
         """
-        position_camera_y_next = self.position_camera_y + (config.tile_size // 2)
+        position_camera_y_next = self.position_camera_y + (config.tile_size // 2)   
 
-        if position_camera_y_next > self.main_surface.get_height():
-            position_camera_y_next = self.main_surface.get_height()
+        if (position_camera_y_next + self.zoom_map_height) > self.main_surface.get_height():
+            position_camera_y_next = self.main_surface.get_height() - self.zoom_map_height
 
         if ((is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
                 or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
