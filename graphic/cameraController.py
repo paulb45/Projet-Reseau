@@ -98,9 +98,20 @@ class CameraController:
         position_camera_x_next = self.position_camera_x - config.tile_size
         position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
 
-        if  ((position_camera_x_next >= 0) and (position_camera_y_next >= 0)
-            and (position_camera_x_next + zoom_map_width_next <= self.main_surface.get_width()) 
-            and (position_camera_y_next + zoom_map_height_next <= self.main_surface.get_height())):
+        if (zoom_map_width_next <= min((config.tile_size * config.zoom_max), self.main_surface.get_width())):
+            # haut
+            if position_camera_y_next < 0:
+                position_camera_y_next = 0
+            # bas
+            if (position_camera_y_next + zoom_map_height_next) > self.main_surface.get_height():
+                position_camera_y_next = self.main_surface.get_height() - zoom_map_height_next
+            # gauche
+            if position_camera_x_next < 0:
+                position_camera_x_next = 0
+            # droite
+            if (position_camera_x_next + zoom_map_width_next) > self.main_surface.get_width():
+                position_camera_x_next = self.main_surface.get_width() - zoom_map_width_next
+            
             # agrandissement de la zone affiché
             self.zoom_map_width = zoom_map_width_next
             self.zoom_map_height = zoom_map_height_next
@@ -109,19 +120,11 @@ class CameraController:
             self.position_camera_x = position_camera_x_next
             self.position_camera_y = position_camera_y_next
 
-        # if (zoom_map_width_next <= min((config.tile_size * config.zoom_max), self.main_surface.get_width())):
-
-            
-
-
 
     def move_right(self):
         """mouvement de la caméra d'une case vers la droite
         """
         position_camera_x_next = self.position_camera_x + config.tile_size
-
-        if (position_camera_x_next + self.zoom_map_width) > self.main_surface.get_width():
-            position_camera_x_next = self.main_surface.get_width() - self.zoom_map_width
 
         if (((position_camera_x_next + self.zoom_map_width) <= self.main_surface.get_width()) 
             and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
@@ -134,10 +137,8 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x - config.tile_size
 
-        if position_camera_x_next < 0:
-            position_camera_x_next = 0
-
-        if ((is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
+        if ((position_camera_x_next >= 0)
+            and (is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
                 or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y))):
             self.position_camera_x = position_camera_x_next
 
