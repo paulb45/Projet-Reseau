@@ -58,7 +58,7 @@ class GAME():
             self.grid.tiles[(x,y)].append(name)    
     
     def spawn_food(self):
-        """_summary_
+        """generer la nouritures
 
         Args:
             position (_type_): _description_
