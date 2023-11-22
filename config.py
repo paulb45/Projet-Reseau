@@ -15,6 +15,10 @@ tile_size = 16
 # activation ou non du déplacement avec le curseur de la souris sur les bords de la fenètre
 move_with_mouse = False
 
+# zoom min et max cen nombre de cellule
+zoom_min = 4
+zoom_max = 40
+
 # taille sur les bords de l'écran pour le déplacement au curseur
 size_move_border = 50
 
