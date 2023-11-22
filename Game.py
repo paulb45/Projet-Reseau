@@ -2,6 +2,11 @@ import time
 import  Grid ,Food,bob
 from Food import Food
 import random
+#var test bob 
+speed = 1
+mass = 10
+E = 100
+speed_buff=1
 
 class GAME():
     def __init__(self,quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day):
@@ -14,43 +19,54 @@ class GAME():
         
     def get_quantity_food(self):
         return self.init_quantity_food
+    
     def get_nb_tick_day(self):
         return self.init_nb_tick_day
+    
     def get_P0(self):
         return self.P0
+    
     def get_grid(self):
         return self.grid
+    
     def get_nb_day(self):
         return self.nb_day
+    
     def set_quantity_food(self, nv_quantity_food):
         self.init_quantity_food = nv_quantity_food
+    
     def set_nb_tick_day(self, nv_nb_tick_day):
         self.init_nb_tick_day = nv_nb_tick_day
+    
     def set_P0(self, nv_P0):
         self.P0 = nv_P0
+    
     def set_grid(self, nv_grid):
         self.grid = nv_grid
+    
     def set_nb_day(self, nv_nb_day):
         self.nb_day = nv_nb_day 
+    
     def init_bobs(self):
+        """init bob
+        
+        """
         for i in range(self.P0):
             x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
             name = f"Bob{i + 1}" #nommer "Bob1" "Bob2" ...
-            name= bob()
+            name= bob( speed, mass, E, speed_buff)
             self.grid.tiles[(x,y)].append(name)    
-    def spawn_food(self, position):
+    
+    def spawn_food(self):
         """_summary_
 
         Args:
             position (_type_): _description_
         """
-        x,y = position
-        if 0 <= x < self.N and 0 <= y < self.M:
-            #todo
-            #aymen khsek tzid l'energie dial food sinon radi ikoun erreur 
-            #food = Food()
-            food = Food(self.init_energy_food)
-            self.grid.tiles[(x,y)].append(food)
+        for i in range(self.get_quantity_food):
+            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)  
+            self.grid.tiles[(x,y)].append(Food(self.init_energy_food)) 
+        
     def bob_play(self):
         for key, bobs in self.grid.tiles.items():
             for bob in bobs: 
