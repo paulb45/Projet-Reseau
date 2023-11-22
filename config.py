@@ -6,6 +6,8 @@ map = defaultdict(lambda:0)
 
 window_size = (1280, 720)
 max_framerate = 60
+
+# Variables pour les sprites
 sprite_path = "sprites/"
 tileset_x_offset, tileset_y_offset = 0, 1
 tile_size = 16
@@ -16,6 +18,8 @@ move_with_mouse = False
 # taille sur les bords de l'écran pour le déplacement au curseur
 size_move_border = 50
 
+# Variables d'interface
+interface_y_offset = 50
 screen_size = [ np.ceil(tile_size*(N+M)/2 / i) for i in range(1,3)]
-screen_size[0] += 50 # Créer un offset pour pouvoir afficher le bob le plus haut
-print(screen_size)
+screen_size[1] += interface_y_offset
+
