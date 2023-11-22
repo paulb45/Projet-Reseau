@@ -33,3 +33,15 @@ class GameView():
         interface_center = (screen_size[0] //2, screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(interface, offset_to_place)
+
+    @staticmethod
+    def move_sprite(sprite, old_map, new_map):
+        # Chercher la position du bob sur l'old map
+        # Chercher la position de ce même bob sur la new map
+        # Calcul des coordonées en iso pour les deux
+        # Calcul de l'écart
+        # En déduire la vitesse sur x et sur y pour l'incrémenter
+        # Faire le déplacement
+
+        # Utiliser une fonction qui calcule les positions intermédiaires pour avoir toutes les entités qui se déplacent "en même temps"
+        pass
