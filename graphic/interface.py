@@ -23,7 +23,7 @@ class Interface(pygame.Surface):
 
     def render_game(self):
         GameView.generate_ground(self, self.grass_tile)
-        GameView.place_entity(self, self.bob, (99,0))
+        GameView.place_entity(self, self.bob, (80,0))
 
 
 # Permet de lancer une instance uniquement si on exécute interface.py

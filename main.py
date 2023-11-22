@@ -1,6 +1,4 @@
 import pygame
-import sys
-import time
 
 from graphic.interface import Interface
 from graphic.gameView import GameView
@@ -11,7 +9,7 @@ from config import *
 pygame.init()
 
 # Création de la fenêtre
-window = pygame.display.set_mode(window_size)
+window = pygame.display.set_mode(window_size, pygame.RESIZABLE)
 window.fill("black")
 pygame.display.set_caption("Game Of Life")
 

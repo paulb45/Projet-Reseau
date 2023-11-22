@@ -32,5 +32,4 @@ class GameView():
         window_center = (window_size[0] // 2, window_size[1] // 2)
         interface_center = (screen_size[0] //2, screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
-        print(offset_to_place)
         window.blit(interface, offset_to_place)
