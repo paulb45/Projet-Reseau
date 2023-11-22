@@ -17,6 +17,10 @@ class EventController:
 
         self.move_mouse_timer = time.time()
 
+    def quit(self):
+        pygame.quit()
+        sys.exit()
+
 
     def run_events(self):
         """Méthode pour vérifier la présente de chaque évènement, et appeler les actions qui leurs sont associés
@@ -27,8 +31,7 @@ class EventController:
                 pass
                 #surface = pygame.display.set_mode((event.w, event.h),pygame.RESIZABLE)
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.quit()
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
