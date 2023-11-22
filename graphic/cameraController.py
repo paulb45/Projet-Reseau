@@ -80,7 +80,7 @@ class CameraController:
         # rétressiement de la zone affiché
         zoom_map_width_next = self.zoom_map_width - config.tile_size * 2
 
-        if not (zoom_map_width_next <= (config.tile_size * 4)):
+        if not (zoom_map_width_next <= (config.tile_size * config.zoom_min)):
             self.zoom_map_width = zoom_map_width_next
             self.zoom_map_height -= config.tile_size
 
@@ -109,11 +109,19 @@ class CameraController:
             self.position_camera_x = position_camera_x_next
             self.position_camera_y = position_camera_y_next
 
+        # if (zoom_map_width_next <= min((config.tile_size * config.zoom_max), self.main_surface.get_width())):
+
+            
+
+
 
     def move_right(self):
         """mouvement de la caméra d'une case vers la droite
         """
         position_camera_x_next = self.position_camera_x + config.tile_size
+
+        if (position_camera_x_next + self.zoom_map_width) > self.main_surface.get_width():
+            position_camera_x_next = self.main_surface.get_width() - self.zoom_map_width
 
         if (((position_camera_x_next + self.zoom_map_width) <= self.main_surface.get_width()) 
             and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
@@ -126,8 +134,10 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x - config.tile_size
 
-        if ((position_camera_x_next >= 0)
-            and (is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
+        if position_camera_x_next < 0:
+            position_camera_x_next = 0
+
+        if ((is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
                 or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y))):
             self.position_camera_x = position_camera_x_next
 
