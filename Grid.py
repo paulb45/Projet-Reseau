@@ -35,8 +35,8 @@ class Grid():
         return positions_disponibles
             
     def get_position(self,obj):
-        for key, bobs in self.grid.items():
-            for bob in bobs:
+        for key, i in self.grid.items():
+            for bob in i:
                 if id(bob) == id(obj):
                     return key  # Retourne les coordonnées (x, y) d'objet recherché
         return None  # Retourne None si l'objet n'est pas trouvé
