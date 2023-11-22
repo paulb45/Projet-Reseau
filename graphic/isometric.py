@@ -18,11 +18,11 @@ class Isometric():
     
     @staticmethod
     def cart_to_iso(pos: tuple) -> list:
-        return (Isometric.transfer_cart_to_iso @ pos) + (interface_offset, interface_offset)
+        return (Isometric.transfer_cart_to_iso @ pos) + (interface_x_offset, interface_y_offset)
     
     @staticmethod
     def iso_to_cart(pos: tuple) -> list:
-        return Isometric.transfer_iso_to_cart @ (pos - (interface_offset, interface_offset))
+        return Isometric.transfer_iso_to_cart @ (pos - (interface_x_offset, interface_y_offset))
     
     @staticmethod
     def iso_to_print(pos: tuple):

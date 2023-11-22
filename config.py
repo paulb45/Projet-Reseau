@@ -19,6 +19,8 @@ move_with_mouse = False
 size_move_border = 50
 
 # Variables d'interface
-interface_offset = 50 # Valeur de l'offset sur chaque côté
-screen_size = [ np.ceil(tile_size*(N+M)/2 / i) + 2*interface_offset for i in range(1,3)]
-print(screen_size)
+screen_size = [ np.ceil(tile_size*(N+M)/2 / i) for i in range(1,3)]
+interface_y_offset = 50 # Valeur de l'offset sur chaque côté
+interface_x_offset = 2*interface_y_offset
+screen_size[0] += interface_x_offset
+screen_size[1] += interface_y_offset
