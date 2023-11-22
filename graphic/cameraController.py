@@ -17,8 +17,6 @@ class CameraController:
         # self.window_height = window_height
         # taille de l'écran dans config.py
 
-        self.viewpoint = None
-
         self.zoom_max = 0
         self.zoom_min = 0
 
@@ -64,9 +62,9 @@ class CameraController:
                                                     self.zoom_map_height))
 
         # on adapte la sous-surface à la taille de la fenetre
-        self.viewpoint = transform.scale(subview, config.window_size)
+        viewpoint = transform.scale(subview, config.window_size)
 
-        return self.viewpoint
+        return viewpoint
 
 
     def modify_size_window(self):
@@ -130,7 +128,7 @@ class CameraController:
 
         if ((position_camera_x_next >= 0)
             and (is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
-                or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y + self.zoom_map_height))):
+                or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y))):
             self.position_camera_x = position_camera_x_next
 
 
@@ -139,8 +137,10 @@ class CameraController:
         """
         position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
 
-        if ((position_camera_y_next >= 0)
-            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next + self.zoom_map_height)
+        if (position_camera_y_next < 0):
+            position_camera_y_next = 0
+
+        if ((is_coordinate_in_map(self.position_camera_x, position_camera_y_next + self.zoom_map_height)
                 or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next + self.zoom_map_height))):
             self.position_camera_y = position_camera_y_next
 
@@ -148,10 +148,12 @@ class CameraController:
     def move_down(self):
         """mouvement de la caméra d'une case vers le bas
         """
-        position_camera_y_next = self.position_camera_y + (config.tile_size // 2)
+        position_camera_y_next = self.position_camera_y + (config.tile_size // 2)   
 
-        if (((position_camera_y_next + self.zoom_map_height) <= self.main_surface.get_height())
-            and (is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
+        if (position_camera_y_next + self.zoom_map_height) > self.main_surface.get_height():
+            position_camera_y_next = self.main_surface.get_height() - self.zoom_map_height
+
+        if ((is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
                 or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
             self.position_camera_y = position_camera_y_next
 
