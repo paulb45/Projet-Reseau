@@ -61,7 +61,7 @@ class GAME():
                
     
     def spawn_food(self):
-        """_summary_
+        """generer la nouritures
 
         Args:
             position (_type_): _description_

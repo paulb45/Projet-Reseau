@@ -55,6 +55,8 @@ class Bob():
     def set_Echild(cls,E):
         cls.Echild=E    
     def move(self,dict)->tuple:
+        #TODO
+        #QUAN IL REste des foods
         """Déplace Bob en choisissant aléatoirement une direction (horizontale ou verticale) pour éviter les mouvement en diagonal
            au moment du mouvement s'il trouve du food il va la manger s'il trouve un autre bob il va l'attaquer 
 
@@ -72,7 +74,7 @@ class Bob():
         self.last_move[1]+=coord[1]
         for i in dict[self.last_move]:
             if(isinstance(Bob,i)):self.attack(i)
-            if(isinstance(Bob,i)):self.eat(i)
+            if(isinstance(Food,i)):self.eat(i)
         return coord
         
 
