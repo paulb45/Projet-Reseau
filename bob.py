@@ -1,4 +1,4 @@
-from food import Food
+from Food import Food
 import random as rd 
 class Bob():
     Emax=200
