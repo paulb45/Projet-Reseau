@@ -1,7 +1,7 @@
 import pygame
 import sys
 import time
-import config
+from config import *
 
 class EventController:
     """
@@ -28,13 +28,13 @@ class EventController:
         # réduire la vitesse de déplacement avec la souris
         if (time.time() - self.move_mouse_timer) >= .02:
             # voir où est le curseur de la souris
-            if (mouse_x < config.size_move_border):
+            if (mouse_x < size_move_border):
                 self.camera.move_left()
-            if (mouse_x > (config.window_size[0] - config.size_move_border)):
+            if (mouse_x > (window_size[0] - size_move_border)):
                 self.camera.move_right()
-            if (mouse_y < config.size_move_border):
+            if (mouse_y < size_move_border):
                 self.camera.move_up()
-            if (mouse_y > (config.window_size[1] - config.size_move_border)):
+            if (mouse_y > (window_size[1] - size_move_border)):
                     self.camera.move_down()
 
             self.move_mouse_timer = time.time()
@@ -63,8 +63,11 @@ class EventController:
         for event in pygame.event.get():
 
             if event.type == pygame.VIDEORESIZE:
-                pass
-                #surface = pygame.display.set_mode((event.w, event.h),pygame.RESIZABLE)
+                # A METTRE DANS UNE FONCTION A PART
+                # NE FONCTIONNE PAS
+                
+                self.camera.modify_size_window()
+
             if event.type == pygame.QUIT:
                 self.quit()
 
@@ -76,6 +79,6 @@ class EventController:
 
         self.keyboard_pressed()
 
-        if config.move_with_mouse:
+        if move_with_mouse:
             self.move_map_with_mouse_on_border()
             
