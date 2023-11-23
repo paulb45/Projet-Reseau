@@ -93,12 +93,12 @@ class CameraController:
         """zoom vers l'arrière de la caméra, de 2 cases
         """
         # le dezoom est un poil plus complex au niveau des vérifications
-        zoom_map_width_next = self.zoom_map_width + config.tile_size * 2
-        zoom_map_height_next = self.zoom_map_height + config.tile_size
-        position_camera_x_next = self.position_camera_x - config.tile_size
-        position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
+        zoom_map_width_next = self.zoom_map_width + tile_size * 2
+        zoom_map_height_next = self.zoom_map_height + tile_size
+        position_camera_x_next = self.position_camera_x - tile_size
+        position_camera_y_next = self.position_camera_y - (tile_size // 2)
 
-        if (zoom_map_width_next <= min((config.tile_size * config.zoom_max), self.main_surface.get_width())):
+        if (zoom_map_width_next <= min((tile_size * zoom_max), self.main_surface.get_width())):
             # haut
             if position_camera_y_next < 0:
                 position_camera_y_next = 0
@@ -126,6 +126,9 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x + tile_size
 
+        if (position_camera_x_next + self.zoom_map_width) > self.main_surface.get_width():
+            position_camera_x_next = self.main_surface.get_width() - self.zoom_map_width
+
         if (((position_camera_x_next + self.zoom_map_width) <= self.main_surface.get_width()) 
             and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
                 or is_coordinate_in_map(position_camera_x_next, self.position_camera_y + self.zoom_map_height))):
@@ -137,8 +140,10 @@ class CameraController:
         """
         position_camera_x_next = self.position_camera_x - tile_size
 
-        if ((position_camera_x_next >= 0)
-            and (is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
+        if position_camera_x_next < 0:
+            position_camera_x_next = 0
+
+        if ((is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
                 or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y))):
             self.position_camera_x = position_camera_x_next
 
