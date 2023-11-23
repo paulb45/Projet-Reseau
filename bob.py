@@ -1,9 +1,12 @@
-from Food import Food
-import random as rd 
+from food import Food
+import random
+
 class Bob():
+    
     Emax=200
     Emother=150
     Echild=50
+    
     def __init__(self,speed,mass,E,speed_buff):
         self.speed=speed
         self.mass=mass
@@ -11,7 +14,8 @@ class Bob():
         self.E=E
         self.last_move=None
         self.speed_buff=speed_buff
-    #getter
+    
+    """ Getters """
     def get_speed(self):
         return self.speed
     def get_mass(self):
@@ -26,13 +30,13 @@ class Bob():
     @classmethod
     def get_Emother(cls):
         return cls.Emother
-    
     def get_last_move(self):
         return self.last_move
     @classmethod
     def get_Echild(cls):
         return cls.Echild
-    #setter
+    
+    """ Setters """
     def set_speed(self,spd):
         self.speed=spd
     def set_mass(self,mass):
@@ -53,7 +57,9 @@ class Bob():
         cls.Emother=E
     @classmethod        
     def set_Echild(cls,E):
-        cls.Echild=E    
+        cls.Echild=E  
+    
+      
     def move(self,dict)->tuple:
         #TODO
         #Il peut alors rester immobile tant qu'il y a de la nourriture, mais chaque tic passé immobile consomme quand même 0.5 d'énergie.
@@ -66,11 +72,11 @@ class Bob():
         Returns:
             tuple: les nouveaux coordonnées(x,y)
         """
-        choix=rd.choice(['horizontal','vertical'])
+        choix=random.choice(['horizontal','vertical'])
         if(choix=='horizontal'):
-            coord=(rd.randint(-self.speed,self.speed+1),0)
+            coord=(random.randint(-self.speed,self.speed+1),0)
         else:
-            coord=(0,rd.randint(-self.speed,self.speed+1))    
+            coord=(0,random.randint(-self.speed,self.speed+1))    
         self.last_move[0]+=coord[0]
         self.last_move[1]+=coord[1]
         for i in dict[self.last_move]:
@@ -79,7 +85,8 @@ class Bob():
         return coord
         
 
-    def eat(self,food: Food)->None:
+    def eat(self,food: Food)->None: ### Si Bob bouffe tout l'énergie de la nourriture, la nourriture doit être détruite ! 
+                    ### Donc soit Bob la détruie dans cette fonction, soit cette fonction renvoie True la nourriture doit être détruite (et Game s'en chargera)
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
@@ -89,6 +96,7 @@ class Bob():
         if(self.E>self.Emax):
             food.energy=self.E-self.Emax
             self.E=self.Emax
+            
     def is_dead(self)->bool:
         """vérifie si Bob mort ou non
 

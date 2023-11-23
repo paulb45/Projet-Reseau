@@ -6,10 +6,14 @@ from config import N, M
 
 #N est la largeur (taille de l'axe x de la grille)
 #M est la hauteur (taille de l'axe y de la grille)
+speed = 1
+mass = 10
+E = 100
+speed_buff=1
 
-grid = defaultdict(lambda:0, {
-        (1,1): Bob(), (2,2): Food(), (3,3): [Bob(), Food()],
-      (7,5):[Bob(),Bob(),Food(),Bob()],(5,5):[Food(),Food()]})
+test_grid = defaultdict(lambda:0, {
+        (1,1): Bob(speed, mass, E, speed_buff), (2,2): Food(E), (3,3): [Bob(speed, mass, E, speed_buff), Food(E)],
+      (7,5):[Bob(speed, mass, E, speed_buff),Bob(speed, mass, E, speed_buff),Food(E),Bob(speed, mass, E, speed_buff)],(5,5):[Food(E),Food(E)]})
 
 
 def affiche_map(grid):

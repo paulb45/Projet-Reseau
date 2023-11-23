@@ -1,8 +1,9 @@
 import time
-import  Grid ,Food
+import  grid
 from bob import Bob
-from Food import Food
+from food import Food
 import random
+
 #var test bob 
 speed = 1
 mass = 10
@@ -54,6 +55,8 @@ class GAME():
         """
         for i in range(self.P0):
             x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
+            
+            # !!!!!!!! BOB N'A PAS DE NOM !!!!!!!!
             name = f"Bob{i + 1}" #nommer "Bob1" "Bob2" ...
             name= Bob( speed, mass, E, speed_buff)
             name.set_last_move((x,y))
@@ -84,14 +87,14 @@ class GAME():
                     self.grid.tiles[new_position].append(bob) #ajouter le bob pour la nouvelle position
                     bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
         #verification du chnagement de la place pour faire -1 à l'energie
-    def destroy_object(obj):
+    def destroy_object(self, obj):
         """_Destroys the given object.__
 
         Args:
             obj (food / bob): 
         """
-        
         del obj
+        
     def day_play(self):
         """chaque jour d=100 ticks
           - chaque jours f=200 points de nourriture
@@ -115,5 +118,6 @@ class GAME():
             
             tick-=1
             time.sleep(1)
-    def create_bob(self,Bob, x,y):
-        self.grid.tiles[(x,y)].append(Bob)
+            
+    def create_bob(self,bob, x,y):
+        self.grid.tiles[(x,y)].append(bob)
