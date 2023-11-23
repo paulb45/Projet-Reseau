@@ -30,11 +30,11 @@ class EventController:
             # voir où est le curseur de la souris
             if (mouse_x < size_move_border):
                 self.camera.move_left()
-            if (mouse_x > (window_size[0] - size_move_border)):
+            if (mouse_x > (pygame.display.get_surface().get_width() - size_move_border)):
                 self.camera.move_right()
             if (mouse_y < size_move_border):
                 self.camera.move_up()
-            if (mouse_y > (window_size[1] - size_move_border)):
+            if (mouse_y > (pygame.display.get_surface().get_height() - size_move_border)):
                     self.camera.move_down()
 
             self.move_mouse_timer = time.time()
