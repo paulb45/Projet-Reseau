@@ -17,10 +17,13 @@ class Interface(pygame.Surface):
         self.load_images()
 
     def load_images(self):
+        """
+            Charge les images nécessaires au jeu
+        """
         self.tileset = self.load_image('Tileset.png')
         self.grass_tile = self.cut_in_image('Tileset.png', (0,0))
 
-        # Import et mise en dimension de Bob
+        # Import + mise en dimension de Bob
         self.bob = self.load_image('crusader_idle_00000.png')
         self.bob = pygame.transform.scale(self.bob, (h:=tile_size, int(h * self.bob.get_height() / self.bob.get_width() )))
 
@@ -38,12 +41,19 @@ class Interface(pygame.Surface):
                 self.place_tile(tile, (i,j))
 
     def place_entity(self, sprite: pygame.sprite, pos: tuple):
+        """
+            Place une entité à partir des coordonnées cartésiens sur la case adéquat.
+            Place le bas sur le milieu de la tile.
+        """
         pos_iso = isometric.cart_to_iso(pos)
         foot_pos = self.place_bottom_position(sprite, pos_iso)
         self.blit(sprite, isometric.iso_to_print(foot_pos))
 
 
     def place_interface_in_middle(self, window):
+        """
+            Place le centre de la carte sur la fenêtre
+        """
         window_center = (window_size[0] // 2, window_size[1] // 2)
         interface_center = (screen_size[0] //2, screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
