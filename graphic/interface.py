@@ -1,5 +1,4 @@
 import pygame
-import graphic.objectSprite as objectSprite
 import graphic.isometric as isometric
 
 import sys, os
@@ -14,14 +13,15 @@ class Interface(pygame.Surface):
     """
     def __init__(self, size, flags=0):
         super().__init__(size, flags)
+        self._images = {}
         self.load_images()
 
     def load_images(self):
-        self.tileset = objectSprite.load_image('Tileset.png')
-        self.grass_tile = objectSprite.cut_in_image('Tileset.png', (0,0))
+        self.tileset = self.load_image('Tileset.png')
+        self.grass_tile = self.cut_in_image('Tileset.png', (0,0))
 
         # Import et mise en dimension de Bob
-        self.bob = objectSprite.load_image('crusader_idle_00000.png')
+        self.bob = self.load_image('crusader_idle_00000.png')
         self.bob = pygame.transform.scale(self.bob, (h:=tile_size, int(h * self.bob.get_height() / self.bob.get_width() )))
 
     def render_game(self):
@@ -30,7 +30,7 @@ class Interface(pygame.Surface):
         
     def place_tile(self, tile: pygame.image, pos: tuple):
         pos_iso = isometric.cart_to_iso(pos)
-        self.blit(tile, objectSprite.place_top_position(isometric.iso_to_print(pos_iso)))
+        self.blit(tile, self.place_top_position(isometric.iso_to_print(pos_iso)))
 
     def generate_ground(self, tile: pygame.image):
         for i in range(N):
@@ -39,7 +39,7 @@ class Interface(pygame.Surface):
 
     def place_entity(self, sprite: pygame.sprite, pos: tuple):
         pos_iso = isometric.cart_to_iso(pos)
-        foot_pos = objectSprite.place_bottom_position(sprite, pos_iso)
+        foot_pos = self.place_bottom_position(sprite, pos_iso)
         self.blit(sprite, isometric.iso_to_print(foot_pos))
 
 
@@ -59,3 +59,41 @@ class Interface(pygame.Surface):
 
         # Utiliser une fonction qui calcule les positions intermédiaires pour avoir toutes les entités qui se déplacent "en même temps"
         pass
+    
+    
+
+    def place_top_position(self, pos: tuple) -> tuple:
+        pos[0] -= tile_size/2
+        return pos
+
+    def place_bottom_position(self, image: pygame.image, pos: tuple) -> tuple:
+        pos = self.place_top_position(pos)
+        pos[1] += tile_size/4 - image.get_height()
+        return pos
+
+    def get_middle_of_tile(self, pos: tuple) -> tuple:
+        # Retourne le milieu de la face supérieur, pas le milieu géométrique de l'image !
+        pos += tile_size/2, tile_size/4
+        return pos
+
+    def load_image(self, image_path: str) -> pygame.image:
+        if image_path in self._images:
+            return self._images[image_path]
+        try:
+            image = pygame.image.load(f"{sprite_path}{image_path}").convert_alpha()
+            self._images[image_path] = image
+            return image
+        except pygame.error as e:
+            print(f"Impossible de charger l'image '{image_path}': {e}")
+            return None
+
+    def cut_in_image(self, image_path: str, pos: tuple) -> pygame.Surface:
+        # Retourne l'image à la i ème ligne, j ème colonne  -> pos = (i, j)
+        return self._images[image_path].subsurface(
+                [
+                    pos[0]*tile_size + tileset_x_offset, 
+                    pos[1]*tile_size + tileset_y_offset, 
+                    (pos[0]+1)*tile_size + tileset_x_offset,
+                    (pos[1]+1)*tile_size + tileset_y_offset
+                ]
+            )
