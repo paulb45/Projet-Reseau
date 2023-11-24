@@ -1,5 +1,5 @@
 import time
-import  grid
+import  grid ,food
 from bob import Bob
 from food import Food
 import random
@@ -56,11 +56,12 @@ class GAME():
         for i in range(self.P0):
             x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
             
-            # !!!!!!!! BOB N'A PAS DE NOM !!!!!!!!
-            name = f"Bob{i + 1}" #nommer "Bob1" "Bob2" ...
             name= Bob( speed, mass, E, speed_buff)
             name.set_last_move((x,y))
-            self.grid.tiles[(x,y)].append(name)
+            #f grid drtiha comme une liste ohna drtiha comme un dict
+            if (x, y) not in self.grid.grid:
+                self.grid.grid[(x, y)] = []
+            self.grid.grid[(x,y)].append(name)
                
     
     def spawn_food(self):
@@ -69,25 +70,27 @@ class GAME():
         Args:
             position (_type_): _description_
         """
-        for i in range(self.get_quantity_food):
-            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)  
-            self.grid.tiles[(x,y)].append(Food(self.init_energy_food)) 
+        for i in range(self.get_quantity_food()):
+            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
+            if (x, y) not in self.grid.grid:
+                self.grid.grid[(x, y)] = []
+            self.grid.grid[x,y].append(Food(self.init_energy_food)) 
         
     def bob_play(self):
         # tuer le bob si n as pas de l'energie sinon move
-        for bobs in self.grid.tiles.items():
+        for bobs in self.grid.grid.items():
             for bob in bobs: 
                 if isinstance(bob,Bob): #Vérification si bob est une instance de la classe BOB
                     position = self.grid.get_position(bob)
                     available_positions = self.grid.scan_around(position, bob.speed) #les places disponibles pour se déplacer 
                 if available_positions:
-                    new_position = bob.move(self.grid.tiles)
+                    new_position = bob.move(self.grid.grid)
                     bob.parthenogenesis()
-                    self.grid.tiles[position].remove(bob) #suppression de la dernière position
-                    self.grid.tiles[new_position].append(bob) #ajouter le bob pour la nouvelle position
+                    self.grid.grid[position].remove(bob) #suppression de la dernière position
+                    self.grid.grid[new_position].append(bob) #ajouter le bob pour la nouvelle position
                     bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
-        #verification du chnagement de la place pour faire -1 à l'energie
-    def destroy_object(self, obj):
+        
+    def destroy_object(obj):
         """_Destroys the given object.__
 
         Args:
@@ -97,27 +100,16 @@ class GAME():
         
     def day_play(self):
         """chaque jour d=100 ticks
-          - chaque jours f=200 points de nourriture
-          - Ef=100 energie de la nourriture
-          
-          - à la fin de la journée tout les foods restantes disparaiteront
-          - 
-          - si Ebob inf à 0 le bob mort
-          - ajouter dict contient(nb morts, nb parthenogenesis) keys jour_i
+           chaque jours f=200 points de nourriture
+           Ef=100 energie de la nourriture
         """
         tick=self.set_nb_tick_day(self.nb_tick_day)
         fd_quantity=self.set_quantity_food(self.get_quantity_food)
         
-        for nourriture in self.get_quantity_food():
-            #deposer l'objet dans la grille
-            #plusieur nourriture peuvent se trouver dans la meme case 
-            pos_x=random.randint(self.grid.get_M)
-            pos_y=random.randint(self.grid.get_N)
-            self.spawn_food((pos_x,pos_y)) 
+        
         while tick>0:
             
             tick-=1
             time.sleep(1)
-            
-    def create_bob(self,bob, x,y):
-        self.grid.tiles[(x,y)].append(bob)
+    def create_bob(self,Bob, x,y):
+        self.grid.grid[(x,y)].append(Bob)

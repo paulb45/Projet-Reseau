@@ -12,7 +12,7 @@ class Bob():
         self.mass=mass
         self.memory=None
         self.E=E
-        self.last_move=None
+        self.last_move=[None,None]
         self.speed_buff=speed_buff
     
     """ Getters """
@@ -77,15 +77,23 @@ class Bob():
             coord=(random.randint(-self.speed,self.speed+1),0)
         else:
             coord=(0,random.randint(-self.speed,self.speed+1))    
-        self.last_move[0]+=coord[0]
-        self.last_move[1]+=coord[1]
-        for i in dict[self.last_move]:
-            if(isinstance(Bob,i)):self.attack(i)
-            if(isinstance(Food,i)):self.eat(i)
+        self.last_move[0]+=int(coord[0])
+        self.last_move[1]+=int(coord[1])
+        if (self.last_move[0],self.last_move[1]) in dict:
+            for i in dict[self.last_move[0],self.last_move[1]]:
+                
+                if(isinstance(i,Bob)):
+                    print("attaquer")
+                    self.attack(i)
+                if(isinstance(i,Food)):
+                    print("manger")
+                    self.eat(i)
+        print("rien")    
         return coord
         
 
-    def eat(self,food: Food)->None: ### Si Bob bouffe tout l'énergie de la nourriture, la nourriture doit être détruite ! 
+    def eat(self,food: Food)->None: 
+        ### Si Bob bouffe tout l'énergie de la nourriture, la nourriture doit être détruite ! 
                     ### Donc soit Bob la détruie dans cette fonction, soit cette fonction renvoie True la nourriture doit être détruite (et Game s'en chargera)
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 

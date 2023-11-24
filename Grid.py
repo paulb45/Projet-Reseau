@@ -1,9 +1,10 @@
 class Grid():
-    def __init__(self,N,M,tiles):
-        self.tiles=tiles
+    def __init__(self,N,M):
+        #self.tiles=tiles
         self.N=N
         self.M=M
-        self.grid = [[None for _ in range(M)] for _ in range(N)]
+        #self.grid = [[None for _ in range(M)] for _ in range(N)]
+        self.grid={}
     def get_N(self):
         return self.N
     def get_M(self):

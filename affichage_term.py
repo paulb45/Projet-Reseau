@@ -2,6 +2,7 @@ from collections import defaultdict
 from bob import Bob
 from food import Food
 from grid import Grid
+from Game import GAME 
 from config import N, M
 
 #N est la largeur (taille de l'axe x de la grille)
@@ -12,8 +13,12 @@ E = 100
 speed_buff=1
 
 test_grid = defaultdict(lambda:0, {
-        (1,1): Bob(speed, mass, E, speed_buff), (2,2): Food(E), (3,3): [Bob(speed, mass, E, speed_buff), Food(E)],
-      (7,5):[Bob(speed, mass, E, speed_buff),Bob(speed, mass, E, speed_buff),Food(E),Bob(speed, mass, E, speed_buff)],(5,5):[Food(E),Food(E)]})
+        (1,1): Bob(speed, mass, E, speed_buff), (2,2): Food(E), 
+        (3,3): [Bob(speed, mass, E, speed_buff), Food(E)],
+        (7,5):[Bob(speed, mass, E, speed_buff),Bob(speed, mass, E, speed_buff),Food(E),Bob(speed, mass, E, speed_buff)],
+        (5,5):[Food(E),Food(E)]
+      }
+                        )
 
 
 def affiche_map(grid):
@@ -41,7 +46,8 @@ def affiche_map(grid):
         for y in range(N):
           # Gestion de l'affichage de chaque case
             to_print =""
-            match grid[y,x]:
+            try:
+              match grid[y,x]:
                 case 0: to_print = " "
                 case Bob(): to_print = "B"
                 case Food(): to_print = "F"
@@ -54,5 +60,33 @@ def affiche_map(grid):
                     else: 
                       food_count += 1               
                   to_print = f"{bob_count}:{food_count}"
+                case _:   to_print = " "
+            except:
+              pass
+                
             print(f"{to_print:^5}|", end='')
         print(f"\n   {split_line_h}-") # Affichage fin de ligne
+        
+
+#test
+
+grd=Grid(10,10)
+game=GAME(3,100,10,3,grd,3)
+#*********test iniy_bobs() ok
+game.init_bobs()
+#test spawn food ok
+game.spawn_food()
+
+
+#game.bob_play()
+b=Bob(speed, mass, E, speed_buff)
+b.last_move=[0,0]
+grd.grid[(0,0)]=[b]
+affiche_map(grd.grid)
+print(grd.scan_around([0,0],1))
+print(b.move(grd.grid))
+affiche_map(grd.grid)
+#affiche_map(grd.grid)
+
+
+        
