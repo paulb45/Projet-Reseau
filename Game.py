@@ -80,16 +80,35 @@ class GAME():
         # tuer le bob si n as pas de l'energie sinon move
         for bobs in self.grid.grid.items():
             for bob in bobs: 
-                if isinstance(bob,Bob): #Vérification si bob est une instance de la classe BOB
+                if isinstance(bob,Bob): 
                     position = self.grid.get_position(bob)
-                    available_positions = self.grid.scan_around(position, bob.speed) #les places disponibles pour se déplacer 
+                    
+                    nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+                    #s'il y a encore de la nourriture bob reste immobile
+                    if(nb_foods>0):
+                        bob.set_E(bob.get_E()-0.5)
+                    #sinon il se déplace    
+                    else:
+                        #bob choisi aléaroirement un mouvement parmis les mouvement dispo
+                        available_positions = self.grid.scan_around(position, bob.speed)
+                        mouvement=bob.move()
+                        while mouvement not in available_positions:
+                            mouvement=bob.move()
+                        self.grid.grid[position].remove(bob) #suppression de la dernière position
+                        self.grid.grid[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
+                        #ici bob il a bien reussi son mouve
+                        #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
+                        if(nb_bobs==1 and nb_foods>0):
+                            eat=bob.eat()
+                    """" 
                 if available_positions:
                     new_position = bob.move(self.grid.grid)
                     bob.parthenogenesis()
                     self.grid.grid[position].remove(bob) #suppression de la dernière position
                     self.grid.grid[new_position].append(bob) #ajouter le bob pour la nouvelle position
                     bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
-        
+        """
+                #if(count())
     def destroy_object(obj):
         """_Destroys the given object.__
 
@@ -113,3 +132,27 @@ class GAME():
             time.sleep(1)
     def create_bob(self,Bob, x,y):
         self.grid.grid[(x,y)].append(Bob)
+    
+    def count(self,x,y)->list:
+        """count et return les bobs et les foods d'une case données _
+
+        Args:
+            x (int):coord x
+            y (int):coord y
+
+        Returns:
+            list:nb_bobs,nb_foods,bobs,foods
+        """
+        nb_bobs,nb_foods=0,0
+        bobs=[]
+        foods=[]
+        if (x, y) not in self.grid.grid: return [0,0]
+        for elt in self.grid.grid[(x,y)]:
+            for e in elt:
+                if(isinstance(elt,Bob)):
+                    nb_bobs+=1
+                    bobs.append(elt)
+                elif(isinstance(elt,Food)): 
+                    nb_foods+=1
+                    foods.append(elt)
+        return [nb_bobs,nb_foods,bobs,foods]            
