@@ -64,6 +64,9 @@ class Bob():
         #TODO
         #Il peut alors rester immobile tant qu'il y a de la nourriture, mais chaque tic passé immobile consomme quand même 0.5 d'énergie.
         #- lorsque plus d'un bob dans la meme case un seul prend la nourriture
+        
+        # FAUX : QUAND ON APPELLE MOVE, IL DOIR BOUGER !!!
+        # C'EST LE JEU QUI GERE SI BOB MANGE
         """Déplace Bob en choisissant aléatoirement une direction (horizontale ou verticale) pour éviter les mouvement en diagonal
            au moment du mouvement s'il trouve du food il va la manger s'il trouve un autre bob il va l'attaquer 
 
@@ -73,6 +76,7 @@ class Bob():
             tuple: les nouveaux coordonnées(x,y)
         """
         choix=random.choice(['horizontal','vertical'])
+        # PAS CA, BOB DOIT POUVOIR FAIRE HORIZONTAL + VERTICAL SI ÇA SPEED EST DE 2
         if(choix=='horizontal'):
             coord=(random.randint(-self.speed,self.speed+1),0)
         else:
@@ -81,7 +85,7 @@ class Bob():
         self.last_move[1]+=int(coord[1])
         if (self.last_move[0],self.last_move[1]) in dict:
             for i in dict[self.last_move[0],self.last_move[1]]:
-                
+                # MOVE NE GERE PAS ÇA, C'EST BOB PLAY QUI LE FAIT !!!
                 if(isinstance(i,Bob)):
                     print("attaquer")
                     self.attack(i)
@@ -102,7 +106,7 @@ class Bob():
         """
         self.E+=food.energy
         if(self.E>self.Emax):
-            food.energy=self.E-self.Emax
+            food.energy=self.E-self.Emax # C'EST FORCÉMENT <=0, IL Y A PROBLÈME
             self.E=self.Emax
             
     def is_dead(self)->bool:
@@ -115,7 +119,7 @@ class Bob():
     def parthenogenesis(self):
         """_summary_
         """
-        if(self.E>=self.Emax):
+        if(self.E>=self.Emax): # IMPOSSIBLE QUE BOB EST + QUE SON ÉNERGIE MAX !
             self.E=self.Emax-self.Emother
             bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
             bebe_bob.last_move=self.last_move 
