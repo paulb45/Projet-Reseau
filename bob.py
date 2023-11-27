@@ -83,8 +83,6 @@ class Bob():
             coord=(0,random.randint(-self.speed,self.speed+1))    
         self.last_move[0]+=int(coord[0])
         self.last_move[1]+=int(coord[1])
-        #sera traité dans game
-        """
         if (self.last_move[0],self.last_move[1]) in dict:
             for i in dict[self.last_move[0],self.last_move[1]]:
                 # MOVE NE GERE PAS ÇA, C'EST BOB PLAY QUI LE FAIT !!!
@@ -94,14 +92,13 @@ class Bob():
                 if(isinstance(i,Food)):
                     print("manger")
                     self.eat(i)
-        print("rien")  
-        """  
+        print("rien")    
         return coord
         
 
     def eat(self,food: Food)->None: 
-        #TODO
-        # soit cette fonction renvoie True la nourriture doit être détruite (et Game s'en chargera)
+        ### Si Bob bouffe tout l'énergie de la nourriture, la nourriture doit être détruite ! 
+                    ### Donc soit Bob la détruie dans cette fonction, soit cette fonction renvoie True la nourriture doit être détruite (et Game s'en chargera)
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
@@ -111,7 +108,7 @@ class Bob():
         if(self.E>self.Emax):
             food.energy=self.E-self.Emax # C'EST FORCÉMENT <=0, IL Y A PROBLÈME
             self.E=self.Emax
-        return food.energy_food  
+            
     def is_dead(self)->bool:
         """vérifie si Bob mort ou non
 
@@ -120,19 +117,12 @@ class Bob():
         """
         return self.E <=0
     def parthenogenesis(self):
-        """si bob atteint l'energie maximal il aura un bebe
-        Returns:
-            BOB: si il ya une parthenogenesis
-            -1 sinon
+        """_summary_
         """
         if(self.E>=self.Emax): # IMPOSSIBLE QUE BOB EST + QUE SON ÉNERGIE MAX !
             self.E=self.Emax-self.Emother
             bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
-            bebe_bob.last_move=self.last_move
-            return bebe_bob 
-            #TODO dans game
+            bebe_bob.last_move=self.last_move 
             #ajouter le nouveau bob dans le dictionnaire
-        else:
-            return -1   
-        
+    
     def attack(self,target)->None:pass
