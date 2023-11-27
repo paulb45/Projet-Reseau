@@ -7,6 +7,9 @@ class Grid():
         
         self.grid={} # une grid à un attribut grid ??? -> c'est pas très logique d'avoir à faire grid.grid pour avoir une grid...
     
+    #aymen scan around fiha des erreurs katle3 des valeurs pas forcément correct
+    #[0,1]->[(0, 0), (0, 2), (1, 0), (1, 1), (1, 2)] :/
+    #[0,0] ->[(0, 1), (1, 0), (1, 1)] :/
 
     def scan_around(self,position, distance):
         x, y = position
