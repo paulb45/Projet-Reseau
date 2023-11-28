@@ -59,9 +59,9 @@ class Game():
             name= Bob( speed, mass, E, speed_buff)
             name.set_last_move((x,y))
             #f grid drtiha comme une liste ohna drtiha comme un dict
-            if (x, y) not in self.grid.grid:
-                self.grid.grid[(x, y)] = []
-            self.grid.grid[(x,y)].append(name)
+            if (x, y) not in self.grid.map:
+                self.grid.map[(x, y)] = []
+            self.grid.map[(x,y)].append(name)
                
     
     def spawn_food(self):
@@ -72,16 +72,19 @@ class Game():
         """
         for i in range(self.get_quantity_food()):
             x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
-            if (x, y) not in self.grid.grid:
-                self.grid.grid[(x, y)] = []
-            self.grid.grid[x,y].append(Food(self.init_energy_food)) 
+            if (x, y) not in self.grid.map:
+                self.grid.map[(x, y)] = []
+            self.grid.map[x,y].append(Food(self.init_energy_food)) 
         
     def bob_play(self):
         # tuer le bob si n as pas de l'energie sinon move
-        for bobs in self.grid.grid.items():
-            for bob in bobs: 
+        for bobs in self.grid.map.items():
+            for bob in bobs:
+                 
                 if isinstance(bob,Bob): 
                     position = self.grid.get_position(bob)
+                    if(bob.is_dead()):
+                        self.grid.map[position].remove(bob) #suppression de la dernière position
                     
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
                     #s'il y a encore de la nourriture bob reste immobile
@@ -94,18 +97,18 @@ class Game():
                         mouvement=bob.move()
                         while mouvement not in available_positions:
                             mouvement=bob.move()
-                        self.grid.grid[position].remove(bob) #suppression de la dernière position
-                        self.grid.grid[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
+                        self.grid.map[position].remove(bob) #suppression de la dernière position
+                        self.grid.map[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
                         #ici bob il a bien reussi son mouve
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
                         if(nb_bobs==1 and nb_foods>0):
                             eat=bob.eat()
                     """" 
                 if available_positions:
-                    new_position = bob.move(self.grid.grid)
+                    new_position = bob.move(self.grid.map)
                     bob.parthenogenesis()
-                    self.grid.grid[position].remove(bob) #suppression de la dernière position
-                    self.grid.grid[new_position].append(bob) #ajouter le bob pour la nouvelle position
+                    self.grid.map[position].remove(bob) #suppression de la dernière position
+                    self.grid.map[new_position].append(bob) #ajouter le bob pour la nouvelle position
                     bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
         """
                 #if(count())
@@ -131,7 +134,7 @@ class Game():
             tick-=1
             time.sleep(1)
     def create_bob(self,Bob, x,y):
-        self.grid.grid[(x,y)].append(Bob)
+        self.grid.map[(x,y)].append(Bob)
     
     def count(self,x,y)->list:
         """count et return les bobs et les foods d'une case données _
@@ -146,8 +149,8 @@ class Game():
         nb_bobs,nb_foods=0,0
         bobs=[]
         foods=[]
-        if (x, y) not in self.grid.grid: return [0,0]
-        for elt in self.grid.grid[(x,y)]:
+        if (x, y) not in self.grid.map: return [0,0]
+        for elt in self.grid.map[(x,y)]:
             for e in elt:
                 if(isinstance(elt,Bob)):
                     nb_bobs+=1
