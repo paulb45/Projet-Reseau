@@ -2,7 +2,7 @@ from collections import defaultdict
 from bob import Bob
 from food import Food
 from grid import Grid
-from Game import GAME 
+from game import Game
 from config import N, M
 
 #N est la largeur (taille de l'axe x de la grille)
@@ -11,7 +11,7 @@ speed = 1
 mass = 10
 E = 100
 speed_buff=1
-
+"""
 test_grid = defaultdict(lambda:0, {
         (1,1): Bob(speed, mass, E, speed_buff), (2,2): Food(E), 
         (3,3): [Bob(speed, mass, E, speed_buff), Food(E)],
@@ -19,7 +19,7 @@ test_grid = defaultdict(lambda:0, {
         (5,5):[Food(E),Food(E)]
       }
                         )
-
+"""
 
 def affiche_map(grid):
     space = 5
@@ -66,12 +66,13 @@ def affiche_map(grid):
                 
             print(f"{to_print:^5}|", end='')
         print(f"\n   {split_line_h}-") # Affichage fin de ligne
-        
+
+"""       
 
 #test
 
 grd=Grid(10,10)
-game=GAME(3,100,10,3,grd,3)
+game=Game(3,100,10,3,grd,3)
 #*********test iniy_bobs() ok
 game.init_bobs()
 #test spawn food ok
@@ -88,5 +89,4 @@ print(b.move(grd.grid))
 affiche_map(grd.grid)
 #affiche_map(grd.grid)
 
-
-        
+""" 
