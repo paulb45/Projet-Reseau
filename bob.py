@@ -107,7 +107,8 @@ class Bob():
         if(self.E>self.Emax):
             food.energy=self.E-self.Emax
             self.E=self.Emax
-        return food.energy_food  
+        return food.energy_food 
+     
     def is_dead(self)->bool:
         """vérifie si Bob mort ou non
 

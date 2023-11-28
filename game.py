@@ -10,7 +10,7 @@ mass = 10
 E = 100
 speed_buff=1
 
-class GAME():
+class Game():
     def __init__(self,quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day):
         self.init_quantity_food=quantity_food
         self.init_energy_food=init_energy_food

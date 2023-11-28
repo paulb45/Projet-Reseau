@@ -67,19 +67,20 @@ def affiche_map(grid):
             print(f"{to_print:^5}|", end='')
         print(f"\n   {split_line_h}-") # Affichage fin de ligne
 
-"""       
+     
 
 #test
 
 grd=Grid(10,10)
-game=Game(3,100,10,3,grd,3)
-#*********test iniy_bobs() ok
-game.init_bobs()
+Game=Game(3,100,10,3,grd,3)
+#*********
+#test iniy_bobs() ok
+Game.init_bobs()
 #test spawn food ok
-game.spawn_food()
-
-
-#game.bob_play()
+Game.spawn_food()
+affiche_map(grd.grid)
+""""
+#Game.bob_play()
 b=Bob(speed, mass, E, speed_buff)
 b.last_move=[0,0]
 grd.grid[(0,0)]=[b]
@@ -88,5 +89,4 @@ print(grd.scan_around([0,0],1))
 print(b.move(grd.grid))
 affiche_map(grd.grid)
 #affiche_map(grd.grid)
-
-""" 
+"""
