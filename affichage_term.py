@@ -79,19 +79,16 @@ Game.init_bobs()
 #test spawn food ok
 Game.spawn_food()
 affiche_map(grd.grid)
-""""
+"""
 #Game.bob_play()
 b=Bob(speed, mass, E, speed_buff)
 b.last_move=[0,0]
 grd.map[(0,0)]=[b]
 #affiche_map(grd.map)
-#print(grd.scan_around([0,0],1))
+print(grd.scan_around([0,0],1))
 #print(b.move([(1,0),(0,1)]))
-f1=Food(99)
-b.eat(f1)
-print(b.get_E(),f1.get_energy())
-b.eat(f1)
-print(b.get_E(),f1.get_energy())
+
+
 
 
 
