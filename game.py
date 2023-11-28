@@ -78,10 +78,11 @@ class Game():
         
     def bob_play(self):
         # tuer le bob si n as pas de l'energie sinon move
-        for bobs in self.grid.map.items():
+        for coords ,bobs in self.grid.map.items():
             for bob in bobs:
-                 
-                if isinstance(bob,Bob): 
+                print(bob)
+                if isinstance(bob,Bob):
+                    print("hello") 
                     position = self.grid.get_position(bob)
                     #on peut utiliser destroy obj
                     if(bob.is_dead()):
@@ -91,6 +92,7 @@ class Game():
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
                     #Eb-=.5
+                    print(nb_bobs)
                     if(nb_foods>0):
                         bob.set_E(bob.get_E()-0.5)
                     #sinon il se déplace    
@@ -98,13 +100,17 @@ class Game():
                         #bob choisi aléaroirement un mouvement parmis les mouvement dispo
                         available_positions = self.grid.scan_around(position, bob.speed)
                         mouvement=bob.move(available_positions)
-                        self.grid.map[position].remove(bob) #suppression de la dernière position
-                        self.grid.map[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
+                        print(mouvement)
+                        
+                        self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
+                        if tuple(mouvement) not in self.grid.map:
+                            self.grid.map[tuple(mouvement)] = []
+                        self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
                          #ici bob il a bien reussi son move
             #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
-                        if(nb_bobs==1 and nb_foods>0):
-                            eat=bob.eat()
+                        """if(nb_bobs==1 and nb_foods>0):
+                            eat=bob.eat()"""
              
                 #if(count())
     def destroy_object(obj):
@@ -146,7 +152,7 @@ class Game():
         foods=[]
         if (x, y) not in self.grid.map: return [0,0]
         for elt in self.grid.map[(x,y)]:
-            for e in elt:
+           
                 if(isinstance(elt,Bob)):
                     nb_bobs+=1
                     bobs.append(elt)

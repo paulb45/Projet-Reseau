@@ -82,11 +82,17 @@ affiche_map(grd.grid)
 """
 #Game.bob_play()
 b=Bob(speed, mass, E, speed_buff)
+b2=Bob(speed, mass, E, speed_buff)
 b.last_move=[0,0]
+b2.last_move=[0,1]
 grd.map[(0,0)]=[b]
+grd.map[(0,1)]=[b2]
 #affiche_map(grd.map)
-print(grd.scan_around([0,0],1))
+#print(grd.scan_around([5,5],1))
 #print(b.move([(1,0),(0,1)]))
+#print(grd.map)
+Game.bob_play()
+
 
 
 
