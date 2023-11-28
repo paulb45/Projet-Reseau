@@ -29,9 +29,7 @@ class Grid():
                         
                         positions_disponibles.append((new_x, new_y))
 
-        # Vérifier si la nouvelle position est à l'intérieur de la grille
-        elif 0 <= new_x < self.N and 0 <= new_y < self.N:
-            positions_disponibles.append((new_x, new_y))
+        
         else:
             for i in range(-distance, distance + 1):
                 for j in range(-distance, distance + 1):
