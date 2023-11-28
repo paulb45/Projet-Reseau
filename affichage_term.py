@@ -79,7 +79,7 @@ Game.init_bobs()
 #test spawn food ok
 Game.spawn_food()
 affiche_map(grd.grid)
-"""
+""""
 #Game.bob_play()
 b=Bob(speed, mass, E, speed_buff)
 b.last_move=[0,0]

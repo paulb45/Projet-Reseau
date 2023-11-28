@@ -21,18 +21,25 @@ class Grid():
     def scan_around(self,position, distance):
         x, y = position
         positions_disponibles = []
-
-        for i in range(-distance, distance + 1):
-            for j in range(-distance, distance + 1):
+        if distance == 1:
+            for i, j in [(0, -1), (-1, 0), (1, 0), (0, 1)]:
                 new_x = x + i
                 new_y = y + j
-
-                # Vérification que la nouvelle position est à l'intérieur de la grille
-                # et que x et y diffèrent, excluant ainsi la diagonale lorsque la distance vaut 1
-                if distance == 1:
-                    if 0 <= new_x < self.N and 0 <= new_y < self.N and (new_x != x or new_y != y):
+                if 0 <= new_x < self.N and 0 <= new_y < self.N :
+                        
                         positions_disponibles.append((new_x, new_y))
-                else : 
+
+        # Vérifier si la nouvelle position est à l'intérieur de la grille
+        if 0 <= new_x < self.N and 0 <= new_y < self.N:
+            positions_disponibles.append((new_x, new_y))
+        else:
+            for i in range(-distance, distance + 1):
+                for j in range(-distance, distance + 1):
+                    new_x = x + i
+                    new_y = y + j
+
+                    # Vérification que la nouvelle position est à l'intérieur de la grille
+                    # et que x et y diffèrent, excluant ainsi la diagonale lorsque la distance vaut 1
                     if 0 <= new_x < self.N and 0 <= new_y < self.N :
                         positions_disponibles.append((new_x, new_y))
 
