@@ -60,25 +60,22 @@ class Bob():
         cls.Echild=E  
     
       
-    def move(self,dict)->tuple:
+    def move(self,coords:list)->tuple:
         #TODO
-        #Il peut alors rester immobile tant qu'il y a de la nourriture, mais chaque tic passé immobile consomme quand même 0.5 d'énergie.
-        #- lorsque plus d'un bob dans la meme case un seul prend la nourriture
-        """Déplace Bob en choisissant aléatoirement une direction (horizontale ou verticale) pour éviter les mouvement en diagonal
-           au moment du mouvement s'il trouve du food il va la manger s'il trouve un autre bob il va l'attaquer 
+        #la fonction scan_around() renvoie un dict avec les possibilité ou bob il va se déplacer
+        #on choisi une parmis  
+        
+        """Déplace Bob en choisissant aléatoirement une direction  
 
         Args:
-            dict :"coord":les objets qui se trouvent dans ces coord (BOB,FOOD) 
+            list :les possibilité de déplacement 
         Returns:
-            tuple: les nouveaux coordonnées(x,y)
+            
         """
-        choix=random.choice(['horizontal','vertical'])
-        if(choix=='horizontal'):
-            coord=(random.randint(-self.speed,self.speed+1),0)
-        else:
-            coord=(0,random.randint(-self.speed,self.speed+1))    
-        self.last_move[0]+=int(coord[0])
-        self.last_move[1]+=int(coord[1])
+        choix=random.choice(coords)
+        x,y=choix[0],choix[1]  
+        self.last_move[0]+=int(x)
+        self.last_move[1]+=int(y)
         #sera traité dans game
         """
         if (self.last_move[0],self.last_move[1]) in dict:
@@ -92,22 +89,29 @@ class Bob():
                     self.eat(i)
         print("rien")  
         """  
-        return coord
+        return self.last_move
         
 
     def eat(self,food: Food)->None: 
-        #TODO
-        # soit cette fonction renvoie True la nourriture doit être détruite (et Game s'en chargera)
+        
+        # cette fonction renvoie True la nourriture doit être détruite 
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
             food (FOOD): la nourriture que bob va manger
         """
+        try:
+            assert food.get_energy() != 0
+        except AssertionError:
+            # Gérer le cas où food.get_energy() est égal à 0
+            print("L'énergie de la nourriture est égale à 0.")
         self.E+=food.energy
         if(self.E>self.Emax):
-            food.energy=self.E-self.Emax
+            food.set_energy(self.E-self.Emax)
             self.E=self.Emax
-        return food.energy_food 
+        else:
+            food.set_energy(0)    
+        return food.energy_food() 
      
     def is_dead(self)->bool:
         """vérifie si Bob mort ou non

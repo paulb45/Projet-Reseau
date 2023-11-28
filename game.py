@@ -83,34 +83,29 @@ class Game():
                  
                 if isinstance(bob,Bob): 
                     position = self.grid.get_position(bob)
+                    #on peut utiliser destroy obj
                     if(bob.is_dead()):
                         self.grid.map[position].remove(bob) #suppression de la dernière position
                     
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+            #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
+                    #Eb-=.5
                     if(nb_foods>0):
                         bob.set_E(bob.get_E()-0.5)
                     #sinon il se déplace    
                     else:
                         #bob choisi aléaroirement un mouvement parmis les mouvement dispo
                         available_positions = self.grid.scan_around(position, bob.speed)
-                        mouvement=bob.move()
-                        while mouvement not in available_positions:
-                            mouvement=bob.move()
+                        mouvement=bob.move(available_positions)
                         self.grid.map[position].remove(bob) #suppression de la dernière position
                         self.grid.map[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
-                        #ici bob il a bien reussi son mouve
+                         #ici bob il a bien reussi son move
+            #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
                         if(nb_bobs==1 and nb_foods>0):
                             eat=bob.eat()
-                    """" 
-                if available_positions:
-                    new_position = bob.move(self.grid.map)
-                    bob.parthenogenesis()
-                    self.grid.map[position].remove(bob) #suppression de la dernière position
-                    self.grid.map[new_position].append(bob) #ajouter le bob pour la nouvelle position
-                    bob.set_last_move(new_position) #MAJ du dernier mouvement du bob
-        """
+             
                 #if(count())
     def destroy_object(obj):
         """_Destroys the given object.__
@@ -155,7 +150,8 @@ class Game():
                 if(isinstance(elt,Bob)):
                     nb_bobs+=1
                     bobs.append(elt)
-                elif(isinstance(elt,Food)): 
-                    nb_foods+=1
-                    foods.append(elt)
+                elif(isinstance(elt,Food)):
+                    if(elt.get_energy()>0): 
+                        nb_foods+=1
+                        foods.append(elt)
         return [nb_bobs,nb_foods,bobs,foods]            
