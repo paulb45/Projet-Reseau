@@ -78,7 +78,9 @@ Game=Game(3,100,10,3,grd,3)
 Game.init_bobs()
 #test spawn food ok
 Game.spawn_food()
-affiche_map(grd.grid)
+
+affiche_map(grd.map)
+print(grd.scan_around([7,5],1))
 """"
 #Game.bob_play()
 b=Bob(speed, mass, E, speed_buff)
