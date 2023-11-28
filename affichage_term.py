@@ -80,7 +80,7 @@ Game.init_bobs()
 Game.spawn_food()
 
 affiche_map(grd.map)
-print(grd.scan_around([7,5],1))
+print(grd.scan_around([0,0],1))
 """"
 #Game.bob_play()
 b=Bob(speed, mass, E, speed_buff)
