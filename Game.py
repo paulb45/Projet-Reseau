@@ -1,7 +1,7 @@
 import time
-import  grid ,food
+import  Grid ,Food
 from bob import Bob
-from food import Food
+from Food import Food
 import random
 
 #var test bob 
@@ -77,29 +77,32 @@ class GAME():
             self.grid.grid[x,y].append(Food(self.init_energy_food)) 
         
     def bob_play(self):
-        # tuer le bob si n as pas de l'energie sinon move
         for bobs in self.grid.grid.items():
             for bob in bobs: 
-                if isinstance(bob,Bob): 
+                if isinstance(bob,Bob):
                     position = self.grid.get_position(bob)
-                    
-                    nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
-                    #s'il y a encore de la nourriture bob reste immobile
-                    if(nb_foods>0):
-                        bob.set_E(bob.get_E()-0.5)
-                    #sinon il se déplace    
+                    ## tuer le bob si n as pas de l'energie sinon move
+                    if (bob.is_dead()):
+                        self.grid.grid[position].remove(bob)
+                        
                     else:
-                        #bob choisi aléaroirement un mouvement parmis les mouvement dispo
-                        available_positions = self.grid.scan_around(position, bob.speed)
-                        mouvement=bob.move()
-                        while mouvement not in available_positions:
+                        nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+                        #s'il y a encore de la nourriture bob reste immobile
+                        if(nb_foods>0):
+                            bob.set_E(bob.get_E()-0.5)
+                        #sinon il se déplace    
+                        else:
+                            #bob choisi aléaroirement un mouvement parmis les mouvement dispo
+                            available_positions = self.grid.scan_around(position, bob.speed)
                             mouvement=bob.move()
-                        self.grid.grid[position].remove(bob) #suppression de la dernière position
-                        self.grid.grid[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
-                        #ici bob il a bien reussi son mouve
-                        #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
-                        if(nb_bobs==1 and nb_foods>0):
-                            eat=bob.eat()
+                            while mouvement not in available_positions:
+                                mouvement=bob.move()
+                            self.grid.grid[position].remove(bob) #suppression de la dernière position
+                            self.grid.grid[mouvement].append(bob) #ajouter le bob pour la nouvelle position 
+                            #ici bob il a bien reussi son mouve
+                            #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
+                            if(nb_bobs==1 and nb_foods>0):
+                                eat=bob.eat()
                     """" 
                 if available_positions:
                     new_position = bob.move(self.grid.grid)
