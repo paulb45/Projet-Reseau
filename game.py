@@ -133,7 +133,10 @@ class Game():
             tick-=1
             time.sleep(1)
     def create_bob(self,Bob, x,y):
-        self.grid.map[(x,y)].append(Bob( speed, mass, E, speed_buff))
+        if (x, y) in self.grid.map:
+            self.grid.map[(x, y)].append(Bob)
+        else:
+            self.grid.map[(x, y)] = [Bob]
     
     def count(self,x,y)->list:
         """count et return les bobs et les foods d'une case données _
