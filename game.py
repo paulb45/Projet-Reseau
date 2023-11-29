@@ -81,9 +81,9 @@ class Game():
         copy_dict=dict(self.grid.map)
         for coords ,bobs in copy_dict.items():
             for bob in bobs:
-                print(bob)
+                
                 if isinstance(bob,Bob):
-                    print("hello") 
+                     
                     position = self.grid.get_position(bob)
                     
                     
@@ -91,7 +91,7 @@ class Game():
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
                     #Eb-=.5
-                    print(nb_bobs)
+                    print("nb boobs",nb_bobs)
                     if(nb_foods>0):
                         bob.set_E(bob.get_E()-0.5)
                     #sinon il se déplace    
@@ -99,7 +99,7 @@ class Game():
                         #bob choisi aléaroirement un mouvement parmis les mouvement dispo
                         available_positions = self.grid.scan_around(position, bob.speed)
                         mouvement=bob.move(available_positions)
-                        print(mouvement)
+                        print("mouvement",mouvement)
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
                             self.grid.map[tuple(mouvement)] = []
@@ -109,8 +109,12 @@ class Game():
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
                         """if(nb_bobs==1 and nb_foods>0):
                             eat=bob.eat()"""
-                    
-                
+                    print("len",len(foods))            
+                    if(len(foods)>0):
+                        eating=bob.eat(foods[0])
+                        print("eating: ",eating)    
+                        if(not eating):
+                            foods.remove(foods[0])
     def destroy_object(obj):
         """_Destroys the given object.__
 
