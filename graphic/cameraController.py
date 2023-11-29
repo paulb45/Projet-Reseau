@@ -33,7 +33,6 @@ class CameraController:
 
         # rapport entre la hauteur et la largeur de l'écran
         self.aspect_ratio = 0
-        self.modify_size_window()
         
         # calcul du zoom initial
         # on va partir par défaut sur l'affichage de 20 cases sur la largeur
@@ -42,6 +41,7 @@ class CameraController:
         else:
             self.zoom_map_width = tile_size * N
 
+        self.modify_size_window()
         self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
 
         # calcul de la position du point de vue, au milieu par défaut
@@ -68,9 +68,15 @@ class CameraController:
 
 
     def modify_size_window(self):
-        """Méthode à appeler s'il y a redimenssion de la taille de la fenetre
+        """Méthode à appeler s'il y a redimension de la taille de la fenetre
         """
+        # aspect_ratio_pre = self.aspect_ratio
         self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
+
+        # if aspect_ratio_pre != 0:
+        #     self.zoom_map_width *= self.aspect_ratio / aspect_ratio_pre
+        
+        # self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
 
 
     # TODO implémenter la vérif de sorti de map
