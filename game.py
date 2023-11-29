@@ -78,7 +78,7 @@ class Game():
         
     def bob_play(self):
         # tuer le bob si n as pas de l'energie sinon move
-        copy_dict=self.grid.map
+        copy_dict=dict(self.grid.map)
         for coords ,bobs in copy_dict.items():
             for bob in bobs:
                 print(bob)
