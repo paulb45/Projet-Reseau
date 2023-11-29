@@ -14,8 +14,8 @@ nb_day = 1
 
 game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
 game.init_bobs()
-#game.create_bob(Bob(1,1,100,0), 1,1)
-affiche_map(game.grid.map)
+game.create_bob(Bob(1,1,100,0), 1,1)
+#affiche_map(game.grid.map)
 
 game.bob_play()
 
