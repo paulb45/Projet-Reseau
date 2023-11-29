@@ -40,33 +40,44 @@ class Menu(pygame.Surface):
         self.game_screen.add.button('Quit', pygame_menu.events.EXIT)
 
     def load_new_game(self):
-        self.new_game.add.text_input('Population de départ :', default='100')
-        self.new_game.add.text_input('Nouriture de départ :', default='100')
-        self.new_game.add.text_input('movement de bob :', default='1')
+        self.new_game.add.text_input('largeur de la carte :', default='100',textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('hauteur de la carte :', default='100',textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Population de départ :', default='100',textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Nouriture de départ :', default='100',textinput_id='population_food',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('movement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.button('Quit', pygame.QUIT)
         self.new_game.add.button('start', self.game_screen)
-        self.new_game.center_content()
+        def data_fun() -> None:
+            """
+            Print data of the menu.
+            """
+            print('Settings data:')
+            data = self.new_game.get_input_data()
+            for k in data.keys():
+                print(f'\t{k}\t=>\t{data[k]}')
+
+        self.new_game.add.button('Store data', data_fun, button_id='store')
+        self.new_game.add.button('Restore original values', self.new_game.reset_value)
+        self.new_game.add.button('Return to main menu', pygame_menu.events.BACK)
 
     def to_print(self, menu_name: str):
         match menu_name:
             case "main_menu":
                 events =  pygame.event.get()
                 self.main_menu.update(events)
-                self.main_menu.draw(self.surface)
+                #self.main_menu.draw(self.surface)
+                self.main_menu.mainloop(self.surface)
             case "game_screen":
-                self.game_screen.draw(self.surface)
+                self.game_screen.draw(self.subsurface)
+                #self.game_screen.mainloop(self.surface)
             case "new_game":
                 self.new_game.draw(self.surface)
+                #self.new_game.mainloop(self.subsurface)
                 
-                
-    
 if __name__ == '__main__':
     pygame.init()
     surface = pygame.display.set_mode((720,480))
     menu=Menu(surface)
-    
-    
-    
     while True:       
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
