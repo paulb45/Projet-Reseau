@@ -113,7 +113,7 @@ class Game():
                         print("eating: ",eating) 
                         #print("eatung",bob.get_E(),foods[0].get_energy())
                         
-                           
+                           #test test
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])

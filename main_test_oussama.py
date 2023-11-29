@@ -28,4 +28,4 @@ game.bob_play()
 affiche_map(game.grid.map)
 #game.bob_play()
 
-#affiche_map(game.grid.map)
+#affiche_map(game.grid.map)w

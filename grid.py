@@ -53,7 +53,7 @@ class Grid():
 
         
     def get_bobs(self,x,y):
-        # A REFAIRE
+        # A REFIRE
         key = (x, y)
         return self.map.get(key, [])  # Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
        
