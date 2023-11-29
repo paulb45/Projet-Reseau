@@ -55,13 +55,9 @@ class Game():
         """
         for i in range(self.P0):
             x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
+            bob= Bob( speed, mass, E, speed_buff)
+            self.create_bob( bob, x, y)
             
-            name= Bob( speed, mass, E, speed_buff)
-            name.set_last_move((x,y))
-            #f grid drtiha comme une liste ohna drtiha comme un dict
-            if (x, y) not in self.grid.map:
-                self.grid.map[(x, y)] = []
-            self.grid.map[(x,y)].append(name)
                
     
     def spawn_food(self):
@@ -137,7 +133,10 @@ class Game():
             tick-=1
             time.sleep(1)
     def create_bob(self,Bob, x,y):
-        self.grid.map[(x,y)].append(Bob( speed, mass, E, speed_buff))
+        if (x, y) in self.grid.map:
+            self.grid.map[(x, y)].append(Bob)
+        else:
+            self.grid.map[(x, y)] = [Bob]
     
     def count(self,x,y)->list:
         """count et return les bobs et les foods d'une case données _
