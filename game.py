@@ -85,9 +85,7 @@ class Game():
                 if isinstance(bob,Bob):
                     print("hello") 
                     position = self.grid.get_position(bob)
-                    #on peut utiliser destroy obj
-                    if(bob.is_dead()):
-                        self.grid.map[position].remove(bob) #suppression de la dernière position
+                    
                     
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
             #*******************deplacement section **********************#       
@@ -102,7 +100,6 @@ class Game():
                         available_positions = self.grid.scan_around(position, bob.speed)
                         mouvement=bob.move(available_positions)
                         print(mouvement)
-                        
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
                             self.grid.map[tuple(mouvement)] = []
@@ -112,8 +109,8 @@ class Game():
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
                         """if(nb_bobs==1 and nb_foods>0):
                             eat=bob.eat()"""
-             
-                #if(count())
+                    
+                
     def destroy_object(obj):
         """_Destroys the given object.__
 
