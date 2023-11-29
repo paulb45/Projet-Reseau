@@ -5,10 +5,10 @@
 from affichage_term import *
 from game import Game
 
-quantity_food = 300
+quantity_food = 3
 init_energy_food = 10
 nb_tick_day = 60
-P0 = 90
+P0 = 10
 grid = Grid(10,10)
 nb_day = 1
 
@@ -17,6 +17,14 @@ game.init_bobs()
 #game.create_bob(Bob(1,1,100,0), 1,1)
 affiche_map(game.grid.map)
 
+
+#game.create_bob(Bob(1,1,100,0), 1,1)
+affiche_map(game.grid.map)
+
+
+affiche_map(game.grid.map)
+game.bob_play()
+affiche_map(game.grid.map)
 game.bob_play()
 
 affiche_map(game.grid.map)
