@@ -87,7 +87,7 @@ class Game():
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
                     #Eb-=.5
-                    print("nb boobs",nb_bobs)
+                    
                     if(nb_foods>0):
                         bob.set_E(bob.get_E()-0.5)
                     #sinon il se déplace    
@@ -95,22 +95,30 @@ class Game():
                         #bob choisi aléaroirement un mouvement parmis les mouvement dispo
                         available_positions = self.grid.scan_around(position, bob.speed)
                         mouvement=bob.move(available_positions)
-                        print("mouvement",mouvement)
+                        
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
                             self.grid.map[tuple(mouvement)] = []
                         self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
+                        print(position,mouvement)
                          #ici bob il a bien reussi son move
             #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
                         """if(nb_bobs==1 and nb_foods>0):
                             eat=bob.eat()"""
-                    print("len",len(foods))            
+                                
                     if(len(foods)>0):
+                        #print("after eating",bob.get_E(),foods[0].get_energy(),end="")
                         eating=bob.eat(foods[0])
-                        print("eating: ",eating)    
-                        if(not eating):
+                        print("eating: ",eating) 
+                        #print("eatung",bob.get_E(),foods[0].get_energy())
+                        
+                           
+                        if(eating):
+                            self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
+                            
+                            
     def destroy_object(obj):
         """_Destroys the given object.__
 

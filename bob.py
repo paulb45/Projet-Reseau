@@ -75,10 +75,7 @@ class Bob():
         choix=random.choice(coords)
         x=choix[0]
         y=choix[1]  
-        x=int(self.last_move[0])
-        y=int(self.last_move[1])
-        x+=int(x)
-        y+=int(y)
+        
         self.last_move=(x,y)
         #sera traité dans game
         """
