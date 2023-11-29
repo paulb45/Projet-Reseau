@@ -73,9 +73,13 @@ class Bob():
             
         """
         choix=random.choice(coords)
-        x,y=choix[0],choix[1]  
-        self.last_move[0]+=int(x)
-        self.last_move[1]+=int(y)
+        x=choix[0]
+        y=choix[1]  
+        x=self.last_move[0]
+        y=self.last_move[1]
+        x+=int(x)
+        y+=int(y)
+        self.last_move=(x,y)
         #sera traité dans game
         """
         if (self.last_move[0],self.last_move[1]) in dict:
