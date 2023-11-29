@@ -19,12 +19,12 @@ affiche_map(game.grid.map)
 
 
 #game.create_bob(Bob(1,1,100,0), 1,1)
-affiche_map(game.grid.map)
+#affiche_map(game.grid.map)
 
 
-affiche_map(game.grid.map)
+#affiche_map(game.grid.map)
 game.bob_play()
-affiche_map(game.grid.map)
-game.bob_play()
+#affiche_map(game.grid.map)
+#game.bob_play()
 
-affiche_map(game.grid.map)
+#affiche_map(game.grid.map)

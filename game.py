@@ -137,7 +137,7 @@ class Game():
             self.grid.map[(x, y)].append(Bob)
         else:
             self.grid.map[(x, y)] = [Bob]
-    
+        Bob.set_last_move([x,y])
     def count(self,x,y)->list:
         """count et return les bobs et les foods d'une case données _
 
