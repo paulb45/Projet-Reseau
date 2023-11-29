@@ -1,5 +1,6 @@
 import pygame
 import pygame_menu
+from typing import Tuple, Optional
 
 class Menu(pygame.Surface):
 
@@ -23,37 +24,45 @@ class Menu(pygame.Surface):
         pygame_menu.themes.THEME_BLUE.widget_font_size = myfontsize
         pygame_menu.themes.THEME_BLUE.widget_font = myfont
 
-        def gamescreenmenu(self):
-            game_screen = pygame_menu.Menu('Gaming',window_size[0],window_size[1],theme=mytheme1)
-            game_screen.add.button('Quit', pygame_menu.events.EXIT)
-            game_screen.draw(surface)
+        def games_creen_menu(self):
+            self.game_screen = pygame_menu.Menu('Gaming',window_size[0],window_size[1],theme=mytheme1)
+            self.game_screen.add.button('Quit', pygame_menu.events.EXIT)
 
-        def startmenu(self):
-            start = pygame_menu.Menu('New Game',window_size[0],window_size[1],theme= mytheme2)
-            start.add.text_input('Population de départ :', default='100')
-            start.add.text_input('Nouriture de départ :', default='100')
-            start.add.text_input('movement de bob :', default='1')
-            start.add.button('Quit', pygame_menu.events.EXIT)
-            start.add.button('start', gamescreenmenu(surface))
-            start.center_content()
+        def start_menu(self):
+            self.start = pygame_menu.Menu('New Game',window_size[0],window_size[1],theme= mytheme2)
+            self.start.add.text_input('largeur de la carte :', default='100',textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
+            self.start.add.text_input('hauteur de la carte :', default='100',textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
+            self.start.add.text_input('Population de départ :', default='100',textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
+            self.start.add.text_input('Nouriture de départ :', default='100',textinput_id='population_food',input_type=pygame_menu.locals.INPUT_INT)
+            self.start.add.text_input('movement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
+            self.start.add.button('Quit', pygame_menu.events.EXIT)
+            self.start.add.button('start',self.game_screen)
+            #mainloop ?
+            def data_fun() -> None:
+                """
+                Print data of the menu.
+                """
+                print('Settings data:')
+                data = self.start.get_input_data()
+                for k in data.keys():
+                    print(f'\t{k}\t=>\t{data[k]}')
 
-        def loadmenu(self):
-            load = pygame_menu.Menu('New Game',window_size[0],window_size[1],theme=mytheme2)
-            load.add.vertical_margin(50)
-            load.add.button('Quit', pygame_menu.events.EXIT)
-            self.load.add.button('Start',gamescreenmenu(surface))
+            self.start.add.button('Store data', data_fun, button_id='store')
+            self.start.add.buttonsettings_menu.add.button('Restore original values', self.start.reset_value)
+            self.start.add.button('Return to main menu', pygame_menu.events.BACK)
+        #def load_menu(self):
+        #   load = pygame_menu.Menu('New Game',window_size[0],window_size[1],theme=mytheme2)
+        #   load.add.vertical_margin(50)
+        #   load.add.button('Quit', pygame_menu.events.EXIT)
+        #   load.add.button('self.start',games_creen_menu)
+        #   load.draw(surface)
 
-        def principal(self):
+        def principal_menu(self):
             self.main_menu = pygame_menu.Menu('EVOlution',window_size[0],window_size[1],theme=mytheme2)
-            self.main_menu.add.button('new game', startmenu(surface))
-            self.main_menu.add.button('load game', loadmenu)
+            self.main_menu.add.button('new game', start_menu)
+            #self.main_menu.add.button('load game', load_menu)
             self.main_menu.add.button('Quit', pygame_menu.events.EXIT)
-            self.main_menu.draw(surface)
 
-    def event_menu(self,events):
-        #self.main_menu.update(events)
-        #self.main_menu.draw(surface)
-    
 if __name__ == '__main__':
     pygame.init()
     surface = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
@@ -61,8 +70,6 @@ if __name__ == '__main__':
     while True:
         events = pygame.event.get()
         #menu.event_menu(events)
-        #menu.main_menu.draw(surface)
-        
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
