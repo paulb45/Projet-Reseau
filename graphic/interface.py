@@ -15,6 +15,8 @@ class Interface(pygame.Surface):
         super().__init__(size, flags)
         self._images = {}
         self.load_images()
+        
+        self.generate_ground(self.grass_tile)
 
     # --- Chargement des sprites ---
     def load_images(self):
@@ -103,7 +105,6 @@ class Interface(pygame.Surface):
                 self.place_tile(tile, (i,j))
 
     def render_game(self):
-        self.generate_ground(self.grass_tile)
         self.place_entity(self.bob, (5,0))
         self.place_entity(self.apple, (6,0))
     
