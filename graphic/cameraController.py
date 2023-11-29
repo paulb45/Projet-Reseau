@@ -1,8 +1,8 @@
-from pygame import Surface, Rect, transform
+import pygame
 
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-import config
+from config import *
 
 # TODO A IMPLEMENTER
 def is_coordinate_in_map(x, y) -> bool:
@@ -11,7 +11,7 @@ def is_coordinate_in_map(x, y) -> bool:
 
 class CameraController:
 
-    def __init__(self, main_surface:Surface):
+    def __init__(self, main_surface: pygame.Surface):
         self.main_surface = main_surface # surface du jeu
         # self.window_width = window_width
         # self.window_height = window_height
@@ -37,10 +37,10 @@ class CameraController:
         
         # calcul du zoom initial
         # on va partir par défaut sur l'affichage de 20 cases sur la largeur
-        if (config.N > 20):
-            self.zoom_map_width = config.tile_size * 20
+        if (N > 20):
+            self.zoom_map_width = tile_size * 20
         else:
-            self.zoom_map_width = config.tile_size * config.N
+            self.zoom_map_width = tile_size * N
 
         self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
 
@@ -49,20 +49,20 @@ class CameraController:
         self.position_camera_y = (self.main_surface.get_height() // 2) - (self.zoom_map_height // 2)
          
 
-    def get_viewpoint(self) -> Surface:
+    def get_viewpoint(self) -> pygame.Surface:
         """Obtenir et calculer le ponit de vu
 
         Returns:
             Surface: surface à afficher à l'écran
         """
         # on prend la sous surface
-        subview = self.main_surface.subsurface(Rect(self.position_camera_x, 
+        subview = self.main_surface.subsurface(pygame.Rect(self.position_camera_x, 
                                                     self.position_camera_y, 
                                                     self.zoom_map_width, 
                                                     self.zoom_map_height))
 
         # on adapte la sous-surface à la taille de la fenetre
-        viewpoint = transform.scale(subview, config.window_size)
+        viewpoint = pygame.transform.scale(subview, pygame.display.get_surface().get_size())
 
         return viewpoint
 
@@ -70,7 +70,7 @@ class CameraController:
     def modify_size_window(self):
         """Méthode à appeler s'il y a redimenssion de la taille de la fenetre
         """
-        self.aspect_ratio = config.window_size[1] / config.window_size[0]
+        self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
 
 
     # TODO implémenter la vérif de sorti de map
@@ -78,11 +78,11 @@ class CameraController:
         """zoom vers l'avant de la caméra, de 2 cases. On ne peux pas zoomer sur plus petit que 4 cases de large
         """
         # rétressiement de la zone affiché
-        zoom_map_width_next = self.zoom_map_width - config.tile_size * 2
+        zoom_map_width_next = self.zoom_map_width - tile_size * 2
 
-        if not (zoom_map_width_next <= (config.tile_size * 4)):
+        if not (zoom_map_width_next <= (tile_size * zoom_min)):
             self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height -= config.tile_size
+            self.zoom_map_height -= tile_size
 
             # le zoom se fait au milieu par rapport au zoom précédent
             self.move_right()
@@ -93,14 +93,25 @@ class CameraController:
         """zoom vers l'arrière de la caméra, de 2 cases
         """
         # le dezoom est un poil plus complex au niveau des vérifications
-        zoom_map_width_next = self.zoom_map_width + config.tile_size * 2
-        zoom_map_height_next = self.zoom_map_height + config.tile_size
-        position_camera_x_next = self.position_camera_x - config.tile_size
-        position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
+        zoom_map_width_next = self.zoom_map_width + tile_size * 2
+        zoom_map_height_next = self.zoom_map_height + tile_size
+        position_camera_x_next = self.position_camera_x - tile_size
+        position_camera_y_next = self.position_camera_y - (tile_size // 2)
 
-        if  ((position_camera_x_next >= 0) and (position_camera_y_next >= 0)
-            and (position_camera_x_next + zoom_map_width_next <= self.main_surface.get_width()) 
-            and (position_camera_y_next + zoom_map_height_next <= self.main_surface.get_height())):
+        if (zoom_map_width_next <= min((tile_size * zoom_max), self.main_surface.get_width())):
+            # haut
+            if position_camera_y_next < 0:
+                position_camera_y_next = 0
+            # bas
+            if (position_camera_y_next + zoom_map_height_next) > self.main_surface.get_height():
+                position_camera_y_next = self.main_surface.get_height() - zoom_map_height_next
+            # gauche
+            if position_camera_x_next < 0:
+                position_camera_x_next = 0
+            # droite
+            if (position_camera_x_next + zoom_map_width_next) > self.main_surface.get_width():
+                position_camera_x_next = self.main_surface.get_width() - zoom_map_width_next
+            
             # agrandissement de la zone affiché
             self.zoom_map_width = zoom_map_width_next
             self.zoom_map_height = zoom_map_height_next
@@ -113,7 +124,10 @@ class CameraController:
     def move_right(self):
         """mouvement de la caméra d'une case vers la droite
         """
-        position_camera_x_next = self.position_camera_x + config.tile_size
+        position_camera_x_next = self.position_camera_x + tile_size
+
+        if (position_camera_x_next + self.zoom_map_width) > self.main_surface.get_width():
+            position_camera_x_next = self.main_surface.get_width() - self.zoom_map_width
 
         if (((position_camera_x_next + self.zoom_map_width) <= self.main_surface.get_width()) 
             and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
@@ -124,10 +138,12 @@ class CameraController:
     def move_left(self):
         """mouvement de la caméra d'une case vers la gauche
         """
-        position_camera_x_next = self.position_camera_x - config.tile_size
+        position_camera_x_next = self.position_camera_x - tile_size
 
-        if ((position_camera_x_next >= 0)
-            and (is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
+        if position_camera_x_next < 0:
+            position_camera_x_next = 0
+
+        if ((is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
                 or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y))):
             self.position_camera_x = position_camera_x_next
 
@@ -135,7 +151,7 @@ class CameraController:
     def move_up(self):
         """mouvement de la caméra d'une case vers le haut
         """
-        position_camera_y_next = self.position_camera_y - (config.tile_size // 2)
+        position_camera_y_next = self.position_camera_y - (tile_size // 2)
 
         if (position_camera_y_next < 0):
             position_camera_y_next = 0
@@ -148,7 +164,7 @@ class CameraController:
     def move_down(self):
         """mouvement de la caméra d'une case vers le bas
         """
-        position_camera_y_next = self.position_camera_y + (config.tile_size // 2)   
+        position_camera_y_next = self.position_camera_y + (tile_size // 2)   
 
         if (position_camera_y_next + self.zoom_map_height) > self.main_surface.get_height():
             position_camera_y_next = self.main_surface.get_height() - self.zoom_map_height
@@ -168,11 +184,11 @@ if __name__ == '__main__':
     pygame.init()
 
     # Création de la fenêtre
-    window = pygame.display.set_mode(config.window_size)
+    window = pygame.display.set_mode(window_size)
 
     clock = pygame.time.Clock()
 
-    screen = Interface(config.screen_size)
+    screen = Interface(screen_size)
 
     screen.render_game()
 
@@ -211,11 +227,11 @@ if __name__ == '__main__':
             # voir où est le curseur de la souris
             if (mouse_x < 10):
                 camera.move_left()
-            if (mouse_x > (config.window_size[0] - 10)):
+            if (mouse_x > (window_size[0] - 10)):
                 camera.move_right()
             if (mouse_y < 10):
                 camera.move_up()
-            if (mouse_y > (config.window_size[1] - 10)):
+            if (mouse_y > (window_size[1] - 10)):
                 camera.move_down()
 
             move_mouse_timer = time.time()
@@ -226,4 +242,4 @@ if __name__ == '__main__':
 
 
         pygame.display.flip()
-        clock.tick(config.max_framerate)
+        clock.tick(max_framerate)

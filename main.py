@@ -1,7 +1,6 @@
 import pygame
 
 from graphic.interface import Interface
-from graphic.gameView import GameView
 from graphic.cameraController import CameraController
 from graphic.eventController import EventController
 from config import *
@@ -21,7 +20,7 @@ camera = CameraController(screen)
 
 eventController = EventController(camera)
 
-GameView.place_interface_in_middle(screen, window)
+screen.place_interface_in_middle(window)
 while True:
     eventController.run_events()
     
