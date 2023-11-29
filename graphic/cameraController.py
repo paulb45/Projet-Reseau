@@ -17,8 +17,7 @@ class CameraController:
         # self.window_height = window_height
         # taille de l'écran dans config.py
 
-        self.zoom_max = 0
-        self.zoom_min = 0
+        self.window_size = pygame.display.get_surface().get_size()
 
         # en pixel sur la largeur
         self.move_step = 0
@@ -41,8 +40,9 @@ class CameraController:
         else:
             self.zoom_map_width = tile_size * N
 
-        self.modify_size_window()
+        self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
         self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
+
 
         # calcul de la position du point de vue, au milieu par défaut
         self.position_camera_x = (self.main_surface.get_width() // 2) - (self.zoom_map_width // 2)
@@ -70,20 +70,34 @@ class CameraController:
     def modify_size_window(self):
         """Méthode à appeler s'il y a redimension de la taille de la fenetre
         """
-        # aspect_ratio_pre = self.aspect_ratio
-        self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
+        range_width = pygame.display.get_surface().get_width() - self.window_size[0]
+        range_height = pygame.display.get_surface().get_height() - self.window_size[1]
+        zoom_map_width_next = self.zoom_map_width + range_width
+        zoom_map_height_next = self.zoom_map_height + range_height
 
-        # if aspect_ratio_pre != 0:
-        #     self.zoom_map_width *= self.aspect_ratio / aspect_ratio_pre
-        
-        # self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)
+        if self.position_camera_x + zoom_map_width_next > self.main_surface.get_width():
+            if self.position_camera_x - range_width < 0:
+                pass
+            else:
+                print(self.position_camera_x)
+                self.position_camera_x -= range_width
+
+        if self.position_camera_y + zoom_map_height_next > self.main_surface.get_height():
+            pass 
+
+        self.zoom_map_width = zoom_map_width_next
+        self.zoom_map_height = zoom_map_height_next   
+
+        self.window_size = pygame.display.get_surface().get_size()
+
+
 
 
     # TODO implémenter la vérif de sorti de map
     def zoom_in(self):
         """zoom vers l'avant de la caméra, de 2 cases. On ne peux pas zoomer sur plus petit que 4 cases de large
         """
-        # rétressiement de la zone affiché
+        # rétrecissement de la zone affichée
         zoom_map_width_next = self.zoom_map_width - tile_size * 2
 
         if not (zoom_map_width_next <= (tile_size * zoom_min)):
