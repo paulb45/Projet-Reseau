@@ -44,6 +44,7 @@ class Grid():
         return positions_disponibles
             
     def get_position(self,obj):
+        # A TESTER
         for key, i in self.map.items():
             for bob in i:
                 if id(bob) == id(obj):
@@ -52,10 +53,8 @@ class Grid():
 
         
     def get_bobs(self,x,y):
+        # A REFAIRE
         key = (x, y)
         return self.map.get(key, [])  # Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
-    def update_size(self,N,M):
-        self.N=N
-        self.M=M
-        
+       
         
