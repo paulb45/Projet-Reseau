@@ -78,7 +78,8 @@ class Game():
         
     def bob_play(self):
         # tuer le bob si n as pas de l'energie sinon move
-        for coords ,bobs in self.grid.map.items():
+        copy_dict=self.grid.map
+        for coords ,bobs in copy_dict.items():
             for bob in bobs:
                 print(bob)
                 if isinstance(bob,Bob):
@@ -151,6 +152,7 @@ class Game():
         bobs=[]
         foods=[]
         if (x, y) not in self.grid.map: return [0,0]
+        
         for elt in self.grid.map[(x,y)]:
            
                 if(isinstance(elt,Bob)):
