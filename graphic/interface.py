@@ -61,12 +61,12 @@ class Interface(pygame.Surface):
             )
 
     # --- Placement des sprites ---
-    def place_top_position(self, pos: tuple) -> tuple:
-        pos[0] -= tile_size/2
+    def place_top_position(self, image: pygame.image, pos: tuple) -> tuple:
+        pos[0] -= image.get_width()//2
         return pos
 
     def place_bottom_position(self, image: pygame.image, pos: tuple) -> tuple:
-        pos = self.place_top_position(pos)
+        pos = self.place_top_position(image, pos)
         pos[1] += tile_size/4 - image.get_height()
         return pos
 
@@ -97,16 +97,32 @@ class Interface(pygame.Surface):
 
     def place_tile(self, tile: pygame.image, pos: tuple):
         pos_iso = isometric.cart_to_iso(pos)
-        self.blit(tile, self.place_top_position(isometric.iso_to_print(pos_iso)))
+        self.blit(tile, self.place_top_position(tile, isometric.iso_to_print(pos_iso)))
         
     def generate_ground(self, tile: pygame.image):
         for i in range(N):
             for j in range(M):
                 self.place_tile(tile, (i,j))
 
-    def render_game(self):
-        self.place_entity(self.bob, (5,0))
-        self.place_entity(self.apple, (6,0))
+    def generate_map(self, grid):
+        from collections import defaultdict
+        class Bob:pass
+        class Food:pass
+        grid = defaultdict(lambda: 0, {(1,1): [Bob()], (50,50) : [Food(), Bob()], (99,99) : [Food()]})
+        for key, l in grid.items():
+            # Setup du comptage
+            food_count = 0
+            bob_count = 0
+            for item in l:
+                if isinstance(item, Bob): bob_count += 1
+                else: food_count += 1
+            if bob_count: self.place_entity(self.bob, key)
+            if food_count: self.place_entity(self.apple, key)
+
+
+
+    def render_game(self, grid=None):
+        self.generate_map(grid)
     
     # --- ??? ---
 

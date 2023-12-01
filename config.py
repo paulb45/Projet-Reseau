@@ -1,6 +1,6 @@
 from collections import defaultdict
 import numpy as np
-N=10
+N=100
 M=100
 map = defaultdict(lambda:0)
 
