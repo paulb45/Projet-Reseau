@@ -52,9 +52,8 @@ class Grid():
         return None  # Retourne None si l'objet n'est pas trouvé
 
         
-    def get_bobs(self,x,y):
-        # A REFIRE
-        key = (x, y)
-        return self.map.get(key, [])  # Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
+    def get_items(self,x,y):
+        position = (x, y)
+        return self.map[position]  #Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
        
         
