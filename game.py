@@ -2,6 +2,7 @@ import time
 import  grid ,food
 from bob import Bob
 from food import Food
+from affichage_term import *
 import random
 
 #var test bob 
@@ -51,7 +52,7 @@ class Game():
     
     def init_bobs(self):
         """init bob
-            
+
         """
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
         for i in range(self.P0):
@@ -75,7 +76,7 @@ class Game():
             self.grid.map[x,y].append(Food(self.init_energy_food)) 
         
     def bob_play(self):
-        # tuer le bob si n as pas de l'energie sinon move
+        
         copy_dict=dict(self.grid.map)
         for coords ,bobs in copy_dict.items():
             for bob in bobs:
@@ -102,19 +103,27 @@ class Game():
                                 self.grid.map[tuple(mouvement)] = []
                             self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
                             #ici bob il a bien reussi son move
+                            
                             bob.set_E(bob.get_E()-1)
                             #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
                             if(bob.is_dead()):
-                                print("bob meur car il a perdu son energy",position,mouvement)
                                 self.destroy_object(bob)
                                 bob_is_alive=False
-            #*********************eating section***************************#             
-                        #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
+                                
+            #******************************eating section***************************#             
+                        
+                    #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
                     if(len(foods)>0 and bob_is_alive):
+                        
                         eating=bob.eat(foods[0])
+                        
+                        #si Ebob=Emax --> un bebe sinon rien
                         parthenogenesis=bob.parthenogenesis()
                         if(parthenogenesis!=-1):
+                            #ajouter le nouveau bob au dict (map)
                             self.grid.map[tuple(position)].append(parthenogenesis)
+                        
+                        #si Efood=0 detruire food
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
@@ -141,6 +150,7 @@ class Game():
         
         while tick>0:
             self.bob_play()
+            affiche_map(self.grid.map)
             tick-=1
             time.sleep(1)
         #supprimer tous les food qui restent
