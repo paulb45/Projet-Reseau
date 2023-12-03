@@ -8,15 +8,19 @@ from game import Game
 quantity_food = 70
 init_energy_food = 10
 nb_tick_day = 60
-P0 = 5
+P0 = 4
 grid = Grid(10,10)
 nb_day = 1
 
 game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
 bob=Bob(1,10,100,10)
-grid.map[0,0]=[bob]
+#grid.map[0,0]=[bob]
+game.create_bob(bob, 5,5)
 #affiche_map(grid.map)
-print(bob.last_move)
-bob.move(2)
-print(bob.last_move)
-#affiche_map(grid.map)
+#print(bob.last_move)
+#bob.move(2)
+#print(bob.last_move)
+
+affiche_map(grid.map)
+game.bob_play()
+affiche_map(grid.map)
