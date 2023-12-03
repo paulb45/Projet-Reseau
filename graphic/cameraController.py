@@ -105,9 +105,8 @@ class CameraController:
             self.zoom_map_width = zoom_map_width_next
             self.zoom_map_height = int(zoom_map_width_next * self.aspect_ratio)
 
-            # le zoom se fait au milieu par rapport au zoom précédent
-            self.move_right()
-            self.move_down()
+            self.position_camera_x += tile_size
+            self.position_camera_y += tile_size // 2
 
             self.modify_speed()
 
