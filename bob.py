@@ -66,14 +66,15 @@ class Bob():
             
         """
         last_move=self.get_last_move()
-        for mov in range(speed):
+        for mov in range(speed-1):
+            print(mov)
             choices=["horizontal","vertical"]
             direction=random.choice(choices)
             if direction=="horizontal":
-                last_move=(last_move[0]+random.choice([1,-1]),last_move[1])
+                last_move=[last_move[0]+random.choice([1,-1]),last_move[1]]
             else:
-                last_move=(last_move[0],random.choice([1,-1] )+last_move[1])
-                self.set_last_move(last_move)
+                last_move=[last_move[0],random.choice([1,-1] )+last_move[1]]
+            self.set_last_move(last_move)
         return self.get_last_move()
 
     def eat(self,food: Food)->None: 
