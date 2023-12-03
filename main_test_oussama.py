@@ -14,16 +14,15 @@ nb_day = 1
 
 game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
 bob=Bob(1,10,100,10)
-#grid.map[0,0]=[bob]
-#bob.set_last_move((0,0))
-game.init_bobs()
-#game.create_bob(bob,0,0)
-affiche_map(grid.map)
+grid.map[0,0]=[bob]
+bob.set_last_move((0,0))
+game.create_bob(bob,0,0)
+#affiche_map(grid.map)
 #print(bob.last_move)
 #bob.move(2)
 #print(bob.last_move)
 
-
+affiche_map(grid.map)
 game.bob_play()
 #affiche_map(game.grid.map)
 affiche_map(grid.map)
