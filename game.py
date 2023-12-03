@@ -54,7 +54,7 @@ class Game():
         
         """
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
-        for i in range(self.P0-1):
+        for i in range(self.P0):
             
             while True :
                 x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
@@ -122,7 +122,7 @@ class Game():
                             foods.remove(foods[0])
                             
                             
-    def destroy_object(obj):
+    def destroy_object(self,obj):
         """_Destroys the given object.__
 
         Args:
