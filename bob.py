@@ -61,7 +61,7 @@ class Bob():
         cls.Echild=E  
     
       
-    def move(self,speed)->None:
+    def move(self,speed)->tuple:
         """Déplace Bob en choisissant aléatoirement une direction   
             
         """

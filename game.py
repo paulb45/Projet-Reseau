@@ -87,38 +87,36 @@ class Game():
                      
                     position = self.grid.get_position(bob)
                     
-                    
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
                     #Eb-=.5
-                    
                     if(nb_foods>0):
                         bob.set_E(bob.get_E()-0.5)
                     #sinon il se déplace    
                     else:
-                        #bob choisi aléaroirement un mouvement parmis les mouvement dispo
-                        available_positions = self.grid.scan_around(position, bob.speed)
-                        mouvement=bob.move(available_positions)
-                        
+                        mouvement=bob.move(bob.speed)
+                        #si bob sort de la grill, il meurt
+                        if(mouvement[0]<0 or mouvement[0]>self.grid.get_N() or mouvement[0]<0 or mouvement[1]>self.grid.get_M()):
+                            self.destroy_object(bob)
+                            pass
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
                             self.grid.map[tuple(mouvement)] = []
                         self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
                         print(position,mouvement)
-                         #ici bob il a bien reussi son move
+                        #ici bob il a bien reussi son move
+                         
             #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
                         """if(nb_bobs==1 and nb_foods>0):
                             eat=bob.eat()"""
                                 
                     if(len(foods)>0):
-                        #print("after eating",bob.get_E(),foods[0].get_energy(),end="")
+
                         eating=bob.eat(foods[0])
                         print("eating: ",eating) 
-                        #print("eatung",bob.get_E(),foods[0].get_energy())
                         
-                           #test test
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
