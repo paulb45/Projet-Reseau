@@ -2,7 +2,7 @@ import time
 import  grid ,food
 from bob import Bob
 from food import Food
-import affichage_term 
+from affichage_term import affiche_map
 
 import random
 
@@ -53,11 +53,10 @@ class Game():
     
     def init_bobs(self):
         """init bob
-            
+
         """
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
         for i in range(self.P0):
-            
             while True :
                 x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
                 if (x, y) not in positions_occupees:
@@ -65,8 +64,6 @@ class Game():
             bob= Bob( speed, mass, E, speed_buff)
             self.create_bob( bob, x, y)
             positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
-               
-    
     def spawn_food(self):
         """generer la nouritures
 
@@ -87,6 +84,8 @@ class Game():
                 if isinstance(bob,Bob):
                     position = self.grid.get_position(bob)
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+                    #quand bob il sort de la grid il meurt et cette variable aide à ne pas traiter ce bob dans la section eat comme il est mort ce qui est logic
+                    bob_is_alive=True
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
                     #Eb-=.5
@@ -105,16 +104,21 @@ class Game():
                                 self.grid.map[tuple(mouvement)] = []
                             self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
                             #ici bob il a bien reussi son move
+                            
                             bob.set_E(bob.get_E()-1)
                             #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
                             if(bob.is_dead()):
-                                print("bob meur car il a perdu son energy",position,mouvement)
                                 self.destroy_object(bob)
                                 bob_is_alive=False
-            #*********************eating section***************************#             
-                        #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
+                                
+            #******************************eating section***************************#             
+                        
+                    #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
                     if(len(foods)>0 and bob_is_alive):
+                        
                         eating=bob.eat(foods[0])
+                        
+                        #si Ebob=Emax --> un bebe sinon rien
                         parthenogenesis=bob.parthenogenesis()
                         if(parthenogenesis!=-1):
                             #ajouter le nouveau bob au dict (map)
@@ -124,8 +128,7 @@ class Game():
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
-                            
-                            
+
     def destroy_object(self,obj):
         """_Destroys the given object.__
 
