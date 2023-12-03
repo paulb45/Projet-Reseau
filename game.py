@@ -96,6 +96,7 @@ class Game():
                         #si bob sort de la grill, il meurt
                         if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
                             print("bob meur car il a sortie de la grille")
+                            self.destroy_object(bob)
                             pass
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
@@ -106,8 +107,6 @@ class Game():
                          
             #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
-                        """if(nb_bobs==1 and nb_foods>0):
-                            eat=bob.eat()"""
                                 
                     if(len(foods)>0):
 
