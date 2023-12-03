@@ -73,7 +73,7 @@ class Bob():
                 last_move=(random.choice([1,-1]),0)
             else:
                 last_move=(0,random.choice([1,-1] ))
-            self.set_last_move(last_move)
+                self.set_last_move(last_move)
         return self.get_last_move()
 
     def eat(self,food: Food)->None: 
