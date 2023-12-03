@@ -97,19 +97,17 @@ class Game():
                         if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
                             print("bob meur car il a sortie de la grille")
                             self.destroy_object(bob)
-                            pass
-                        self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
-                        if tuple(mouvement) not in self.grid.map:
-                            self.grid.map[tuple(mouvement)] = []
-                        self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
-                        print(position,mouvement)
-                        #ici bob il a bien reussi son move
+                        else:
+                            self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
+                            if tuple(mouvement) not in self.grid.map:
+                                self.grid.map[tuple(mouvement)] = []
+                            self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
+                            print(position,mouvement)
+                            #ici bob il a bien reussi son move
                          
             #*********************eating section***************************#             
-                        #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture
-                                
+                        #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
                     if(len(foods)>0):
-
                         eating=bob.eat(foods[0])
                         print("eating: ",eating)
                         parthenogenesis=bob.parthenogenesis()
