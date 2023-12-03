@@ -61,9 +61,10 @@ class Bob():
         cls.Echild=E  
     
       
-    def move(self,speed)->tuple:
-        """Déplace Bob en choisissant aléatoirement une direction   
-            
+    def move(self,speed:int)->tuple:
+        """Déplace Bob en choisissant aléatoirement une direction  
+            la gestion ce fait dans la class Game
+            return: les nouvelles coordonnées de bob 
         """
         last_move=self.get_last_move()
         for mov in range(speed):
@@ -76,13 +77,17 @@ class Bob():
             self.set_last_move(last_move)
         return self.get_last_move()
 
-    def eat(self,food: Food)->None: 
+    def eat(self,food: Food)->bool: 
         
         # cette fonction renvoie True la nourriture doit être détruite 
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
             food (FOOD): la nourriture que bob va manger
+        Returns:
+            true siginifie que Efood=0 donc il faut detruire food dans la class Game
+            false -->Efood>0
+            la gestion se fait dans la class Game
         """
         self.E+=food.energy
         if(self.E>self.Emax):
@@ -93,7 +98,7 @@ class Bob():
         return food.is_dead() 
      
     def is_dead(self)->bool:
-        """vérifie si Bob mort ou non
+        """vérifie si Bob dead ou non
 
         Returns:
             bool: true si BOB est mort non sinon 
