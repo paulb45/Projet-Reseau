@@ -2,7 +2,8 @@ import time
 import  grid ,food
 from bob import Bob
 from food import Food
-from affichage_term import *
+import affichage_term 
+
 import random
 
 #var test bob 
