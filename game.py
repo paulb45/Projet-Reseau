@@ -62,7 +62,7 @@ class Game():
                     break  # Sortez de la boucle si la position n'est pas occupée 
             bob= Bob( speed, mass, E, speed_buff)
             self.create_bob( bob, x, y)
-            positions_occupees.append((x,y))
+            positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
                
     
     def spawn_food(self):
@@ -137,11 +137,13 @@ class Game():
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
-        tick=self.set_nb_tick_day(self.nb_tick_day)
-        fd_quantity=self.set_quantity_food(self.get_quantity_food)
-        
+        tick = self.set_nb_tick_day(self.init_nb_tick_day)   #recupuration du nombre des ticks par jour
+        fd_quantity = self.set_quantity_food(self.get_quantity_food)    #la quantite de la nourriture par jour
+        self.init_bobs()    #Initialisation des bobs
+        self.spawn_food()   #generation de la nourriture
         
         while tick>0:
+            self.bob_play()
             
             tick-=1
             time.sleep(1)
