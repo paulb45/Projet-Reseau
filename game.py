@@ -85,6 +85,8 @@ class Game():
                 if isinstance(bob,Bob):
                     position = self.grid.get_position(bob)
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+                    #quand bob il sort de la grid il meurt et cette variable aide à ne pas traiter ce bob dans la section eat comme il est mort ce qui est logic
+                    bob_is_alive=True
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
                     #Eb-=.5
@@ -93,10 +95,12 @@ class Game():
                     #sinon il se déplace    
                     else:
                         mouvement=bob.move(bob.speed)
+                        
                         #si bob sort de la grill, il meurt
                         if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
                             print("bob meur car il a sortie de la grille",position,mouvement)
                             self.destroy_object(bob)
+                            bob_is_alive=False
                         else:
                             self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                             if tuple(mouvement) not in self.grid.map:
@@ -104,10 +108,16 @@ class Game():
                             self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
                             print(position,mouvement)
                             #ici bob il a bien reussi son move
-                         
+                            bob.set_E(bob.get_E()-1)
+                            #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
+                            if(bob.is_dead()):
+                                print("bob meur car il a perdu son energy",position,mouvement)
+                                self.destroy_object(bob)
+                                bob_is_alive=False
+                                
             #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
-                    if(len(foods)>0):
+                    if(len(foods)>0 and bob_is_alive):
                         eating=bob.eat(foods[0])
                         print("eating: ",eating)
                         parthenogenesis=bob.parthenogenesis()
