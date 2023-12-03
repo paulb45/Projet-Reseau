@@ -130,9 +130,9 @@ class Game():
             obj (food / bob): 
         """
         (x,y) = self.grid.get_position(obj)
-        for element in self.grid.map[x,y]:
-            if id(obj) == id(element) : 
-                self.grid.map[(x, y)].remove(element)       
+        if x is not None and y is not None:
+            if obj in self.grid.map[x, y]:
+                self.grid.map[x, y].remove(obj)     
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture
