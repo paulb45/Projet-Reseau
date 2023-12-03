@@ -82,11 +82,8 @@ class Game():
         copy_dict=dict(self.grid.map)
         for coords ,bobs in copy_dict.items():
             for bob in bobs:
-                
                 if isinstance(bob,Bob):
-                     
                     position = self.grid.get_position(bob)
-                    
                     nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
             #*******************deplacement section **********************#       
                     #s'il y a encore de la nourriture bob reste immobile
@@ -97,7 +94,7 @@ class Game():
                     else:
                         mouvement=bob.move(bob.speed)
                         #si bob sort de la grill, il meurt
-                        if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
+                        if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[0]<0 or mouvement[1]>=self.grid.get_M()):
                             print("bob meur car il a sortie de la grille")
                             pass
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
