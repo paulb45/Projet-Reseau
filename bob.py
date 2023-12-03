@@ -66,7 +66,7 @@ class Bob():
             
         """
         last_move=self.get_last_move()
-        for mov in range(speed-1):
+        for mov in range(speed):
             print(mov)
             choices=["horizontal","vertical"]
             direction=random.choice(choices)
