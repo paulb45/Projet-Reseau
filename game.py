@@ -137,8 +137,8 @@ class Game():
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
-        tick = self.set_nb_tick_day(self.init_nb_tick_day)   #recupuration du nombre des ticks par jour
-        fd_quantity = self.set_quantity_food(self.get_quantity_food)    #la quantite de la nourriture par jour
+        tick = self.get_nb_tick_day()  #recupuration du nombre des ticks par jour
+        fd_quantity = self.get_quantity_food()  #la quantite de la nourriture par jour
         self.init_bobs()    #Initialisation des bobs
         self.spawn_food()   #generation de la nourriture
         
