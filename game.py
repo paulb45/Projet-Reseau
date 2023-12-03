@@ -53,11 +53,16 @@ class Game():
         """init bob
         
         """
-        for i in range(self.P0):
-            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1) 
+        positions_occupees=[] #pour stocker les positions qui sont deja occupées
+        for i in range(self.P0-1):
+            
+            while True :
+                x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
+                if (x, y) not in positions_occupees:
+                    break  # Sortez de la boucle si la position n'est pas occupée 
             bob= Bob( speed, mass, E, speed_buff)
             self.create_bob( bob, x, y)
-            
+            positions_occupees.append((x,y))
                
     
     def spawn_food(self):
