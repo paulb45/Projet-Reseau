@@ -5,35 +5,24 @@
 from affichage_term import *
 from game import Game
 
-quantity_food = 3
+quantity_food = 70
 init_energy_food = 10
-nb_tick_day = 5
-P0 = 3
+nb_tick_day = 60
+P0 = 100
 grid = Grid(10,10)
 nb_day = 1
 
 game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
-#game.init_bobs()
-bob=Bob(1,1,100,0)
-game.create_bob(bob, 1,1)
-affiche_map(game.grid.map)
-game.destroy_object(bob)
-affiche_map(game.grid.map)
-
-"""for i in range(3):
-    game.day_play()
-    affiche_map(game.grid.map)
-    #game.day_play()"""
-    
-
-
-#game.create_bob(Bob(1,1,100,0), 1,1)
+bob=Bob(1,10,100,10)
+#grid.map[0,0]=[bob]
+#bob.set_last_move((0,0))
+#game.create_bob(bob,0,0)
+#affiche_map(grid.map)
+#print(bob.last_move)
+#bob.move(2)
+#print(bob.last_move)
+game.init_bobs()
+affiche_map(grid.map)
+game.bob_play()
 #affiche_map(game.grid.map)
-
-
-#affiche_map(game.grid.map)
-#game.bob_play()
-#affiche_map(game.grid.map)
-#game.bob_play()
-
-#affiche_map(game.grid.map)
+affiche_map(grid.map)
