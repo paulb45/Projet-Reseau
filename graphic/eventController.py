@@ -62,10 +62,7 @@ class EventController:
         """
         for event in pygame.event.get():
 
-            if event.type == pygame.VIDEORESIZE:
-                # A METTRE DANS UNE FONCTION A PART
-                # NE FONCTIONNE PAS
-                
+            if event.type == pygame.VIDEORESIZE:               
                 self.camera.modify_size_window()
 
             if event.type == pygame.QUIT:

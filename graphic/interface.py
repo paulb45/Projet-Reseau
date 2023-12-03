@@ -13,7 +13,9 @@ class Interface(pygame.Surface):
     """
     def __init__(self, size, flags=0):
         super().__init__(size, flags)
+        self.font = pygame.font.SysFont('chalkduster.ttf', 40)
         self._images = {}
+        self.ground = pygame.Surface(size)
         self.load_images()
         
         self.generate_ground(self.grass_tile)
@@ -97,14 +99,19 @@ class Interface(pygame.Surface):
 
     def place_tile(self, tile: pygame.image, pos: tuple):
         pos_iso = isometric.cart_to_iso(pos)
-        self.blit(tile, self.place_top_position(tile, isometric.iso_to_print(pos_iso)))
+        self.ground.blit(tile, self.place_top_position(tile, isometric.iso_to_print(pos_iso)))
         
     def generate_ground(self, tile: pygame.image):
         for i in range(N):
             for j in range(M):
                 self.place_tile(tile, (i,j))
+        self.print_ground()
+    
+    def print_ground(self):
+        self.blit(self.ground, (0,0))
 
     def generate_map(self, grid):
+        # Ajoue du texte
         from collections import defaultdict
         class Bob:pass
         class Food:pass
@@ -118,6 +125,11 @@ class Interface(pygame.Surface):
                 else: food_count += 1
             if bob_count: self.place_entity(self.bob, key)
             if food_count: self.place_entity(self.apple, key)
+            if (bob_count > 1) or (food_count > 1):
+                text_count = self.font.render(f'[{bob_count};{food_count}]', True, (0, 255, 0))
+                text_count.get_rect().center = (0,0)
+
+
 
 
 
