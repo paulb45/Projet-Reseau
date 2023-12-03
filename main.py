@@ -31,17 +31,19 @@ def count_obj(grid, name):
         return nb_food
     
     
-
+"""
 game.init_bobs()
 game.spawn_food()
 affiche_map(grid.map)
 
-print("nombre des foods avant bob_play est "+str(count_obj(game.grid, "Foods")))
-print("nombre des bobs avant bob_play est "+str(count_obj(game.grid, "Bobs")))
-game.bob_play()
+#print("nombre des foods avant bob_play est "+str(count_obj(game.grid, "Foods")))
+#print("nombre des bobs avant bob_play est "+str(count_obj(game.grid, "Bobs")))
+game.day_play()
 #affiche_map(game.grid.map)
 affiche_map(grid.map)
-print("nombre des bobs vivant est "+str(count_obj(game.grid, "Bobs")))
-print("nombre des foods restant est "+str(count_obj(game.grid, "Foods")))
-liste= game.grid.get_items(0,0)
-print(len(liste))
+#print("nombre des bobs vivant est "+str(count_obj(game.grid, "Bobs")))
+#print("nombre des foods restant est "+str(count_obj(game.grid, "Foods")))
+"""
+for i in range(3):
+    game.day_play()
+    affiche_map(grid.map)
