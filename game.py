@@ -98,7 +98,7 @@ class Game():
                         mouvement=bob.move(bob.speed)
                         #si bob sort de la grill, il meurt
                         if(mouvement[0]<0 or mouvement[0]>self.grid.get_N() or mouvement[0]<0 or mouvement[1]>self.grid.get_M()):
-                            self.destroy_object(bob)
+                            self.grid.map[position].remove(bob)
                             pass
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
