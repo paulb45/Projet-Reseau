@@ -16,7 +16,7 @@ game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
 bob=Bob(1,10,100,10)
 grid.map[0,0]=[bob]
 bob.set_last_move((0,0))
-game.create_bob(bob, 5,5)
+game.create_bob(bob,0,0)
 #affiche_map(grid.map)
 print(bob.last_move)
 bob.move(2)
