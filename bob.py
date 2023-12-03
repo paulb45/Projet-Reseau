@@ -110,8 +110,6 @@ class Bob():
             bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
             bebe_bob.last_move=self.last_move
             return bebe_bob 
-            #TODO dans game
-            #ajouter le nouveau bob dans le dictionnaire
         else:
             return -1   
         
