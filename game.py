@@ -97,9 +97,9 @@ class Game():
                     else:
                         mouvement=bob.move(bob.speed)
                         #si bob sort de la grill, il meurt
-                        """ if(mouvement[0]<0 or mouvement[0]>self.grid.get_N() or mouvement[0]<0 or mouvement[1]>self.grid.get_M()):
+                        if(mouvement[0]<0 or mouvement[0]>self.grid.get_N() or mouvement[0]<0 or mouvement[1]>self.grid.get_M()):
                             print("bob meur car il a sortie de la grille")
-                            pass"""
+                            pass
                         self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                         if tuple(mouvement) not in self.grid.map:
                             self.grid.map[tuple(mouvement)] = []
@@ -115,7 +115,10 @@ class Game():
                     if(len(foods)>0):
 
                         eating=bob.eat(foods[0])
-                        print("eating: ",eating) 
+                        print("eating: ",eating)
+                        parthenogenesis=bob.parthenogenesis()
+                        if(parthenogenesis!=-1):
+                            pass 
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
