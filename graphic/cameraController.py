@@ -72,38 +72,6 @@ class CameraController:
     def modify_size_window(self):
         """Méthode à appeler s'il y a redimension de la taille de la fenetre
         """
-        # range_width = pygame.display.get_surface().get_width() - self.window_width
-        # range_height = pygame.display.get_surface().get_height() - self.window_height
-
-        # # le nombre de pixels visibles, n'est pas le même que le nombre de pixel de notre jeu !
-        # if range_width:
-        #     # il y a changement de la taille de la fenêtre en largeur
-        #     range_width = int(range_width * self.zoom_map_width / pygame.display.get_surface().get_width())
-        # elif range_height:
-        #     # il y a changement de la taille de la fenêtre en largeur
-        #     range_height = int(range_height * self.zoom_map_height / pygame.display.get_surface().get_height())
-        # else:
-        #     # aucun changement n'a été détecté ?
-        #     return
-
-        # if range_width:
-        #     self.window_height
-
-        # zoom_map_width_next = self.zoom_map_width + range_width
-        # zoom_map_height_next = self.zoom_map_height + range_height
-
-        # if self.position_camera_x + zoom_map_width_next > self.main_surface.get_width():
-        #     if self.position_camera_x - range_width < 0:
-        #         pass
-        #     else:
-        #         self.position_camera_x -= range_width
-
-        # if self.position_camera_y + zoom_map_height_next > self.main_surface.get_height():
-        #     pass 
-
-        # self.zoom_map_width = zoom_map_width_next
-        # self.zoom_map_height = zoom_map_height_next   
-
         self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
         # largeur du zoom multiplié par le ratio de la fenetre
         zoom_map_height_next = int(self.zoom_map_width * self.aspect_ratio)
