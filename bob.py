@@ -1,4 +1,5 @@
 from food import Food
+from grid import *
 import random
 
 class Bob():
@@ -60,38 +61,21 @@ class Bob():
         cls.Echild=E  
     
       
-    def move(self,coords:list)->tuple:
-        #TODO
-        #la fonction scan_around() renvoie un dict avec les possibilité ou bob il va se déplacer
-        #on choisi une parmis  
-        
-        """Déplace Bob en choisissant aléatoirement une direction  
-
-        Args:
-            list :les possibilité de déplacement 
-        Returns:
+    def move(self,speed)->None:
+        """Déplace Bob en choisissant aléatoirement une direction   
             
         """
-        choix=random.choice(coords)
-        x=choix[0]
-        y=choix[1]  
+        last_move=self.get_last_move()
+        for mov in range(speed):
+            choices=["horizontal","vertical"]
+            direction=random.choice(choices)
+            if direction=="horizontal":
+                last_move=(random.choice([1,-1]),0)
+            else:
+                last_move=(0,random.choice([1,-1] ))
         
-        self.last_move=(x,y)
-        #sera traité dans game
-        """
-        if (self.last_move[0],self.last_move[1]) in dict:
-            for i in dict[self.last_move[0],self.last_move[1]]:
-                
-                if(isinstance(i,Bob)):
-                    print("attaquer")
-                    self.attack(i)
-                if(isinstance(i,Food)):
-                    print("manger")
-                    self.eat(i)
-        print("rien")  
-        """  
-        return self.last_move
-        
+        self.set_last_move(last_move)
+        return self.get_last_move()
 
     def eat(self,food: Food)->None: 
         
@@ -101,11 +85,6 @@ class Bob():
         Args:
             food (FOOD): la nourriture que bob va manger
         """
-        try:
-            assert food.get_energy() != 0
-        except AssertionError:
-            # Gérer le cas où food.get_energy() est égal à 0
-            print("L'énergie de la nourriture est égale à 0.")
         self.E+=food.energy
         if(self.E>self.Emax):
             food.set_energy(self.E-self.Emax)
