@@ -92,8 +92,10 @@ class Game():
                     #Eb-=.5
                     if(nb_foods>0):
                         bob.set_E(bob.get_E()-0.5)
+                        print(1)
                     #sinon il se déplace    
                     else:
+                        print(2)
                         mouvement=bob.move(bob.speed)
                         
                         #si bob sort de la grill, il meurt
@@ -101,11 +103,13 @@ class Game():
                             print("bob meur car il a sortie de la grille",position,mouvement)
                             self.destroy_object(bob)
                             bob_is_alive=False
+                            print(3)
                         else:
                             self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
                             if tuple(mouvement) not in self.grid.map:
                                 self.grid.map[tuple(mouvement)] = []
-                            self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position 
+                            self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
+                            print(4) 
                             print(position,mouvement)
                             #ici bob il a bien reussi son move
                             bob.set_E(bob.get_E()-1)
@@ -114,11 +118,13 @@ class Game():
                                 print("bob meur car il a perdu son energy",position,mouvement)
                                 self.destroy_object(bob)
                                 bob_is_alive=False
+                                print(5)
                                 
             #*********************eating section***************************#             
                         #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
                     if(len(foods)>0 and bob_is_alive):
                         eating=bob.eat(foods[0])
+                        print(6)
                         print("eating: ",eating)
                         parthenogenesis=bob.parthenogenesis()
                         if(parthenogenesis!=-1):
