@@ -9,15 +9,16 @@ def is_coordinate_in_map(x, y) -> bool:
     return True
 # TODO A IMPLEMENTER
 
+ZOOM_DEFAULT = 20
+
 class CameraController:
 
     def __init__(self, main_surface: pygame.Surface):
         self.main_surface = main_surface # surface du jeu
-        # self.window_width = window_width
-        # self.window_height = window_height
-        # taille de l'écran dans config.py
 
-        self.window_size = pygame.display.get_surface().get_size()
+        # taille de la fenetre windows considérée par CameraController (!= taille réelle de la fenetre)
+        self.window_width = pygame.display.get_surface().get_width()
+        self.window_height = pygame.display.get_surface().get_height()
 
         # en pixel sur la largeur
         self.move_step = 0
@@ -35,8 +36,8 @@ class CameraController:
         
         # calcul du zoom initial
         # on va partir par défaut sur l'affichage de 20 cases sur la largeur
-        if (N > 20):
-            self.zoom_map_width = tile_size * 20
+        if (N > ZOOM_DEFAULT):
+            self.zoom_map_width = tile_size * ZOOM_DEFAULT
         else:
             self.zoom_map_width = tile_size * N
 
@@ -54,7 +55,8 @@ class CameraController:
 
         Returns:
             Surface: surface à afficher à l'écran
-        """
+        """  
+
         # on prend la sous surface
         subview = self.main_surface.subsurface(pygame.Rect(self.position_camera_x, 
                                                     self.position_camera_y, 
@@ -70,27 +72,50 @@ class CameraController:
     def modify_size_window(self):
         """Méthode à appeler s'il y a redimension de la taille de la fenetre
         """
-        range_width = pygame.display.get_surface().get_width() - self.window_size[0]
-        range_height = pygame.display.get_surface().get_height() - self.window_size[1]
-        zoom_map_width_next = self.zoom_map_width + range_width
-        zoom_map_height_next = self.zoom_map_height + range_height
+        # range_width = pygame.display.get_surface().get_width() - self.window_width
+        # range_height = pygame.display.get_surface().get_height() - self.window_height
 
-        if self.position_camera_x + zoom_map_width_next > self.main_surface.get_width():
-            if self.position_camera_x - range_width < 0:
-                pass
-            else:
-                print(self.position_camera_x)
-                self.position_camera_x -= range_width
+        # # le nombre de pixels visibles, n'est pas le même que le nombre de pixel de notre jeu !
+        # if range_width:
+        #     # il y a changement de la taille de la fenêtre en largeur
+        #     range_width = int(range_width * self.zoom_map_width / pygame.display.get_surface().get_width())
+        # elif range_height:
+        #     # il y a changement de la taille de la fenêtre en largeur
+        #     range_height = int(range_height * self.zoom_map_height / pygame.display.get_surface().get_height())
+        # else:
+        #     # aucun changement n'a été détecté ?
+        #     return
 
-        if self.position_camera_y + zoom_map_height_next > self.main_surface.get_height():
-            pass 
+        # if range_width:
+        #     self.window_height
 
-        self.zoom_map_width = zoom_map_width_next
-        self.zoom_map_height = zoom_map_height_next   
+        # zoom_map_width_next = self.zoom_map_width + range_width
+        # zoom_map_height_next = self.zoom_map_height + range_height
 
-        self.window_size = pygame.display.get_surface().get_size()
+        # if self.position_camera_x + zoom_map_width_next > self.main_surface.get_width():
+        #     if self.position_camera_x - range_width < 0:
+        #         pass
+        #     else:
+        #         self.position_camera_x -= range_width
 
+        # if self.position_camera_y + zoom_map_height_next > self.main_surface.get_height():
+        #     pass 
 
+        # self.zoom_map_width = zoom_map_width_next
+        # self.zoom_map_height = zoom_map_height_next   
+
+        self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
+        # largeur du zoom multiplié par le ratio de la fenetre
+        zoom_map_height_next = int(self.zoom_map_width * self.aspect_ratio)
+
+        if zoom_map_height_next > self.main_surface.get_height():
+            zoom_map_height_next = self.main_surface.get_height()
+            self.zoom_map_width = int(self.zoom_map_height * pygame.display.get_surface().get_width() / pygame.display.get_surface().get_height())
+
+        if (self.position_camera_y + zoom_map_height_next) > self.main_surface.get_height():
+            self.position_camera_y = self.main_surface.get_height() - zoom_map_height_next
+        
+        self.zoom_map_height = zoom_map_height_next
 
 
     # TODO implémenter la vérif de sorti de map
@@ -102,7 +127,7 @@ class CameraController:
 
         if not (zoom_map_width_next <= (tile_size * zoom_min)):
             self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height -= tile_size
+            self.zoom_map_height = int(zoom_map_width_next * self.aspect_ratio)
 
             # le zoom se fait au milieu par rapport au zoom précédent
             self.move_right()
@@ -114,11 +139,23 @@ class CameraController:
         """
         # le dezoom est un poil plus complex au niveau des vérifications
         zoom_map_width_next = self.zoom_map_width + tile_size * 2
-        zoom_map_height_next = self.zoom_map_height + tile_size
-        position_camera_x_next = self.position_camera_x - tile_size
-        position_camera_y_next = self.position_camera_y - (tile_size // 2)
+        zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
         if (zoom_map_width_next <= min((tile_size * zoom_max), self.main_surface.get_width())):
+
+            position_camera_y_next = 0
+            position_camera_x_next = 0
+
+            # la hauteur doit être inférieur ou égal à la hauteur de la surface principale
+            if zoom_map_height_next > self.main_surface.get_height():
+                zoom_map_height_next = self.main_surface.get_height()
+                zoom_map_width_next = int(zoom_map_height_next / self.aspect_ratio)
+
+                position_camera_x_next = self.position_camera_x - ((zoom_map_width_next - self.zoom_map_width) // 2)
+            else:
+                position_camera_y_next = self.position_camera_y - ((zoom_map_height_next - self.zoom_map_height) // 2)
+                position_camera_x_next = self.position_camera_x - tile_size
+
             # haut
             if position_camera_y_next < 0:
                 position_camera_y_next = 0
@@ -131,14 +168,14 @@ class CameraController:
             # droite
             if (position_camera_x_next + zoom_map_width_next) > self.main_surface.get_width():
                 position_camera_x_next = self.main_surface.get_width() - zoom_map_width_next
-            
-            # agrandissement de la zone affiché
-            self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height = zoom_map_height_next
 
             # le dezoom se replace sur le milieu du zoom précédent
             self.position_camera_x = position_camera_x_next
             self.position_camera_y = position_camera_y_next
+            
+            # agrandissement de la zone affiché
+            self.zoom_map_width = zoom_map_width_next
+            self.zoom_map_height = zoom_map_height_next        
 
 
     def move_right(self):
@@ -192,6 +229,17 @@ class CameraController:
         if ((is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
                 or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
             self.position_camera_y = position_camera_y_next
+
+
+    def _debug(self):
+        print(
+            f"main_surface.width = {self.main_surface.get_width()}\n",
+            f"main_surface.height = {self.main_surface.get_height()}\n",
+            f"zoom_map_width = {self.zoom_map_width}\n",
+            f"zoom_map_height = {self.zoom_map_height}\n",
+            f"position_camera_x = {self.position_camera_x}\n",
+            f"position_camera_y = {self.position_camera_y}\n"
+        )
 
 
 
