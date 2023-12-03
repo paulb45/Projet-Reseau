@@ -9,7 +9,8 @@ def is_coordinate_in_map(x, y) -> bool:
     return True
 # TODO A IMPLEMENTER
 
-ZOOM_DEFAULT = 20
+SPEED_MIN = 2
+SPEED_MAX = 8
 
 class CameraController:
 
@@ -33,11 +34,14 @@ class CameraController:
 
         # rapport entre la hauteur et la largeur de l'écran
         self.aspect_ratio = 0
+
+        # vitesse du déplacement (nombre de pixel)
+        self.speed = 6
         
         # calcul du zoom initial
         # on va partir par défaut sur l'affichage de 20 cases sur la largeur
-        if (N > ZOOM_DEFAULT):
-            self.zoom_map_width = tile_size * ZOOM_DEFAULT
+        if (N > (zoom_max - zoom_min)):
+            self.zoom_map_width = tile_size * (zoom_max - zoom_min)
         else:
             self.zoom_map_width = tile_size * N
 
@@ -56,7 +60,6 @@ class CameraController:
         Returns:
             Surface: surface à afficher à l'écran
         """  
-
         # on prend la sous surface
         subview = self.main_surface.subsurface(pygame.Rect(self.position_camera_x, 
                                                     self.position_camera_y, 
@@ -67,6 +70,11 @@ class CameraController:
         viewpoint = pygame.transform.scale(subview, pygame.display.get_surface().get_size())
 
         return viewpoint
+
+
+    def modify_speed(self):
+        # mise à l'echelle linéaire en fonction du zoom
+        self.speed = SPEED_MIN + ((self.zoom_map_width - zoom_min*tile_size) * (SPEED_MAX - SPEED_MIN)) // (zoom_max*tile_size + zoom_min*tile_size)
 
 
     def modify_size_window(self):
@@ -100,6 +108,8 @@ class CameraController:
             # le zoom se fait au milieu par rapport au zoom précédent
             self.move_right()
             self.move_down()
+
+            self.modify_speed()
 
 
     def zoom_out(self):
@@ -143,13 +153,15 @@ class CameraController:
             
             # agrandissement de la zone affiché
             self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height = zoom_map_height_next        
+            self.zoom_map_height = zoom_map_height_next   
+
+            self.modify_speed()     
 
 
     def move_right(self):
         """mouvement de la caméra d'une case vers la droite
         """
-        position_camera_x_next = self.position_camera_x + tile_size
+        position_camera_x_next = self.position_camera_x + self.speed
 
         if (position_camera_x_next + self.zoom_map_width) > self.main_surface.get_width():
             position_camera_x_next = self.main_surface.get_width() - self.zoom_map_width
@@ -163,7 +175,7 @@ class CameraController:
     def move_left(self):
         """mouvement de la caméra d'une case vers la gauche
         """
-        position_camera_x_next = self.position_camera_x - tile_size
+        position_camera_x_next = self.position_camera_x - self.speed
 
         if position_camera_x_next < 0:
             position_camera_x_next = 0
@@ -176,7 +188,7 @@ class CameraController:
     def move_up(self):
         """mouvement de la caméra d'une case vers le haut
         """
-        position_camera_y_next = self.position_camera_y - (tile_size // 2)
+        position_camera_y_next = self.position_camera_y - (self.speed // 2)
 
         if (position_camera_y_next < 0):
             position_camera_y_next = 0
@@ -189,7 +201,7 @@ class CameraController:
     def move_down(self):
         """mouvement de la caméra d'une case vers le bas
         """
-        position_camera_y_next = self.position_camera_y + (tile_size // 2)   
+        position_camera_y_next = self.position_camera_y + (self.speed // 2)   
 
         if (position_camera_y_next + self.zoom_map_height) > self.main_surface.get_height():
             position_camera_y_next = self.main_surface.get_height() - self.zoom_map_height
