@@ -2,7 +2,7 @@ import time
 import  grid ,food
 from bob import Bob
 from food import Food
-from affichage_term import affiche_map
+from affichage_term import *
 
 import random
 
