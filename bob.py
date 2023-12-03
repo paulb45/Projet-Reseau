@@ -70,9 +70,9 @@ class Bob():
             choices=["horizontal","vertical"]
             direction=random.choice(choices)
             if direction=="horizontal":
-                last_move=(random.choice([1,-1]),0)
+                last_move=(last_move[0]+random.choice([1,-1]),last_move[1])
             else:
-                last_move=(0,random.choice([1,-1] ))
+                last_move=(last_move[0],random.choice([1,-1] )+last_move[1])
                 self.set_last_move(last_move)
         return self.get_last_move()
 
