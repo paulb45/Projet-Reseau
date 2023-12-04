@@ -5,6 +5,9 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
+class Bob:pass
+class Food:pass
+
 class Interface(pygame.Surface):
     """
         Interface est une surface contenant l'ensemble des éléments graphiques (l'ensemble des sprites) qui 
@@ -17,6 +20,7 @@ class Interface(pygame.Surface):
         self._images = {}
         self.ground = pygame.Surface(size)
         self.load_images()
+        self.graphic_tick = 100
         
         self.generate_ground(self.grass_tile)
 
@@ -85,17 +89,6 @@ class Interface(pygame.Surface):
         pos_iso = isometric.cart_to_iso(pos)
         foot_pos = self.place_bottom_position(sprite, pos_iso)
         self.blit(sprite, isometric.iso_to_print(foot_pos))
-        
-    def move_sprite(self, sprite, old_map, new_map):
-        # Chercher la position du bob sur l'old map
-        # Chercher la position de ce même bob sur la new map
-        # Calcul des coordonées en iso pour les deux
-        # Calcul de l'écart
-        # En déduire la vitesse sur x et sur y pour l'incrémenter
-        # Faire le déplacement
-
-        # Utiliser une fonction qui calcule les positions intermédiaires pour avoir toutes les entités qui se déplacent "en même temps"
-        pass        
 
     def place_tile(self, tile: pygame.image, pos: tuple):
         pos_iso = isometric.cart_to_iso(pos)
@@ -110,13 +103,30 @@ class Interface(pygame.Surface):
     def print_ground(self):
         self.blit(self.ground, (0,0))
 
-    def generate_map(self, grid):
-        # Ajoue du texte
-        from collections import defaultdict
-        class Bob:pass
-        class Food:pass
-        grid = defaultdict(lambda: 0, {(1,1): [Bob()], (50,50) : [Food(), Bob()], (99,99) : [Food()]})
-        for key, l in grid.items():
+    def print_food(self, map):
+        for key, l in map.items():
+            for item in l:
+                if isinstance(item, Food):
+                    self.place_entity(self.apple, key)
+
+    def move_bobs(self, map, current_tick):
+        for key, l in map.items():
+            for item in l:
+                if isinstance(item, Bob):
+                    dep_sum = abs(item.last_move[0]) + abs(item.last_move[1])
+                    if dep_sum:
+                        # Calcul de l'incrément de déplacement sur le prochain tick
+                        new_x_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[1])) / self.graphic_tick)
+                        new_y_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[0])) / self.graphic_tick)
+
+                        if item.last_move[0] < 0 : new_x_tick = -new_x_tick
+                        if item.last_move[1] < 0 : new_y_tick = -new_y_tick
+
+                        self.place_entity(self.bob, key + (new_x_tick, new_y_tick)) # A voir la somme de tuple   
+
+
+    def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
+        for key, l in map.items():
             # Setup du comptage
             food_count = 0
             bob_count = 0
@@ -125,6 +135,7 @@ class Interface(pygame.Surface):
                 else: food_count += 1
             if bob_count: self.place_entity(self.bob, key)
             if food_count: self.place_entity(self.apple, key)
+            # Ajoue du texte
             if (bob_count > 1) or (food_count > 1):
                 text_count = self.font.render(f'[{bob_count};{food_count}]', True, (0, 255, 0))
                 text_count.get_rect().center = (0,0)
@@ -133,14 +144,21 @@ class Interface(pygame.Surface):
 
 
 
-    def render_game(self, grid=None):
-        self.generate_map(grid)
+    def render_game(self, map):
+        current_tick = 1
+        while current_tick <= self.graphic_tick:
+            self.print_ground()
+            self.move_bobs(map, current_tick)
+            self.print_food(map)
+            current_tick += 1
+
+        self.generate_map(map)
     
-    # --- ??? ---
+    # --- Autre ---
 
     def place_interface_in_middle(self, window):
         """
-            Place le centre de la carte sur la fenêtre
+            Place le centre de la carte au centre de la fenêtre
         """
         window_center = (window_size[0] // 2, window_size[1] // 2)
         interface_center = (screen_size[0] //2, screen_size[1] // 2)

@@ -38,7 +38,11 @@ class MainSurface:
             self.event_controller.run_events()
             
             # rendu du jeu
-            self.game_surface.render_game()
+            from collections import defaultdict
+            class Bob:pass
+            class Food:pass
+            map = defaultdict(lambda: 0, {(1,1): [Bob()], (50,50) : [Food(), Bob()], (99,99) : [Food()]})
+            self.game_surface.render_game(map)
         
             self.window.blit(self.camera.get_viewpoint(), (0,0))
 
