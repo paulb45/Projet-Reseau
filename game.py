@@ -1,8 +1,8 @@
 import time
+
 import  grid ,food
 from bob import Bob
 from food import Food
-from affichage_term import *
 
 import random
 
@@ -128,7 +128,6 @@ class Game():
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
-
     def destroy_object(self,obj):
         """_Destroys the given object.__
 
@@ -151,13 +150,12 @@ class Game():
         
         while tick>0:
             self.bob_play()
-            affiche_map(self.grid.map)
             tick-=1
             time.sleep(1)
         #supprimer tous les food qui restent
         copy_dict=dict(self.grid.map)
         for coords ,foods in copy_dict.items():
-            for bob in foods:
+            for food in foods:
                 if isinstance(food,Food):
                     self.destroy_object(food)
     def create_bob(self,Bob, x,y):
