@@ -20,7 +20,7 @@ class Interface(pygame.Surface):
         self._images = {}
         self.ground = pygame.Surface(size)
         self.load_images()
-        self.graphic_tick = 100
+        self.graphic_tick = 10
         
         self.generate_ground(self.grass_tile)
 
@@ -112,17 +112,18 @@ class Interface(pygame.Surface):
     def move_bobs(self, map, current_tick):
         for key, l in map.items():
             for item in l:
-                if isinstance(item, Bob):
+                if isinstance(item, Bob):  # Vite merge avec la logique pour régler ce problème
+                    print(key)
                     dep_sum = abs(item.last_move[0]) + abs(item.last_move[1])
-                    if dep_sum:
-                        # Calcul de l'incrément de déplacement sur le prochain tick
-                        new_x_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[1])) / self.graphic_tick)
-                        new_y_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[0])) / self.graphic_tick)
+                
+                    # Calcul de l'incrément de déplacement sur le prochain tick
+                    new_x_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[1])) / self.graphic_tick)
+                    new_y_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[0])) / self.graphic_tick)
 
-                        if item.last_move[0] < 0 : new_x_tick = -new_x_tick
-                        if item.last_move[1] < 0 : new_y_tick = -new_y_tick
+                    if item.last_move[0] < 0 : new_x_tick = -new_x_tick
+                    if item.last_move[1] < 0 : new_y_tick = -new_y_tick
 
-                        self.place_entity(self.bob, key + (new_x_tick, new_y_tick)) # A voir la somme de tuple   
+                    self.place_entity(self.bob, key + (new_x_tick, new_y_tick)) # A voir la somme de tuple   
 
 
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
@@ -136,13 +137,11 @@ class Interface(pygame.Surface):
             if bob_count: self.place_entity(self.bob, key)
             if food_count: self.place_entity(self.apple, key)
             # Ajoue du texte
+            """
             if (bob_count > 1) or (food_count > 1):
                 text_count = self.font.render(f'[{bob_count};{food_count}]', True, (0, 255, 0))
                 text_count.get_rect().center = (0,0)
-
-
-
-
+            """
 
     def render_game(self, map):
         current_tick = 1
@@ -161,6 +160,6 @@ class Interface(pygame.Surface):
             Place le centre de la carte au centre de la fenêtre
         """
         window_center = (window_size[0] // 2, window_size[1] // 2)
-        interface_center = (screen_size[0] //2, screen_size[1] // 2)
+        interface_center = (screen_size[0] // 2, screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)

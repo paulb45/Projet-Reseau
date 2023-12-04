@@ -8,6 +8,11 @@ from graphic.interface import Interface
 from graphic.cameraController import CameraController
 from graphic.eventController import EventController
 
+from collections import defaultdict
+class Bob:pass
+class Food:pass
+map = defaultdict(lambda: 0, {(1,1): [Bob()], (50,50) : [Food(), Bob()], (99,99) : [Food()]})
+
 class MainSurface:
 
     def __init__(self):
@@ -38,10 +43,6 @@ class MainSurface:
             self.event_controller.run_events()
             
             # rendu du jeu
-            from collections import defaultdict
-            class Bob:pass
-            class Food:pass
-            map = defaultdict(lambda: 0, {(1,1): [Bob()], (50,50) : [Food(), Bob()], (99,99) : [Food()]})
             self.game_surface.render_game(map)
         
             self.window.blit(self.camera.get_viewpoint(), (0,0))
