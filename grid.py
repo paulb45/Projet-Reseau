@@ -1,31 +1,36 @@
 class Grid():
     def __init__(self,N,M):
-        #self.tiles=tiles
+        
         self.N=N
         self.M=M
-        
         self.map={}
+        
+    
+        """GETTERS"""
     def get_N(self):
         return self.N
     def get_M(self):
         return self.M
+    
+    """SETTERS"""
     def set_N(self,nv_N):
         self.N = nv_N
     def set_M(self,nv_M):
         self.M = nv_M
     
-    #aymen scan around fiha des erreurs katle3 des valeurs pas forcément correct
-    #[0,1]->[(0, 0), (0, 2), (1, 0), (1, 1), (1, 2)] :/
-    #[0,0] ->[(0, 1), (1, 0), (1, 1)] :/
+        """ la fonction scan_around retourne les places possibles ou le bob peut se deplacer ( donne une vision )
+
+        """
 
     def scan_around(self,position, distance):
+        
         x, y = position
         positions_disponibles = []
         if distance == 1:
-            for i, j in [(0, -1), (-1, 0), (1, 0), (0, 1)]:
+            for i, j in [(0, -1), (-1, 0), (1, 0), (0, 1)]: #la liste des coordonnees sert a donner des cordonnes qui sont pas en diagonale
                 new_x = x + i
                 new_y = y + j
-                if 0 <= new_x < self.N and 0 <= new_y < self.N :
+                if 0 <= new_x < self.N and 0 <= new_y < self.N : 
                         
                         positions_disponibles.append((new_x, new_y))
 
@@ -42,7 +47,10 @@ class Grid():
                         positions_disponibles.append((new_x, new_y))
 
         return positions_disponibles
-            
+    
+    
+        """ la fonction get_position permet de donner la position dans la grille d'un objet passe en parametres
+        """
     def get_position(self,obj):
         
         for key, itms in self.map.items():
@@ -51,9 +59,12 @@ class Grid():
                     return key  # Retourne les coordonnées (x, y) d'objet recherché
         return None  # Retourne None si l'objet n'est pas trouvé
 
-        
+        """
+        #Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
+        """
+    
     def get_items(self,x,y):
         position = (x, y)
-        return self.map[position]  #Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
+        return self.map[position]  
        
         

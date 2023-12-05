@@ -1,8 +1,8 @@
 import time
-
 import  grid ,food
 from bob import Bob
 from food import Food
+from affichage_term import *
 
 import random
 
@@ -21,6 +21,7 @@ class Game():
         self.grid=grid
         self.nb_day=nb_day
         
+        """GETTERS"""
     def get_quantity_food(self):
         return self.init_quantity_food
     
@@ -35,6 +36,9 @@ class Game():
     
     def get_nb_day(self):
         return self.nb_day
+    
+    
+    """SETTERS"""
     
     def set_quantity_food(self, nv_quantity_food):
         self.init_quantity_food = nv_quantity_food
@@ -53,6 +57,7 @@ class Game():
     
     def init_bobs(self):
         """init bob
+            initialisation des P0 bobs dans exactement P0 places
 
         """
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
@@ -128,6 +133,7 @@ class Game():
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
+
     def destroy_object(self,obj):
         """_Destroys the given object.__
 
@@ -135,9 +141,7 @@ class Game():
             obj (food / bob): 
         """
         (x,y) = self.grid.get_position(obj)
-        for element in self.grid.map[x,y]:
-            if id(obj) == id(element) : 
-                self.grid.map[(x, y)].remove(element)       
+        self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]      
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture
@@ -150,10 +154,12 @@ class Game():
         
         while tick>0:
             self.bob_play()
+            
             tick-=1
             time.sleep(1)
         #supprimer tous les food qui restent
         copy_dict=dict(self.grid.map)
+        
         for coords ,foods in copy_dict.items():
             for food in foods:
                 if isinstance(food,Food):

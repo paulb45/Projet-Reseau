@@ -73,28 +73,38 @@ def affiche_map(grid):
 
 grd=Grid(10,10)
 Game=Game(3,100,10,3,grd,3)
-"""
-#test iniy_bobs() ok
-Game.init_bobs()
-#test spawn food ok
-Game.spawn_food()
-affiche_map(grd.grid)
-"""
-#Game.bob_play()
-"""b=Bob(speed, mass, E, speed_buff)
-b2=Bob(speed, mass, E, speed_buff)
-b.last_move=[0,0]
-b2.last_move=[0,1]
-grd.map[(0,0)]=[b]
-grd.map[(0,1)]=[b2]"""
-#affiche_map(grd.map)
-#print(grd.scan_around([5,5],1))
-#print(b.move([(1,0),(0,1)]))
-#print(grd.map)
+
 Game.bob_play()
 
 
+"""
+_________Grid_________
 
+scan_around()  test OK
+get_position() test OK
+get_items()    test OK
+
+
+________Game__________
+
+init_bob()       test OK
+spawn_food()     test OK
+bob_play()       test OK
+destroy_object() test OK
+day_play()       test OK
+create_bob()     test OK
+count()          test OK
+
+_______Bob___________
+
+move()            test OK
+eat()             test OK
+is_dead()         test OK
+parthenogenesis() test OK
+
+______Food____________
+is_dead()         test OK
+"""
 
 
 

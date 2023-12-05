@@ -4,17 +4,15 @@
 
 from affichage_term import *
 from game import Game
+import time
 
 quantity_food = 300
 init_energy_food = 10
-nb_tick_day = 60
-P0 = 20
+nb_tick_day = 20
+P0 = 10
 grid = Grid(10,10)
 nb_day = 1
-
-game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
-bob=Bob(1,10,1,10)
-game.create_bob(bob,0,0)
+#************************* Foncction pour faciliter les testes ****************************#
 def count_obj(grid, name):
     nb_bob = 0
     nb_food = 0
@@ -29,21 +27,28 @@ def count_obj(grid, name):
         return nb_bob
     elif(name=="Foods"):
         return nb_food
-    
-    
-"""
-game.init_bobs()
-game.spawn_food()
-affiche_map(grid.map)
-
-#print("nombre des foods avant bob_play est "+str(count_obj(game.grid, "Foods")))
-#print("nombre des bobs avant bob_play est "+str(count_obj(game.grid, "Bobs")))
-game.day_play()
+game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
+#game.init_bobs()    #Initialisation des bobs
+#game.spawn_food()   #generation de la nourriture
 #affiche_map(game.grid.map)
-affiche_map(grid.map)
-#print("nombre des bobs vivant est "+str(count_obj(game.grid, "Bobs")))
-#print("nombre des foods restant est "+str(count_obj(game.grid, "Foods")))
-"""
-for i in range(3):
-    game.day_play()
-    affiche_map(grid.map)
+#print("nombre des foods  a l'initialisation est "+str(count_obj(game.grid, "Foods")))
+#print("nombre des bobs a l'initialisation est "+str(count_obj(game.grid, "Bobs")))
+    
+"""while nb_tick_day>0:
+    game.bob_play()
+    nb_tick_day-=1
+    time.sleep(1)
+    affiche_map(game.grid.map)
+    
+copy_dict=dict(game.grid.map)
+for coords ,bobs in copy_dict.items():
+    for bob in bobs:
+        if isinstance(bob,Bob):
+            print("l'energie du bobs est"+str(bob.E))
+for coords ,foods in copy_dict.items():
+    for food in foods:
+        if isinstance(food,Food):
+            game.destroy_object(food)
+affiche_map(game.grid.map)"""
+game.day_play()
+affiche_map(game.grid.map)
