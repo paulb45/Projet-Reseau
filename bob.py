@@ -61,21 +61,18 @@ class Bob():
         cls.Echild=E  
     
       
-    def move(self,speed:int)->tuple:
+    def move(self)->tuple:
         """Déplace Bob en choisissant aléatoirement une direction  
             la gestion ce fait dans la class Game
             return: les nouvelles coordonnées de bob 
         """
-        last_move=self.get_last_move()
-        for mov in range(speed):
-            choices=["horizontal","vertical"]
-            direction=random.choice(choices)
-            if direction=="horizontal":
-                last_move=[last_move[0]+random.choice([1,-1]),last_move[1]]
-            else:
-                last_move=[last_move[0],random.choice([1,-1] )+last_move[1]]
-            self.set_last_move(last_move)
-        return self.get_last_move()
+        # Version sans vision
+        self.set_last_move(
+                            x:=random.randint(0, self.speed) * random.choice((1,-1)), 
+                            y:=(self.speed - abs(x)) * random.choice((1,-1))
+                           )
+
+        return (x,y)
 
     def eat(self,food: Food)->bool: 
         
