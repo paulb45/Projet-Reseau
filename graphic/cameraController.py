@@ -102,11 +102,13 @@ class CameraController:
         zoom_map_width_next = self.zoom_map_width - tile_size * 2
 
         if not (zoom_map_width_next <= (tile_size * zoom_min)):
-            self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height = int(zoom_map_width_next * self.aspect_ratio)
+            zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
             self.position_camera_x += tile_size
-            self.position_camera_y += tile_size // 2
+            self.position_camera_y += (self.zoom_map_height - zoom_map_height_next) // 2
+
+            self.zoom_map_width = zoom_map_width_next
+            self.zoom_map_height = zoom_map_height_next
 
             self.modify_speed()
 
@@ -210,6 +212,19 @@ class CameraController:
             self.position_camera_y = position_camera_y_next
 
 
+    def position_camera_to_game(self, x:int, y:int) -> (int, int):
+        """Obtenir la position en pixel sur la carte du jeu, par rapport à une coordonnée sur la fenêtre
+
+        Args:
+            x (int): position en absisse sur la fenêtre
+            y (int): position en ordonnée sur la fenêtre
+
+        Returns:
+            (int, int): coordonnée sur la carte du jeu
+        """
+        return self.position_camera_x + x, self.position_camera_y + y
+
+
     def _debug(self):
         print(
             f"main_surface.width = {self.main_surface.get_width()}\n",
@@ -219,7 +234,6 @@ class CameraController:
             f"position_camera_x = {self.position_camera_x}\n",
             f"position_camera_y = {self.position_camera_y}\n"
         )
-
 
 
 if __name__ == '__main__':
