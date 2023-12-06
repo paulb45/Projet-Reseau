@@ -33,14 +33,15 @@ class MainSurface:
         self.menu=Menu(self.window)
         #self.menu.to_print("main_menu")
 
-    def run(self, map):           
-        self.event_controller.run_events()
-        # rendu du jeu
-        self.game_surface.render_game(map)
-        
-        self.window.blit(self.camera.get_viewpoint(), (0,0))
+    def run(self, map):
+        for tick in range(1, max_framerate):
+            self.event_controller.run_events()
+            # rendu du jeu
+            self.game_surface.render_game(map, tick)
+            
+            self.window.blit(self.camera.get_viewpoint(), (0,0))
 
-        pygame.display.flip()
+            pygame.display.flip()
         self.clock.tick(max_framerate)
 
 

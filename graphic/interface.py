@@ -111,8 +111,7 @@ class Interface(pygame.Surface):
     def move_bobs(self, map, current_tick):
         for key, l in map.items():
             for item in l:
-                print(type(item))
-                if isinstance(item, logic.bob.Bob):  # Vite merge avec la logique pour régler ce problème
+                if isinstance(item, logic.bob.Bob):
                     dep_sum = abs(item.last_move[0]) + abs(item.last_move[1])
                 
                     # Calcul de l'incrément de déplacement sur le prochain tick
@@ -142,14 +141,12 @@ class Interface(pygame.Surface):
                 text_count.get_rect().center = (0,0)
             """
 
-    def render_game(self, map):
-        current_tick = 1
+    def render_game(self, map, current_tick):
         while current_tick <= self.graphic_tick:
             self.print_ground()
-            self.move_bobs(map, current_tick)
+            #self.move_bobs(map, current_tick)
             self.print_food(map)
             current_tick += 1
-
         self.generate_map(map)
     
     # --- Autre ---
