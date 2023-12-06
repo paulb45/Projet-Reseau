@@ -67,10 +67,18 @@ class Bob():
             return: les nouvelles coordonnées de bob 
         """
         # Version sans vision
+        coords=self.get_last_move()
         self.set_last_move((
                             x:=random.randint(0, self.speed) * random.choice((1,-1)), 
                             (self.speed - abs(x)) * random.choice((1,-1))
                            ))
+        position = list(self.get_last_move())
+        self.set_last_move(
+            
+            (coords[0]+position[0],
+            coords[1]+position[1])
+            
+        )
 
         return self.get_last_move()
 

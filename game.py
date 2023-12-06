@@ -137,16 +137,17 @@ class Game():
                             foods.remove(foods[0])
                             
             #**********************************attack section******************************# 
-                        #s'il y a plus qu'un bob dans la case
+                    """ 
+                       #s'il y a plus qu'un bob dans la case
                         if(len(bobs)>1 and bob_is_alive):
                             #bob il va essayer d'attaquer tous les bobs qui se trouvent dans la meme case
-                            for i in range(bobs):
+                            for i in range(len(bobs)):
                                 if(id(bob)!=id(i)):
                                     attack=bob.attack(i)
                                     if(attack):
                                         self.destroy_object(i)
                                         break
-                                    
+                                    """
                                          
 
     def destroy_object(self,obj):
