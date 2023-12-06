@@ -212,6 +212,19 @@ class CameraController:
             self.position_camera_y = position_camera_y_next
 
 
+    def position_camera_to_game(self, x:int, y:int) -> (int, int):
+        """Obtenir la position en pixel sur la carte du jeu, par rapport à une coordonnée sur la fenêtre
+
+        Args:
+            x (int): position en absisse sur la fenêtre
+            y (int): position en ordonnée sur la fenêtre
+
+        Returns:
+            (int, int): coordonnée sur la carte du jeu
+        """
+        return self.position_camera_x + x, self.position_camera_y + y
+
+
     def _debug(self):
         print(
             f"main_surface.width = {self.main_surface.get_width()}\n",
@@ -221,7 +234,6 @@ class CameraController:
             f"position_camera_x = {self.position_camera_x}\n",
             f"position_camera_y = {self.position_camera_y}\n"
         )
-
 
 
 if __name__ == '__main__':
