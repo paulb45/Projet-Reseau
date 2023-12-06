@@ -8,7 +8,7 @@ class EventController:
         Classe pour gérer les évènements pygame
     """
 
-    def __init__(self, camera):
+    def __init__(self, camera, menu):
         """
             Constructeur de EventController
 
@@ -16,6 +16,8 @@ class EventController:
             camera (CameraController): camera du jeu
         """
         self.camera = camera
+        
+        self.menu = menu
 
         self.move_mouse_timer = time.time()
 
