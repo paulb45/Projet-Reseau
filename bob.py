@@ -67,12 +67,12 @@ class Bob():
             return: les nouvelles coordonnées de bob 
         """
         # Version sans vision
-        self.set_last_move(
+        self.set_last_move((
                             x:=random.randint(0, self.speed) * random.choice((1,-1)), 
-                            y:=(self.speed - abs(x)) * random.choice((1,-1))
-                           )
+                            (self.speed - abs(x)) * random.choice((1,-1))
+                           ))
 
-        return (x,y)
+        return self.get_last_move()
 
     def eat(self,food: Food)->bool: 
         

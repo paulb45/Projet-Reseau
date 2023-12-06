@@ -98,7 +98,7 @@ class Game():
                         bob.set_E(bob.get_E()-0.5)
                     #sinon il se déplace    
                     else:
-                        mouvement=bob.move(bob.speed)
+                        mouvement=bob.move()
                         #si bob sort de la grill, il meurt
                         if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
                             self.destroy_object(bob)
