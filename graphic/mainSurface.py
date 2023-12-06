@@ -1,5 +1,5 @@
 import pygame
-
+import pygame_menu
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
@@ -7,6 +7,7 @@ from config import *
 from graphic.interface import Interface
 from graphic.cameraController import CameraController
 from graphic.eventController import EventController
+from graphic.test_menu import Menu
 
 from collections import defaultdict
 class Bob:pass
@@ -34,14 +35,16 @@ class MainSurface:
 
         self.event_controller = EventController(self.camera)
 
-        self.menu = None # classe menu ?
+        #self.menu = None # classe menu ?
 
         # screen.place_interface_in_middle(window)
 
     def run(self):
+        self.menu=Menu(self.window)
+        self.menu.to_print("main_menu")
         while True:
+            print('test')
             self.event_controller.run_events()
-            
             # rendu du jeu
             self.game_surface.render_game(map)
         
