@@ -8,9 +8,9 @@ class Bob():
     Emother=150
     Echild=50
     
-    def __init__(self,speed,mass,E,speed_buff):
-        self.speed=speed
-        self.mass=mass
+    def __init__(self,E,speed_buff):
+        self.speed=1
+        self.mass=1
         self.memory=None
         self.E=E
         self.last_move=[None,None]
@@ -114,5 +114,24 @@ class Bob():
             return bebe_bob 
         else:
             return -1   
+    #TODO TESTER ATTACK    
+    def attack(self,target)->bool:
+        """si bm/Bm<2/3 --> bob il peut attaqué target
+
+        Args:
+            target (Bob): bob qui se trouve dans la meme case que notre bob
+
+        Returns:
+            bool: True si bob il a bien attaqué
+                  False sinon
+                  ce retour sert dans game pour destroy target  
+        """
+        #big_boy,small_boy=self.get_E(),target.get_E()if self.get_E()>target.get_E()else target.get_E(),self.get_E()
+        if(target.get_E()/self.get_E()<2/3):
+            #
+            E_gain=0.5*target.get_E()*(1-(target.get_E()/self.get_E()))
+            self.set_E(self.get_E()+E_gain)
+            return True
+        return False
+            
         
-    def attack(self,target)->None:pass

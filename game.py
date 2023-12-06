@@ -2,13 +2,14 @@ import time
 import  grid ,food
 from bob import Bob
 from food import Food
+import numpy as np 
 from affichage_term import *
 
 import random
 
 #var test bob 
 speed = 1
-mass = 10
+
 E = 100
 speed_buff=1
 
@@ -66,7 +67,7 @@ class Game():
                 x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
                 if (x, y) not in positions_occupees:
                     break  # Sortez de la boucle si la position n'est pas occupée 
-            bob= Bob( speed, mass, E, speed_buff)
+            bob= Bob( E, speed_buff)
             self.create_bob( bob, x, y)
             positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
     def spawn_food(self):
@@ -109,8 +110,9 @@ class Game():
                                 self.grid.map[tuple(mouvement)] = []
                             self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
                             #ici bob il a bien reussi son move
-                            
-                            bob.set_E(bob.get_E()-1)
+                            #l'energy que bob va perdre
+                            cost_energy=bob.get_mass()*np.cbrt(bob.get_speed())
+                            bob.set_E(bob.get_E()-cost_energy)
                             #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
                             if(bob.is_dead()):
                                 self.destroy_object(bob)
@@ -133,6 +135,14 @@ class Game():
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
+                            
+            #**********************************attack section******************************# 
+                        #s'il y a plus qu'un bob dans la case
+                        if(len(bobs)>1 and bob_is_alive):
+                            #bob il va essayer d'attaquer 
+                            for i in range(bobs):
+                                if(id(bob)!=id(i)):
+                                    pass 
 
     def destroy_object(self,obj):
         """_Destroys the given object.__
