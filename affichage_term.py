@@ -60,6 +60,7 @@ def affiche_map(grid):
                     else: 
                       food_count += 1               
                   to_print = f"{bob_count}:{food_count}"
+
                 case _:   to_print = " "
             except:
               pass
@@ -105,9 +106,3 @@ parthenogenesis() test OK
 ______Food____________
 is_dead()         test OK
 """
-
-
-
-
-
-
