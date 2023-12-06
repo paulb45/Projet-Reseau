@@ -3,7 +3,6 @@ from config import *
 from logic.game import Game
 window = MainSurface()
 
-
 # Initilisation de la logique
 quantity_food = 300
 init_energy_food = 10
