@@ -1,7 +1,11 @@
+from turtle import width
 import pygame
 import pygame_menu
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
 
-class Menu(pygame.Surface):
+class GameMenu(pygame.Surface):
 
     def __init__(self, surface):
         super().__init__(pygame.display.get_surface().get_size())
@@ -44,8 +48,8 @@ class Menu(pygame.Surface):
         self.game_screen.add.button('Quit', pygame_menu.events.EXIT)
 
         self.new_game.add.vertical_margin(30)
-        self.new_game.add.text_input('largeur de la carte :', default='100',textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('hauteur de la carte :', default='100',textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Population de départ :', default='100',textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Nouriture de départ :', default='100',textinput_id='population_food',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('nouriture par jour :', default='1',textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
@@ -58,6 +62,7 @@ class Menu(pygame.Surface):
         self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.button('Quit', pygame.QUIT)
         self.new_game.add.button('start', self.game_screen)
+
         def data_fun() -> None:
             """
             Print data of the menu.
@@ -66,6 +71,9 @@ class Menu(pygame.Surface):
             data = self.new_game.get_input_data()
             for k in data.keys():
                 print(f'\t{k}\t=>\t{data[k]}')
+            Config.width_map = data['map_width']
+            Config.height_map = data['map_height']
+            print(f"map: ({Config.width_map},{Config.height_map})")
         self.new_game.add.button('Store data', data_fun, button_id='store')
         self.new_game.add.button('Restore original values', self.new_game.reset_value)
         self.new_game.add.button('Return to main menu', pygame_menu.events.BACK)
@@ -88,7 +96,7 @@ class Menu(pygame.Surface):
 if __name__ == '__main__':
     pygame.init()
     surface = pygame.display.set_mode((720,480))
-    menu=Menu(surface)
+    menu=GameMenu(surface)
     #menu.load_main_menu()
     while True:   
         events = pygame.event.get()  
@@ -98,6 +106,12 @@ if __name__ == '__main__':
         if menu.main_menu.is_enabled():
             menu.main_menu.update(events)
             menu.main_menu.draw(surface)
-                 
+
+        if menu.main_menu.get_current() == menu.game_screen:
+            surface.fill('black')
+            menu.game_screen.draw(surface)
+            #menu.game_screen.force_surface_cache_update()
+            #menu.game_screen.force_surface_update()
+
         pygame.display.flip()
         pygame.display.update()

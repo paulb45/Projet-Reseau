@@ -5,6 +5,14 @@ ticks = 100
 window_size = (1280, 720)
 max_framerate = 60
 
+# Initilisation de la logique
+quantity_food = 300
+init_energy_food = 10
+nb_tick_day = 5
+P0 = 99
+nb_day = 1
+game = Game(quantity_food,init_energy_food,nb_tick_day,P0,nb_day)
+
 # Variables pour les sprites
 sprite_path = "sprites/"
 tileset_x_offset, tileset_y_offset = 0, 1

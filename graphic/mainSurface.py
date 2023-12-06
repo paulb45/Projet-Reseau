@@ -7,7 +7,7 @@ from config import *
 from graphic.interface import Interface
 from graphic.cameraController import CameraController
 from graphic.eventController import EventController
-from graphic.test_menu import Menu
+from graphic.test_menu import GameMenu
 
 class MainSurface:
 
@@ -30,9 +30,12 @@ class MainSurface:
 
         self.event_controller = EventController(self.camera)
 
-        self.menu=Menu(self.window)
+        self.menu=GameMenu(self.window)
+        self.menu.main_menu.enable()
         #self.menu.to_print("main_menu")
+        
 
+<<<<<<< HEAD
     def run(self, map):
         for tick in range(1, max_framerate):
             self.event_controller.run_events()
@@ -40,10 +43,26 @@ class MainSurface:
             self.game_surface.render_game(map, tick)
             
             self.window.blit(self.camera.get_viewpoint(), (0,0))
+=======
+    def run(self, map):           
+        self.event_controller.run_events()
+        
+        if self.menu.main_menu.is_enabled():
+            self.menu.main_menu.update(pygame.event.get())
+            self.menu.main_menu.draw(self.window)
+
+        if self.menu.main_menu.get_current() == self.menu.game_screen:
+            self.window.fill('black')
+            self.menu.game_screen.draw(self.window)
+            #rendu du jeu
+            self.window.blit(self.camera.get_viewpoint(), (0,0))
+            self.game_surface.render_game(carte)
+>>>>>>> 2430160696c0b0fe89da91dc1ec2fe4d644224ab
 
             pygame.display.flip()
         self.clock.tick(max_framerate)
 
 
 if __name__ == '__main__':
-    MainSurface().run()
+    carte ={}
+    MainSurface().run(carte)
