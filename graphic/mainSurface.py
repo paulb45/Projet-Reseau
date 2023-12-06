@@ -30,11 +30,8 @@ class MainSurface:
 
         self.event_controller = EventController(self.camera)
 
-        #self.menu = None # classe menu ?
-
-        # screen.place_interface_in_middle(window)
         self.menu=Menu(self.window)
-        self.menu.to_print("main_menu")
+        #self.menu.to_print("main_menu")
 
     def run(self, map):           
         self.event_controller.run_events()
