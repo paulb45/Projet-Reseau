@@ -28,9 +28,10 @@ class MainSurface:
 
         self.camera = CameraController(self.game_surface)
 
-        self.event_controller = EventController(self.camera)
-
         self.menu=GameMenu(self.window)
+
+        self.event_controller = EventController(self.camera, self.menu)
+        
         self.menu.main_menu.enable()
         #self.menu.to_print("main_menu")
         
@@ -39,18 +40,16 @@ class MainSurface:
         self.event_controller.run_events()
         
         if self.menu.main_menu.is_enabled():
-            self.menu.main_menu.update(pygame.event.get())
             self.menu.main_menu.draw(self.window)
 
         # Implémenter les ticks
         if self.menu.main_menu.get_current() == self.menu.game_screen:
-            self.window.fill('black')
-            self.menu.game_screen.draw(self.window)
-            #rendu du jeu
+            self.game_surface.render_game(map)
             self.window.blit(self.camera.get_viewpoint(), (0,0))
-            self.game_surface.render_game(carte)
+            self.menu.game_screen.draw(self.window)
+    
+        pygame.display.flip()
 
-            pygame.display.flip()
         self.clock.tick(max_framerate)
 
 

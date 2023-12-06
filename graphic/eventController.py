@@ -16,7 +16,7 @@ class EventController:
             camera (CameraController): camera du jeu
         """
         self.camera = camera
-        
+
         self.menu = menu
 
         self.move_mouse_timer = time.time()
@@ -62,6 +62,8 @@ class EventController:
         """
             Méthode pour vérifier la présente de chaque évènement, et appeler les actions qui leurs sont associés
         """
+        self.menu.main_menu.update(pygame.event.get().copy())
+
         for event in pygame.event.get():
 
             if event.type == pygame.VIDEORESIZE:               
