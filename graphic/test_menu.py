@@ -1,5 +1,9 @@
+from turtle import width
 import pygame
 import pygame_menu
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
 
 class GameMenu(pygame.Surface):
 
@@ -44,8 +48,8 @@ class GameMenu(pygame.Surface):
         self.game_screen.add.button('Quit', pygame_menu.events.EXIT)
 
         self.new_game.add.vertical_margin(30)
-        self.new_game.add.text_input('largeur de la carte :', default='100',textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('hauteur de la carte :', default='100',textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Population de départ :', default='100',textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Nouriture de départ :', default='100',textinput_id='population_food',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('nouriture par jour :', default='1',textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
@@ -67,6 +71,9 @@ class GameMenu(pygame.Surface):
             data = self.new_game.get_input_data()
             for k in data.keys():
                 print(f'\t{k}\t=>\t{data[k]}')
+            Config.width_map = data['map_width']
+            Config.height_map = data['map_height']
+            print(f"map: ({Config.width_map},{Config.height_map})")
         self.new_game.add.button('Store data', data_fun, button_id='store')
         self.new_game.add.button('Restore original values', self.new_game.reset_value)
         self.new_game.add.button('Return to main menu', pygame_menu.events.BACK)
