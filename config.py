@@ -26,3 +26,8 @@ interface_y_offset = 50 # Valeur de l'offset sur chaque côté
 interface_x_offset = interface_y_offset
 screen_size[0] += 2*interface_x_offset
 screen_size[1] += 2*interface_y_offset
+
+class Config():
+    width_map=N
+    height_map=M
+    move_with_cursor=move_with_mouse

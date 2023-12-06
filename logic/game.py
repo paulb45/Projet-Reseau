@@ -1,10 +1,10 @@
-import time
-import  grid ,food
-from bob import Bob
-from food import Food
-from affichage_term import *
-
-import random
+import time, random
+from logic.bob import Bob
+from logic.food import Food
+from logic.grid import Grid
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
 
 #var test bob 
 speed = 1
@@ -13,13 +13,16 @@ E = 100
 speed_buff=1
 
 class Game():
-    def __init__(self,quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day):
+    def __init__(self,quantity_food,init_energy_food,nb_tick_day,P0,nb_day):
         self.init_quantity_food=quantity_food
         self.init_energy_food=init_energy_food
         self.init_nb_tick_day=nb_tick_day
         self.P0=P0 #nombre des bobs a initialiser
-        self.grid=grid
+        self.grid=Grid()
         self.nb_day=nb_day
+        
+        self.init_bobs()
+        self.spawn_food()
         
         """GETTERS"""
     def get_quantity_food(self):
@@ -63,7 +66,7 @@ class Game():
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
         for i in range(self.P0):
             while True :
-                x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
+                x, y = random.randint(0, N-1), random.randint(0, M-1)
                 if (x, y) not in positions_occupees:
                     break  # Sortez de la boucle si la position n'est pas occupée 
             bob= Bob( speed, mass, E, speed_buff)
@@ -76,7 +79,7 @@ class Game():
             position (_type_): _description_
         """
         for i in range(self.get_quantity_food()):
-            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
+            x, y = random.randint(0, N-1), random.randint(0, M-1)
             if (x, y) not in self.grid.map:
                 self.grid.map[(x, y)] = []
             self.grid.map[x,y].append(Food(self.init_energy_food)) 
@@ -100,7 +103,7 @@ class Game():
                     else:
                         mouvement=bob.move()
                         #si bob sort de la grill, il meurt
-                        if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
+                        if(mouvement[0]<0 or mouvement[0]>=N or mouvement[1]<0 or mouvement[1]>=M):
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:
@@ -156,7 +159,6 @@ class Game():
             self.bob_play()
             
             tick-=1
-            time.sleep(1)
         #supprimer tous les food qui restent
         copy_dict=dict(self.grid.map)
         

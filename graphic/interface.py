@@ -4,9 +4,8 @@ import graphic.isometric as isometric
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
-
-class Bob:pass
-class Food:pass
+import logic.bob
+import logic.food
 
 class Interface(pygame.Surface):
     """
@@ -106,14 +105,14 @@ class Interface(pygame.Surface):
     def print_food(self, map):
         for key, l in map.items():
             for item in l:
-                if isinstance(item, Food):
+                if isinstance(item, logic.food.Food):
                     self.place_entity(self.apple, key)
 
     def move_bobs(self, map, current_tick):
         for key, l in map.items():
             for item in l:
-                if isinstance(item, Bob):  # Vite merge avec la logique pour régler ce problème
-                    print(key)
+                print(type(item))
+                if isinstance(item, logic.bob.Bob):  # Vite merge avec la logique pour régler ce problème
                     dep_sum = abs(item.last_move[0]) + abs(item.last_move[1])
                 
                     # Calcul de l'incrément de déplacement sur le prochain tick
@@ -122,8 +121,8 @@ class Interface(pygame.Surface):
 
                     if item.last_move[0] < 0 : new_x_tick = -new_x_tick
                     if item.last_move[1] < 0 : new_y_tick = -new_y_tick
-
-                    self.place_entity(self.bob, key + (new_x_tick, new_y_tick)) # A voir la somme de tuple   
+                    #(new_x_tick + key[0], new_y_tick + key[1])
+                    self.place_entity(self.bob, key) 
 
 
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
@@ -132,7 +131,7 @@ class Interface(pygame.Surface):
             food_count = 0
             bob_count = 0
             for item in l:
-                if isinstance(item, Bob): bob_count += 1
+                if isinstance(item, logic.bob.Bob): bob_count += 1
                 else: food_count += 1
             if bob_count: self.place_entity(self.bob, key)
             if food_count: self.place_entity(self.apple, key)
