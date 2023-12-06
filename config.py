@@ -31,4 +31,3 @@ class Config():
     width_map=N
     height_map=M
     move_with_cursor=move_with_mouse
-    
