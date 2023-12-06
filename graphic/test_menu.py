@@ -1,7 +1,7 @@
 import pygame
 import pygame_menu
 
-class Menu(pygame.Surface):
+class GameMenu(pygame.Surface):
 
     def __init__(self, surface):
         super().__init__(pygame.display.get_surface().get_size())
@@ -58,6 +58,7 @@ class Menu(pygame.Surface):
         self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.button('Quit', pygame.QUIT)
         self.new_game.add.button('start', self.game_screen)
+
         def data_fun() -> None:
             """
             Print data of the menu.
@@ -88,7 +89,7 @@ class Menu(pygame.Surface):
 if __name__ == '__main__':
     pygame.init()
     surface = pygame.display.set_mode((720,480))
-    menu=Menu(surface)
+    menu=GameMenu(surface)
     #menu.load_main_menu()
     while True:   
         events = pygame.event.get()  
@@ -98,6 +99,12 @@ if __name__ == '__main__':
         if menu.main_menu.is_enabled():
             menu.main_menu.update(events)
             menu.main_menu.draw(surface)
-                 
+
+        if menu.main_menu.get_current() == menu.game_screen:
+            surface.fill('black')
+            menu.game_screen.draw(surface)
+            #menu.game_screen.force_surface_cache_update()
+            #menu.game_screen.force_surface_update()
+
         pygame.display.flip()
         pygame.display.update()
