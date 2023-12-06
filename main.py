@@ -3,7 +3,6 @@ from logic.game import Game
 from logic.grid import Grid
 window = MainSurface()
 
-
 # Gestion du menu ? -> où dans main surface
 
 
