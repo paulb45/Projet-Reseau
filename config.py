@@ -1,9 +1,18 @@
 import numpy as np
+
+
 N=100
 M=100
 ticks = 100
 window_size = (1280, 720)
 max_framerate = 60
+
+# Initilisation de la logique
+init_quantity_food = 300
+init_energy_food = 10
+nb_ticks_day = 5
+pop_init = 99
+nbs_day = 1
 
 # Variables pour les sprites
 sprite_path = "sprites/"
@@ -31,3 +40,8 @@ class Config():
     width_map=N
     height_map=M
     move_with_cursor=move_with_mouse
+    quantity_food = init_quantity_food
+    energy_food = init_energy_food
+    nb_tick_day = nb_ticks_day
+    P0 = pop_init
+    nb_day = nbs_day

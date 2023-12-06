@@ -42,6 +42,7 @@ class MainSurface:
             self.menu.main_menu.update(pygame.event.get())
             self.menu.main_menu.draw(self.window)
 
+        # Implémenter les ticks
         if self.menu.main_menu.get_current() == self.menu.game_screen:
             self.window.fill('black')
             self.menu.game_screen.draw(self.window)
@@ -49,7 +50,7 @@ class MainSurface:
             self.window.blit(self.camera.get_viewpoint(), (0,0))
             self.game_surface.render_game(carte)
 
-        pygame.display.flip()
+            pygame.display.flip()
         self.clock.tick(max_framerate)
 
 

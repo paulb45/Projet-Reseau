@@ -61,7 +61,6 @@ class Game():
     def init_bobs(self):
         """init bob
             initialisation des P0 bobs dans exactement P0 places
-
         """
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
         for i in range(self.P0):
@@ -72,6 +71,7 @@ class Game():
             bob= Bob( speed, mass, E, speed_buff)
             self.create_bob( bob, x, y)
             positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
+            
     def spawn_food(self):
         """generer la nouritures
 
@@ -102,15 +102,16 @@ class Game():
                     #sinon il se déplace    
                     else:
                         mouvement=bob.move()
+                        new_coords = (coords[0] + mouvement[0], coords[1] + mouvement[1])
                         #si bob sort de la grill, il meurt
-                        if(mouvement[0]<0 or mouvement[0]>=N or mouvement[1]<0 or mouvement[1]>=M):
+                        if(new_coords[0]<0 or new_coords[0]>=N or new_coords[1]<0 or new_coords[1]>=M):
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:
                             self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
-                            if tuple(mouvement) not in self.grid.map:
-                                self.grid.map[tuple(mouvement)] = []
-                            self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
+                            if tuple(new_coords) not in self.grid.map:
+                                self.grid.map[tuple(new_coords)] = []
+                            self.grid.map[tuple(new_coords)].append(bob) #ajouter le bob pour la nouvelle position
                             #ici bob il a bien reussi son move
                             
                             bob.set_E(bob.get_E()-1)
@@ -155,10 +156,7 @@ class Game():
         self.init_bobs()    #Initialisation des bobs
         self.spawn_food()   #generation de la nourriture
         
-        while tick>0:
-            self.bob_play()
-            
-            tick-=1
+        self.bob_play()
         #supprimer tous les food qui restent
         copy_dict=dict(self.grid.map)
         
@@ -166,6 +164,7 @@ class Game():
             for food in foods:
                 if isinstance(food,Food):
                     self.destroy_object(food)
+            
     def create_bob(self,Bob, x,y):
         if (x, y) in self.grid.map:
             self.grid.map[(x, y)].append(Bob)
