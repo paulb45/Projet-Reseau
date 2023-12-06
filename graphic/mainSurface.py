@@ -33,6 +33,7 @@ class MainSurface:
         self.menu=GameMenu(self.window)
         self.menu.main_menu.enable()
         #self.menu.to_print("main_menu")
+        
 
     def run(self, map):           
         self.event_controller.run_events()
@@ -46,8 +47,7 @@ class MainSurface:
             self.menu.game_screen.draw(self.window)
             #rendu du jeu
             self.window.blit(self.camera.get_viewpoint(), (0,0))
-        
-        
+            self.game_surface.render_game(carte)
 
         pygame.display.flip()
         self.clock.tick(max_framerate)
@@ -55,6 +55,4 @@ class MainSurface:
 
 if __name__ == '__main__':
     carte ={}
-    MainSurface.game_surface.render_game(carte)
-    while True:
-        MainSurface().run(carte)
+    MainSurface().run(carte)
