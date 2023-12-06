@@ -11,11 +11,12 @@ P0 = 99
 nb_day = 1
 game = Game(quantity_food,init_energy_food,nb_tick_day,P0,nb_day)
 
-# Gestion du menu
+# Gestion du menu ? -> où dans main surface
 
 
 while True:
     # Jouer la journée de logic
+    game.bob_play()
     
     # Gestion graphique
     window.run(game.grid.map)

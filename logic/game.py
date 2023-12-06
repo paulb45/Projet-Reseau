@@ -103,7 +103,7 @@ class Game():
                     else:
                         mouvement=bob.move()
                         #si bob sort de la grill, il meurt
-                        if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
+                        if(mouvement[0]<0 or mouvement[0]>=N or mouvement[1]<0 or mouvement[1]>=M):
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:
@@ -159,7 +159,6 @@ class Game():
             self.bob_play()
             
             tick-=1
-            time.sleep(1)
         #supprimer tous les food qui restent
         copy_dict=dict(self.grid.map)
         
