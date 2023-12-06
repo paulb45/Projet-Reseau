@@ -1,9 +1,7 @@
-from collections import defaultdict
 import numpy as np
 N=100
 M=100
-map = defaultdict(lambda:0)
-
+ticks = 100
 window_size = (1280, 720)
 max_framerate = 60
 
