@@ -6,10 +6,10 @@ from affichage_term import *
 from game import Game
 import time
 
-quantity_food = 300
-init_energy_food = 10
-nb_tick_day = 5
-P0 = 99
+quantity_food = 200
+init_energy_food = 100
+nb_tick_day = 100
+P0 = 100
 grid = Grid(10,10)
 nb_day = 1
 ########################## Foncction pour faciliter les testes##############################
@@ -28,7 +28,8 @@ def count_obj(grid, name):
     elif(name=="Foods"):
         return nb_food
 game = Game(quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day)
-game.init_bobs()    #Initialisation des bobs
+"""
+#game.init_bobs()    #Initialisation des bobs
 game.spawn_food()   #generation de la nourriture
 affiche_map(game.grid.map)
 #print("nombre des foods  a l'initialisation est "+str(count_obj(game.grid, "Foods")))
@@ -46,3 +47,10 @@ for coords ,foods in copy_dict.items():
         if isinstance(food,Food):
             game.destroy_object(food)
 affiche_map(game.grid.map)
+"""
+while True:
+    start_time = time.time()
+    game.day_play()
+    end_time = time.time()
+    iteration_time = end_time - start_time
+    print(f"Temps de l'itération : {iteration_time} secondes")

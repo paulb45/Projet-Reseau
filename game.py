@@ -89,7 +89,8 @@ class Game():
             for bob in bobs:
                 if isinstance(bob,Bob):
                     position = self.grid.get_position(bob)
-                    nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+                    if position is not None:
+                        nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
                     #quand bob il sort de la grid il meurt et cette variable aide à ne pas traiter ce bob dans la section eat comme il est mort ce qui est logic
                     bob_is_alive=True
             #*******************deplacement section **********************#       
@@ -105,19 +106,20 @@ class Game():
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:
-                            self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
-                            if tuple(mouvement) not in self.grid.map:
-                                self.grid.map[tuple(mouvement)] = []
-                            self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
-                            #ici bob il a bien reussi son move
-                            #l'energy que bob va perdre
-                            cost_energy=bob.get_mass()*np.cbrt(bob.get_speed())
-                            bob.set_E(bob.get_E()-cost_energy)
-                            #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
-                            if(bob.is_dead()):
-                                self.destroy_object(bob)
-                                bob_is_alive=False
-                                
+                            if position is not None:
+                                self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
+                                if tuple(mouvement) not in self.grid.map:
+                                    self.grid.map[tuple(mouvement)] = []
+                                self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
+                                #ici bob il a bien reussi son move
+                                #l'energy que bob va perdre
+                                cost_energy=bob.get_mass()*np.cbrt(bob.get_speed())
+                                bob.set_E(bob.get_E()-cost_energy)
+                                #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
+                                if(bob.is_dead()):
+                                    self.destroy_object(bob)
+                                    bob_is_alive=False
+                                    
             #******************************eating section***************************#             
                         
                     #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      

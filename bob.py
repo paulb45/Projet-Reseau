@@ -117,7 +117,7 @@ class Bob():
         """
         if(self.E>=self.Emax):
             self.E=self.Emax-self.Emother
-            bebe_bob= Bob(self.speed,self.mass,self.Echild,self.speed_buff)
+            bebe_bob= Bob(self.Echild,self.speed_buff)
             bebe_bob.last_move=self.last_move
             return bebe_bob 
         else:
