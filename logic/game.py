@@ -145,32 +145,34 @@ class Game():
             obj (food / bob): 
         """
         (x,y) = self.grid.get_position(obj)
-        self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]      
+        self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]     
+         
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
+        self.destroy_food()
+        self.spawn_food()   #generation de la nourriture
         tick = self.get_nb_tick_day()  #recupuration du nombre des ticks par jour
         fd_quantity = self.get_quantity_food()  #la quantite de la nourriture par jour
-        self.init_bobs()    #Initialisation des bobs
-        self.spawn_food()   #generation de la nourriture
-        
         self.bob_play()
-        #supprimer tous les food qui restent
-        copy_dict=dict(self.grid.map)
         
-        for coords ,foods in copy_dict.items():
+        
+            
+    def destroy_food(self):
+        for _ ,foods in self.grid.map.items():
             for food in foods:
                 if isinstance(food,Food):
                     self.destroy_object(food)
-            
+        
     def create_bob(self,Bob, x,y):
         if (x, y) in self.grid.map:
             self.grid.map[(x, y)].append(Bob)
         else:
             self.grid.map[(x, y)] = [Bob]
         Bob.set_last_move([x,y])
+        
     def count(self,x,y)->list:
         """count et return les bobs et les foods d'une case données _
 

@@ -39,21 +39,24 @@ class MainSurface:
         #self.menu.to_print("main_menu")
         
 
-    def run(self, map):           
-        self.event_controller.run_events()
+    def run(self, map):
+        current_tick = 1
+        while(current_tick < max_framerate):
+            self.event_controller.run_events()
+            
+            if self.menu.main_menu.is_enabled():
+                self.menu.main_menu.draw(self.window)
+
+            # Implémenter les ticks
+            if self.menu.main_menu.get_current() == self.menu.game_screen:
+                self.game_surface.render_game(map, current_tick)
+                self.window.blit(self.camera.get_viewpoint(), (0,0))
+                self.menu.game_screen.draw(self.window)
         
-        if self.menu.main_menu.is_enabled():
-            self.menu.main_menu.draw(self.window)
+            pygame.display.flip()
 
-        # Implémenter les ticks
-        if self.menu.main_menu.get_current() == self.menu.game_screen:
-            self.game_surface.render_game(map)
-            self.window.blit(self.camera.get_viewpoint(), (0,0))
-            self.menu.game_screen.draw(self.window)
-    
-        pygame.display.flip()
-
-        self.clock.tick(max_framerate)
+            self.clock.tick(max_framerate)
+            current_tick += 1  
 
 
 if __name__ == '__main__':
