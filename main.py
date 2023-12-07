@@ -16,6 +16,5 @@ game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0
 while True:
     # Jouer la journée de logic
     game.day_play()
-    
     # Gestion graphique
     window.run(game.grid.map)

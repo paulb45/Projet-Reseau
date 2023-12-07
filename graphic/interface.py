@@ -19,7 +19,6 @@ class Interface(pygame.Surface):
         self._images = {}
         self.ground = pygame.Surface(size)
         self.load_images()
-        self.graphic_tick = 10
         
         self.generate_ground(self.grass_tile)
 
@@ -115,8 +114,8 @@ class Interface(pygame.Surface):
                     dep_sum = abs(item.last_move[0]) + abs(item.last_move[1])
                 
                     # Calcul de l'incrément de déplacement sur le prochain tick
-                    new_x_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[1])) / self.graphic_tick)
-                    new_y_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[0])) / self.graphic_tick)
+                    new_x_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[1])) / max_framerate)
+                    new_y_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[0])) / max_framerate)
 
                     if item.last_move[0] < 0 : new_x_tick = -new_x_tick
                     if item.last_move[1] < 0 : new_y_tick = -new_y_tick
@@ -142,12 +141,10 @@ class Interface(pygame.Surface):
             """
 
     def render_game(self, map, current_tick):
-        while current_tick <= self.graphic_tick:
-            self.print_ground()
-            #self.move_bobs(map, current_tick)
-            self.print_food(map)
-            current_tick += 1
-        self.generate_map(map)
+        self.print_ground()
+        self.move_bobs(map, current_tick)
+        self.print_food(map)
+        #self.generate_map(map)
     
     # --- Autre ---
 

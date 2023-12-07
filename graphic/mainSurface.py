@@ -46,8 +46,8 @@ class MainSurface:
             
             if self.menu.main_menu.is_enabled():
                 self.menu.main_menu.draw(self.window)
-
-            # Implémenter les ticks
+                
+            # LAG DANS CE IF
             if self.menu.main_menu.get_current() == self.menu.game_screen:
                 self.game_surface.render_game(map, current_tick)
                 self.window.blit(self.camera.get_viewpoint(), (0,0))
