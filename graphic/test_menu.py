@@ -1,6 +1,7 @@
 from turtle import width
 import pygame
 import pygame_menu
+from pygame_menu import sound
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
@@ -9,6 +10,9 @@ class GameMenu(pygame.Surface):
 
     def __init__(self, surface):
         super().__init__(pygame.display.get_surface().get_size())
+        self.engine=sound.Sound()
+        self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
+        #self.engine.set_sound(sound.SOUND_TYPE_OPEN_MENU, '/home/me/open.ogg')
         self.surface = surface
         self.myfont=pygame_menu.font.FONT_MUNRO
         self.myfontsize = 30
@@ -37,7 +41,8 @@ class GameMenu(pygame.Surface):
         #self.load_new_game()
         #self.load_main_menu()
         #self.load_game_screen_menu()
-
+        
+        self.main_menu.set_sound(self.engine,recursive=True)
         self.main_menu.add.label('Evolutionnary game of life',font_size=self.myfontsize*2,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(50)
         self.main_menu.add.button('new game', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)

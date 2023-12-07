@@ -14,6 +14,9 @@ nb_ticks_day = 5
 pop_init = 99
 nbs_day = 1
 
+#varaibles pour la musique
+music_path ="music/"
+
 # Variables pour les sprites
 sprite_path = "sprites/"
 tileset_x_offset, tileset_y_offset = 0, 1
