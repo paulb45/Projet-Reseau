@@ -84,6 +84,15 @@ class GameMenu(pygame.Surface):
         self.new_game.add.button('Return to main menu', pygame_menu.events.BACK)
         self.new_game.add.vertical_margin(10)
 
+        def on_resize() -> None:
+            """
+            Function checked if the window is resized.
+            """
+            window_size = surface.get_size()
+            new_w, new_h = 0.75 * window_size[0], 0.7 * window_size[1]
+            menu.resize(new_w, new_h)
+            print(f'New menu size: {menu.get_size()}')
+
     # def to_print(self, menu_name: str):
     #     match menu_name:
     #         case "main_menu":

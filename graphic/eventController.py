@@ -62,13 +62,14 @@ class EventController:
         """
             Méthode pour vérifier la présente de chaque évènement, et appeler les actions qui leurs sont associés
         """
-        self.menu.main_menu.update(pygame.event.get().copy())
-
-        for event in pygame.event.get():
-
+    
+        self.events =pygame.event.get()
+        for event in self.events:
+            
             if event.type == pygame.VIDEORESIZE:               
                 self.camera.modify_size_window()
-
+                self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
+                self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
             if event.type == pygame.QUIT:
                 self.quit()
 
@@ -82,4 +83,6 @@ class EventController:
 
         if move_with_mouse:
             self.move_map_with_mouse_on_border()
+
+        self.menu.main_menu.update(self.events)
             
