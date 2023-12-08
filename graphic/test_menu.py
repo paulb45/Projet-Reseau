@@ -10,8 +10,8 @@ class GameMenu(pygame.Surface):
 
     def __init__(self, surface):
         super().__init__(pygame.display.get_surface().get_size())
-        self.engine=sound.Sound()
-        self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
+        #self.engine=sound.Sound()
+        #self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
         #self.engine.set_sound(sound.SOUND_TYPE_OPEN_MENU, '/home/me/open.ogg')
         self.surface = surface
         self.myfont=pygame_menu.font.FONT_MUNRO
@@ -37,23 +37,31 @@ class GameMenu(pygame.Surface):
         self.main_menu = pygame_menu.Menu('EVOlution',pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
         self.game_screen = pygame_menu.Menu('Gaming',pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme1)
         self.new_game = pygame_menu.Menu('New Game', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
-        
+
         #self.load_new_game()
         #self.load_main_menu()
         #self.load_game_screen_menu()
         
-        self.main_menu.set_sound(self.engine,recursive=True)
+        #self.main_menu.set_sound(self.engine,recursive=True)
         self.main_menu.add.label('Evolutionnary game of life',font_size=self.myfontsize*2,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(50)
         self.main_menu.add.button('new game', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(10)
         self.main_menu.add.button('Quit', pygame.QUIT,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.draw(self.surface)
+        #self.main_menu.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
         
-        self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200))
-        self.quitbutton.translate(-100,0)
-
+        self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200,25))
+        self.quitbutton.translate(-20,0)
+        self.game_screen.add.vertical_margin(25)
+        self.slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='range_slider',value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
+        self.slider.translate(-20,0)
+        self.game_screen.add.vertical_margin(25)
+        self.optionbtn=self.game_screen.add.button('option', pygame_menu.events.BACK,align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
+        self.optionbtn.translate(-20,0)
+        #self.game_screen.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
+        # erreur en cas de récursion
         self.new_game.add.vertical_margin(30)
         self.new_game.add.text_input('largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
@@ -69,7 +77,7 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.button('Quit', pygame.QUIT)
         self.new_game.add.button('start', self.game_screen)
-
+        
         def data_fun() -> None:
             """
             Print data of the menu.
@@ -85,15 +93,8 @@ class GameMenu(pygame.Surface):
         self.new_game.add.button('Restore original values', self.new_game.reset_value)
         self.new_game.add.button('Return to main menu', pygame_menu.events.BACK)
         self.new_game.add.vertical_margin(10)
-
-        def on_resize() -> None:
-            """
-            Function checked if the window is resized.
-            """
-            window_size = surface.get_size()
-            new_w, new_h = 0.75 * window_size[0], 0.7 * window_size[1]
-            menu.resize(new_w, new_h)
-            print(f'New menu size: {menu.get_size()}')
+        #self.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
+        
 
     # def to_print(self, menu_name: str):
     #     match menu_name:

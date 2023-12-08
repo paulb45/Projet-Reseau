@@ -70,6 +70,8 @@ class EventController:
                 self.camera.modify_size_window()
                 self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
                 self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
+                self.menu.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
+
             if event.type == pygame.QUIT:
                 self.quit()
 
