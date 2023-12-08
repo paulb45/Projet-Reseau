@@ -50,7 +50,9 @@ class GameMenu(pygame.Surface):
         self.main_menu.add.button('Quit', pygame.QUIT,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.draw(self.surface)
 
-        self.game_screen.add.button('Quit', pygame_menu.events.EXIT)
+        
+        self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200))
+        self.quitbutton.translate(-100,0)
 
         self.new_game.add.vertical_margin(30)
         self.new_game.add.text_input('largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
