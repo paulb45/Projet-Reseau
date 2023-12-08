@@ -158,8 +158,10 @@ class Game():
         Args:
             obj (food / bob): 
         """
-        (x,y) = self.grid.get_position(obj)
-        self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]      
+        position = self.grid.get_position(obj)
+        if position is not None:
+            x, y = position
+            self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]      
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture
@@ -174,11 +176,11 @@ class Game():
             self.bob_play()
             
             tick-=1
-            time.sleep(1)
+            
         #supprimer tous les food qui restent
-        copy_dict=dict(self.grid.map)
         
-        for coords ,foods in copy_dict.items():
+        
+        for coords ,foods in list(self.grid.map.items()):
             for food in foods:
                 if isinstance(food,Food):
                     self.destroy_object(food)
