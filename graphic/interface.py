@@ -108,19 +108,15 @@ class Interface(pygame.Surface):
                     self.place_entity(self.apple, key)
 
     def move_bobs(self, map, current_tick):
-        for key, l in map.items():
-            for item in l:
-                if isinstance(item, logic.bob.Bob):
-                    dep_sum = abs(item.last_move[0]) + abs(item.last_move[1])
-                
-                    # Calcul de l'incrément de déplacement sur le prochain tick
-                    new_x_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[1])) / max_framerate)
-                    new_y_tick = int(tile_size * current_tick * (dep_sum - abs(item.last_move[0])) / max_framerate)
+        bobs_list = self.get_all_bobs(map)      
+        for key, bob in bobs_list:
+            # Calcul de l'incrément de déplacement sur le prochain tick
+            new_x_tick = int(bob.last_move[0] * (1- current_tick/ max_framerate))
+            new_y_tick = int(bob.last_move[1] * (1- current_tick/ max_framerate))
 
-                    if item.last_move[0] < 0 : new_x_tick = -new_x_tick
-                    if item.last_move[1] < 0 : new_y_tick = -new_y_tick
-                    #(new_x_tick + key[0], new_y_tick + key[1])
-                    self.place_entity(self.bob, key) 
+            new_pos = (key[0] - new_x_tick, key[1] - new_y_tick)
+            bob_with_border = self.apply_bob_border(bob)
+            self.place_entity(bob_with_border, new_pos) 
 
 
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
@@ -142,8 +138,8 @@ class Interface(pygame.Surface):
 
     def render_game(self, map, current_tick):
         self.print_ground()
-        self.move_bobs(map, current_tick)
         self.print_food(map)
+        self.move_bobs(map, current_tick)
         #self.generate_map(map)
     
     # --- Autre ---
@@ -156,3 +152,32 @@ class Interface(pygame.Surface):
         interface_center = (screen_size[0] // 2, screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)
+
+    def apply_border(self, image: pygame.image, color) -> pygame.image :
+        image_copy = image.copy()
+        pixels = pygame.PixelArray(image_copy)
+        for x in range(1, image_copy.get_width() - 1):
+            for y in range(1, image_copy.get_height() - 1):
+                # Vérifiez si le pixel est transparent et s'il a un voisin non transparent
+                if pixels[x, y] == (0, 0, 0, 0) and any(pixels[i, j] != (0, 0, 0, 0) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)):
+                    # Appliquez le liseré bleu au pixel du bord
+                    pixels[x, y] = color
+        del pixels
+        return image_copy
+
+    def apply_bob_border(self, bob) -> pygame.image:
+        health_ratio = bob.get_E() / bob.get_Emax()
+        red = int((1 - health_ratio) * 255)
+        green = int(health_ratio * 255)
+        blue = 0
+        print(green)
+        bob_with_border = self.apply_border(self.bob, (red, green, blue))
+        return bob_with_border
+    
+    def get_all_bobs(self, map) -> list:
+        bobs_list = []
+        for key, l in map.items():
+            for item in l:
+                if isinstance(item, logic.bob.Bob):
+                    bobs_list.append([key, item])
+        return bobs_list

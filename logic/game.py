@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
 #var test bob 
-speed = 1
+speed = 10
 mass = 10
 E = 100
 speed_buff=1
