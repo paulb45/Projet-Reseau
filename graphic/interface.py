@@ -28,10 +28,10 @@ class Interface(pygame.Surface):
             Charge les images nécessaires au jeu
         """
         self.tileset = self.load_image('Tileset.png')
-        self.grass_tile = self.cut_in_image('Tileset.png', (0,0))
+        self.grass_tile = self.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset))
 
-        self.bob = self.load_sprite('crusader_idle_00000.png')
-        self.apple = self.load_sprite('apple.png')
+        self.bob = self.load_sprite('bob.png')
+        self.apple = self.load_sprite('food.png')
         self.apple = pygame.transform.scale_by(self.apple, 0.5)
     
     def scale_sprite(self, image: pygame.image) -> pygame.image:
@@ -53,14 +53,14 @@ class Interface(pygame.Surface):
             print(f"Impossible de charger l'image '{image_path}': {e}")
             return None
 
-    def cut_in_image(self, image_path: str, pos: tuple) -> pygame.Surface:
+    def cut_in_image(self, image_path: str, pos: tuple, offset: tuple) -> pygame.Surface:
         # Retourne l'image à la i ème ligne, j ème colonne  -> pos = (i, j)
         return self._images[image_path].subsurface(
                 [
-                    pos[0]*tile_size + tileset_x_offset, 
-                    pos[1]*tile_size + tileset_y_offset, 
-                    (pos[0]+1)*tile_size + tileset_x_offset,
-                    (pos[1]+1)*tile_size + tileset_y_offset
+                    pos[0]*tile_size + offset[0], 
+                    pos[1]*tile_size + offset[1], 
+                    tile_size,
+                    tile_size
                 ]
             )
 
@@ -115,8 +115,8 @@ class Interface(pygame.Surface):
             new_y_tick = int(bob.last_move[1] * (1- current_tick/ max_framerate))
 
             new_pos = (key[0] - new_x_tick, key[1] - new_y_tick)
-            bob_with_border = self.apply_bob_border(bob)
-            self.place_entity(bob_with_border, new_pos) 
+            #bob_with_border = self.apply_bob_border(bob)
+            self.place_entity(self.bob, new_pos) 
 
 
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
@@ -153,16 +153,23 @@ class Interface(pygame.Surface):
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)
 
-    def apply_border(self, image: pygame.image, color) -> pygame.image :
+    def apply_border(self, image: pygame.image, color: tuple) -> pygame.image :
+        border_thickness = 10
         image_copy = image.copy()
-        pixels = pygame.PixelArray(image_copy)
-        for x in range(1, image_copy.get_width() - 1):
-            for y in range(1, image_copy.get_height() - 1):
+        #pixels = pygame.PixelArray(image_copy)
+        for x in range(image_copy.get_width()):
+            for y in range(image_copy.get_height()):
+                pixel = image_copy.get_at((x,y))
                 # Vérifiez si le pixel est transparent et s'il a un voisin non transparent
-                if pixels[x, y] == (0, 0, 0, 0) and any(pixels[i, j] != (0, 0, 0, 0) for i in range(x - 1, x + 2) for j in range(y - 1, y + 2)):
-                    # Appliquez le liseré bleu au pixel du bord
-                    pixels[x, y] = color
-        del pixels
+                if pixel == (0, 0, 0, 0) and any(
+                        0 <= i < image_copy.get_width() and 0 <= j < image_copy.get_height() and image_copy.get_at((i,j)) != (0, 0, 0, 0)
+                        for i in range(x - border_thickness, x + border_thickness + 1)
+                        for j in range(y - border_thickness, y + border_thickness + 1)
+                    ):
+                    # Appliquez le liseré bleu autour du personnage avec l'épaisseur spécifiée
+                    for i in range(max(0, x - border_thickness), min(image_copy.get_width(), x + border_thickness + 1)):
+                        for j in range(max(0, y - border_thickness), min(image_copy.get_height(), y + border_thickness + 1)):
+                            image_copy.set_at((x, y), pygame.Color(color[0], color[1], color[2]))
         return image_copy
 
     def apply_bob_border(self, bob) -> pygame.image:
@@ -170,7 +177,6 @@ class Interface(pygame.Surface):
         red = int((1 - health_ratio) * 255)
         green = int(health_ratio * 255)
         blue = 0
-        print(green)
         bob_with_border = self.apply_border(self.bob, (red, green, blue))
         return bob_with_border
     

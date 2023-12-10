@@ -19,8 +19,9 @@ music_path ="music/"
 
 # Variables pour les sprites
 sprite_path = "sprites/"
-tileset_x_offset, tileset_y_offset = 0, 1
-tile_size = 16
+tileset_x_offset, tileset_y_offset = 0, 0
+pos_x_tile, pos_y_tile = 2,2
+tile_size = 32
 
 # activation ou non du déplacement avec le curseur de la souris sur les bords de la fenètre
 move_with_mouse = False
@@ -39,6 +40,7 @@ interface_x_offset = interface_y_offset
 screen_size[0] += 2*interface_x_offset
 screen_size[1] += 2*interface_y_offset
 
+# Variable avec une configuration dynamique
 class Config():
     width_map=N
     height_map=M
