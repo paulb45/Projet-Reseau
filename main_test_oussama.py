@@ -40,18 +40,21 @@ while nb_tick_day>0:
     nb_tick_day-=1
     time.sleep(1)
     affiche_map(game.grid.map)
-    
+  
 copy_dict=dict(game.grid.map)
 for coords ,foods in copy_dict.items():
     for food in foods:
         if isinstance(food,Food):
             game.destroy_object(food)
 affiche_map(game.grid.map)
-"""
-while True:
-    start_time = time.time()
-    game.day_play()
-    end_time = time.time()
-    iteration_time = end_time - start_time
-    print(f"Temps de l'iteration : {iteration_time} secondes")
+""" 
+game.partie()
+
     
+
+for coords ,bobs in game.grid.map.items():
+    for bob in bobs:
+        if isinstance(bob,Bob):
+            print("la velocity de ce bob est :"+str(bob.speed))
+            
+print("nombre des bobs a la fin est "+str(count_obj(game.grid, "Bobs")))

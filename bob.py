@@ -1,6 +1,7 @@
 from food import Food
 from grid import *
 import random
+import config
 
 class Bob():
     
@@ -8,13 +9,14 @@ class Bob():
     Emother=150
     Echild=50
     
-    def __init__(self,E,speed_buff):
+    
+    def __init__(self,E):
         self.speed=1
         self.mass=1
         self.memory=None
         self.E=E
         self.last_move=[None,None]
-        self.speed_buff=speed_buff
+        self.speed_buff = 0.0
     
     """ Getters """
     def get_speed(self):
@@ -66,11 +68,14 @@ class Bob():
             la gestion ce fait dans la class Game
             return: les nouvelles coordonnées de bob 
         """
-        # Version sans vision
+        #Version sans vision
+        self.speed_buff += self.speed
+        speed_mouvement= int(self.speed_buff)
+        self.speed_buff -= speed_mouvement
         coords=self.get_last_move()
         self.set_last_move((
-                            x:=random.randint(0, self.speed) * random.choice((1,-1)), 
-                            (self.speed - abs(x)) * random.choice((1,-1))
+                            x:=random.randint(0, speed_mouvement) * random.choice((1,-1)), 
+                            (speed_mouvement - abs(x)) * random.choice((1,-1))
                            ))
         position = list(self.get_last_move())
         self.set_last_move(
@@ -117,8 +122,10 @@ class Bob():
         """
         if(self.E>=self.Emax):
             self.E=self.Emax-self.Emother
-            bebe_bob= Bob(self.Echild,self.speed_buff)
+            bebe_bob= Bob(self.Echild)
             bebe_bob.last_move=self.last_move
+            mutation = random.uniform(-config.mutation_speed, config.mutation_speed)
+            bebe_bob.set_speed(self.speed+mutation)
             return bebe_bob 
         else:
             return -1   

@@ -9,7 +9,7 @@ import random
 
 #var test bob 
 speed = 1
-
+Etmin=0.5
 E = 100
 speed_buff=1
 
@@ -67,7 +67,7 @@ class Game():
                 x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
                 if (x, y) not in positions_occupees:
                     break  # Sortez de la boucle si la position n'est pas occupée 
-            bob= Bob( E, speed_buff)
+            bob= Bob( E)
             self.create_bob( bob, x, y)
             positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
     def spawn_food(self):
@@ -113,7 +113,11 @@ class Game():
                             self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
                             #ici bob il a bien reussi son move
                             #l'energy que bob va perdre
-                            cost_energy=bob.get_mass()*np.cbrt(bob.get_speed())
+                            #energie consommee
+                            Bc=bob.get_speed() ** 2
+                            cost_energy=max(Etmin,Bc)
+                            
+                            #cost_energy=bob.get_mass()*np.cbrt(bob.get_speed())
                             bob.set_E(bob.get_E()-cost_energy)
                             #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
                             if(bob.is_dead()):
@@ -169,7 +173,7 @@ class Game():
         """
         tick = self.get_nb_tick_day()  #recupuration du nombre des ticks par jour
         fd_quantity = self.get_quantity_food()  #la quantite de la nourriture par jour
-        self.init_bobs()    #Initialisation des bobs
+        
         self.spawn_food()   #generation de la nourriture
         
         while tick>0:
@@ -184,6 +188,12 @@ class Game():
             for food in foods:
                 if isinstance(food,Food):
                     self.destroy_object(food)
+    def partie(self):
+        self.init_bobs()    #Initialisation des bobs
+        while(self.nb_day > 0):
+            self.day_play()
+            self.nb_day-=1;
+        
     def create_bob(self,Bob, x,y):
         if (x, y) in self.grid.map:
             self.grid.map[(x, y)].append(Bob)
