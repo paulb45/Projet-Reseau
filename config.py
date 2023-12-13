@@ -1,4 +1,5 @@
 import numpy as np
+from configparser import ConfigParser
 
 
 N=100
@@ -50,3 +51,49 @@ class Config():
     nb_tick_day = nb_ticks_day
     P0 = pop_init
     nb_day = nbs_day
+
+def set_default_values():
+    #Get the configparser object
+    config_object = ConfigParser()
+
+    #section DEFAULT
+    config_object["DEFAULT"] = {
+        "N": "100",
+        "M": "100",
+        "move_with_mouse": "True",
+        "nb_days": "1",
+        "nb_ticks_day": "5",
+        "pop_init": "99",
+        "quantity_food": "300",
+        "energy_food": "10"
+    }
+
+    #Write into config.ini file
+    with open('config.ini', 'w') as conf:
+        config_object.write(conf)
+
+
+def get_value(key):
+    key = str(key)
+
+    #Get the configparser object
+    config_object = ConfigParser()
+    config_object.read("config.ini")
+
+    #Get the value
+    return config_object["DEFAULT"][key]
+
+def update_value(key, value):
+    key = str(key)
+    value = str(value)
+
+    #Get the configparser object
+    config_object = ConfigParser()
+    config_object.read("config.ini")
+
+    #Update the value
+    config_object["DEFAULT"][key] = value
+
+    #Write into config.ini file
+    with open('config.ini', 'w') as conf:
+        config_object.write(conf)
