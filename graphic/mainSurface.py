@@ -51,7 +51,8 @@ class MainSurface:
 
     def run(self, map=None):
         current_tick = 1
-        self.game_surface.init_values_bobs_day(map)
+        if map != None:
+            self.game_surface.init_values_bobs_day(map)
         while(current_tick < max_framerate):
             self.event_controller.run_events()
             # LAG DANS CE IF
