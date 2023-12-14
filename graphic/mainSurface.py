@@ -45,6 +45,7 @@ class MainSurface:
         self.game_surface = Interface(screen_size)
 
         self.camera = CameraController(self.game_surface)
+        self.menu.zoom_slider.set_value(self.camera.get_zoom_ratio())
 
         self.event_controller.camera = self.camera
         
