@@ -27,7 +27,7 @@ class Grid():
 
                     # Vérification que la nouvelle position est à l'intérieur de la grille
                     # et que x et y diffèrent, excluant ainsi la diagonale lorsque la distance vaut 1
-                    if 0 <= new_x < N and 0 <= new_y < N :
+                    if 0 <= new_x < Config.width_map and 0 <= new_y < Config.height_map :
                         positions_disponibles.append((new_x, new_y))
 
         return positions_disponibles
