@@ -63,8 +63,9 @@ class EventController:
             Méthode pour vérifier la présente de chaque évènement, et appeler les actions qui leurs sont associés
         """
     
-        self.events =pygame.event.get()
-        for event in self.events:
+        events = pygame.event.get()
+
+        for event in events:
             
             if event.type == pygame.VIDEORESIZE:               
                 self.camera.modify_size_window()
@@ -86,5 +87,11 @@ class EventController:
         if move_with_mouse:
             self.move_map_with_mouse_on_border()
 
-        self.menu.main_menu.update(self.events)
-            
+        
+        
+        if self.menu.game_is_on:
+            # events = [e for e in events if e.type != 768]
+            self.menu.game_screen.update([e for e in events if e.type != 768])
+        else:    
+            self.menu.main_menu.update(events)
+

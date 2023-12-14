@@ -31,7 +31,7 @@ class MainSurface:
 
         self.camera = CameraController(self.game_surface)
 
-        self.menu=GameMenu(self.window)
+        self.menu = GameMenu(self.window)
 
         self.event_controller = EventController(self.camera, self.menu)
         
@@ -43,15 +43,19 @@ class MainSurface:
         current_tick = 1
         while(current_tick < max_framerate):
             self.event_controller.run_events()
-            
-            if self.menu.main_menu.is_enabled():
-                self.menu.main_menu.draw(self.window)
                 
             # LAG DANS CE IF
-            if self.menu.main_menu.get_current() == self.menu.game_screen:
+            # if self.menu.main_menu.get_current() == self.menu.game_screen:
+            #     self.game_surface.render_game(map, current_tick)
+            #     self.window.blit(self.camera.get_viewpoint(), (0,0))
+            #     self.menu.game_screen.draw(self.window)
+
+            if self.menu.game_is_on:
                 self.game_surface.render_game(map, current_tick)
                 self.window.blit(self.camera.get_viewpoint(), (0,0))
                 self.menu.game_screen.draw(self.window)
+            else:
+                self.menu.main_menu.draw(self.window)
         
             pygame.display.flip()
 
