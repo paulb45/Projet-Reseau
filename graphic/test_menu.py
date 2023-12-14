@@ -17,6 +17,7 @@ class GameMenu(pygame.Surface):
         self.game_is_on = False
         
         self.zoom_slider_event = pygame.event.Event(pygame.USEREVENT+1,message= 'zoommustchange')
+        self.volume_change_event = pygame.event.Event(pygame.USEREVENT+2,message= 'volumemustchange')
         #self.engine=sound.Sound()
         #self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
         #self.engine.set_sound(sound.SOUND_TYPE_OPEN_MENU, '/home/me/open.ogg')
@@ -61,6 +62,9 @@ class GameMenu(pygame.Surface):
         def zoom_changer(n):
             #print('the function was called')
             pygame.event.post(self.zoom_slider_event)
+            
+        def change_volume(n):
+            pygame.mixer.music.set_volume( n /100)
         
         #self.game_screen.set_controller(KeyboardInterrupt,apply_to_widgets = False)
         self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200,25))
@@ -70,13 +74,13 @@ class GameMenu(pygame.Surface):
         self.zoom_slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='zoom_slider',onchange= zoom_changer,value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
         self.zoom_slider.translate(-20,0)
         self.zoom_slider.set_controls(keyboard=False)
-        
-        
-        
         self.game_screen.add.vertical_margin(25)
         self.optionbtn=self.game_screen.add.button('option', self.change_game_is_on, align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
         self.optionbtn.translate(-20,0)
         self.optionbtn.set_controls(keyboard=False)
+        self.volume_slider =self.game_screen.add.range_slider('volume', 50, (0, 100), 1,rangeslider_id='volume_slider',onchange = change_volume ,value_format=lambda x: str(int(x)), background_color=(200,200,200,25))
+        self.volume_slider.translate(-20,0)
+        self.volume_slider.set_controls(keyboard=False)
  
 
         #self.game_screen.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
@@ -94,7 +98,6 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('energy des parent apres reproduction', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
-        #self.new_game.add.range_slider('volume',self.change_volume,rangeslider_id='volume_slider', value_format= int, background_color=(200,200,200,25))
         self.new_game.add.button('Quit', pygame.QUIT)
         # self.new_game.add.button('start', self.game_screen)
         self.new_game.add.button('start', self.change_game_is_on)
@@ -134,12 +137,6 @@ class GameMenu(pygame.Surface):
 
         self.game_is_on = not self.game_is_on
         
-    def change_volume(self):
-        pygame.mixer.music.set_volume( self.volume /100)
-
-    
-
-
         #self.interface.generate_ground(self.interface.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset)))
         #print("size change bich")
 
