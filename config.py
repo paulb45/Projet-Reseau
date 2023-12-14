@@ -18,6 +18,8 @@ nbs_day = 1
 #varaibles pour la musique
 music_path ="music/"
 
+assets_path = "assets/"
+
 # Variables pour les sprites
 sprite_path = "sprites/"
 tileset_x_offset, tileset_y_offset = 0, 0
