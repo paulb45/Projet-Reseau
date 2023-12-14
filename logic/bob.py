@@ -29,11 +29,8 @@ class Bob():
     def get_Emax(cls):
         return cls.Emax
     def get_E(self):
-        # modifier temporairement car retourner une valeur négative
-        if self.E <= 0:
-            return 0
-        else :
-            return self.E
+    
+        return self.E
         #todo
     @classmethod
     def get_Emother(cls):
@@ -82,14 +79,6 @@ class Bob():
                             x:=random.randint(0, speed_mouvement) * random.choice((1,-1)), 
                             (speed_mouvement - abs(x)) * random.choice((1,-1))
                            ))
-        position = list(self.get_last_move())
-        self.set_last_move(
-            
-            (coords[0]+position[0],
-            coords[1]+position[1])
-            
-        )
-
         return self.get_last_move()
 
     def eat(self,food: Food)->bool: 
