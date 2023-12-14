@@ -26,6 +26,9 @@ class MainSurface:
 
         pygame.display.set_caption("Game Of Life")
 
+        # icone de l'application
+        pygame.display.set_icon(pygame.image.load(assets_path + "icon.png"))
+
         # clock pour la gestion des FPS
         self.clock = pygame.time.Clock()
 
