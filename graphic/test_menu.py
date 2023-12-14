@@ -60,13 +60,15 @@ class GameMenu(pygame.Surface):
         self.quitbutton.translate(-20,0)
         self.quitbutton.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
-        self.slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='range_slider',value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
+        self.slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='zoom_slider',value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
         self.slider.translate(-20,0)
         self.slider.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
         self.optionbtn=self.game_screen.add.button('option', self.change_game_is_on, align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
         self.optionbtn.translate(-20,0)
         self.optionbtn.set_controls(keyboard=False)
+ 
+
         #self.game_screen.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
         # erreur en cas de récursion
         self.new_game.add.vertical_margin(30)
@@ -82,6 +84,7 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('energy des parent apres reproduction', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.range_slider('volume',self.change_volume,rangeslider_id='volume_slider', value_format= int, background_color=(200,200,200,25))
         self.new_game.add.button('Quit', pygame.QUIT)
         # self.new_game.add.button('start', self.game_screen)
         self.new_game.add.button('start', self.change_game_is_on)
@@ -108,6 +111,9 @@ class GameMenu(pygame.Surface):
             pygame_menu.events.BACK
 
         self.game_is_on = not self.game_is_on
+        
+    def change_volume(self):
+        pygame.mixer.music.set_volume( self.volume /100)
 
     # def to_print(self, menu_name: str):
     #     match menu_name:
