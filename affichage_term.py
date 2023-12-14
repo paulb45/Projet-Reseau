@@ -71,12 +71,12 @@ def affiche_map(grid):
      
 
 #test
-
+"""
 grd=Grid(10,10)
 Game=Game(3,100,10,3,grd,3)
 
 Game.bob_play()
-
+"""
 
 """
 _________Grid_________
