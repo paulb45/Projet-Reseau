@@ -65,7 +65,7 @@ class Game():
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
         for i in range(self.P0):
             while True :
-                x, y = random.randint(0, N-1), random.randint(0, M-1)
+                x, y = random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
                 if (x, y) not in positions_occupees:
                     break  # Sortez de la boucle si la position n'est pas occupée 
             bob= Bob( speed, mass, E, speed_buff)
@@ -79,7 +79,7 @@ class Game():
             position (_type_): _description_
         """
         for i in range(self.get_quantity_food()):
-            x, y = random.randint(0, N-1), random.randint(0, M-1)
+            x, y = random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
             if (x, y) not in self.grid.map:
                 self.grid.map[(x, y)] = []
             self.grid.map[x,y].append(Food(self.init_energy_food)) 
@@ -104,7 +104,7 @@ class Game():
                         mouvement=bob.move()
                         new_coords = (coords[0] + mouvement[0], coords[1] + mouvement[1])
                         #si bob sort de la grill, il meurt
-                        if(new_coords[0]<0 or new_coords[0]>=N or new_coords[1]<0 or new_coords[1]>=M):
+                        if(new_coords[0]<0 or new_coords[0]>=Config.width_map or new_coords[1]<0 or new_coords[1]>=Config.width_map):
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:

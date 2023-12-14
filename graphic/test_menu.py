@@ -5,14 +5,17 @@ from pygame_menu import sound
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
+#from graphic.interface import Interface
 
 class GameMenu(pygame.Surface):
 
     def __init__(self, surface):
         super().__init__(pygame.display.get_surface().get_size())
-
+        #self.interface = Interface
+        #self.interface.load_images()
         # True si on est sur le jeu et false sinon
         self.game_is_on = False
+        
 
         #self.engine=sound.Sound()
         #self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
@@ -96,6 +99,18 @@ class GameMenu(pygame.Surface):
                 print(f'\t{k}\t=>\t{data[k]}')
             Config.width_map = data['map_width']
             Config.height_map = data['map_height']
+            # Variables d'interface
+            screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
+            interface_y_offset = 50 # Valeur de l'offset sur chaque côté
+            interface_x_offset = interface_y_offset
+            screen_size[0] += 2*interface_x_offset
+            screen_size[1] += 2*interface_y_offset
+
+            # Variables d'interface
+            interface_y_offset = 50 # Valeur de l'offset sur chaque côté
+            interface_x_offset = interface_y_offset
+            screen_size[0] += 2*interface_x_offset
+            screen_size[1] += 2*interface_y_offset
             print(f"map: ({Config.width_map},{Config.height_map})")
         self.new_game.add.button('Store data', data_fun, button_id='store')
         self.new_game.add.button('Restore original values', self.new_game.reset_value)
@@ -108,6 +123,10 @@ class GameMenu(pygame.Surface):
             pygame_menu.events.BACK
 
         self.game_is_on = not self.game_is_on
+
+
+        #self.interface.generate_ground(self.interface.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset)))
+        #print("size change bich")
 
     # def to_print(self, menu_name: str):
     #     match menu_name:
