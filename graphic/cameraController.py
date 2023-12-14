@@ -40,10 +40,10 @@ class CameraController:
         
         # calcul du zoom initial
         # on va partir par défaut sur l'affichage de 20 cases sur la largeur
-        if (N > (zoom_max - zoom_min)):
+        if (Config.width_map > (zoom_max - zoom_min)):
             self.zoom_map_width = tile_size * (zoom_max - zoom_min)
         else:
-            self.zoom_map_width = tile_size * N
+            self.zoom_map_width = tile_size * Config.width_map
 
         self.aspect_ratio = pygame.display.get_surface().get_height() / pygame.display.get_surface().get_width()
         self.zoom_map_height = int(self.zoom_map_width * self.aspect_ratio)

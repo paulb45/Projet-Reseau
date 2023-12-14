@@ -93,8 +93,8 @@ class Interface(pygame.Surface):
         self.ground.blit(tile, self.place_top_position(tile, isometric.iso_to_print(pos_iso)))
         
     def generate_ground(self, tile: pygame.image):
-        for i in range(N):
-            for j in range(M):
+        for i in range(Config.width_map):
+            for j in range(Config.height_map):
                 self.place_tile(tile, (i,j))
         self.print_ground()
     

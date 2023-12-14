@@ -16,7 +16,7 @@ class Grid():
             for i, j in [(0, -1), (-1, 0), (1, 0), (0, 1)]: #la liste des coordonnees sert a donner des cordonnes qui sont pas en diagonale
                 new_x = x + i
                 new_y = y + j
-                if 0 <= new_x < N and 0 <= new_y < N : 
+                if 0 <= new_x < Config.width_map and 0 <= new_y < Config.height_map : 
                         positions_disponibles.append((new_x, new_y))
         
         else:
