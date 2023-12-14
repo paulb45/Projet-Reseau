@@ -1,6 +1,6 @@
-
 from affichage_term import *
-from game import Game
+from logic.game import Game
+from logic import *
 import time
 
 quantity_food = 10
