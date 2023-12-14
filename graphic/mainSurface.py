@@ -49,10 +49,10 @@ class MainSurface:
         self.event_controller.camera = self.camera
         
 
-    def run(self, map=None):
+    def run(self, map):
         current_tick = 1
-        if map != None:
-            self.game_surface.init_values_bobs_day(map)
+        self.game_surface.init_values_bobs_day(map)
+
         while(current_tick < max_framerate):
             self.event_controller.run_events()
             # LAG DANS CE IF
@@ -61,7 +61,7 @@ class MainSurface:
             #     self.window.blit(self.camera.get_viewpoint(), (0,0))
             #     self.menu.game_screen.draw(self.window)
 
-            if self.menu.game_is_on and map != None:
+            if self.menu.game_is_on:
                 self.game_surface.render_game(map)
                 self.window.blit(self.camera.get_viewpoint(), (0,0))
                 self.menu.game_screen.draw(self.window)
@@ -73,6 +73,16 @@ class MainSurface:
 
             self.clock.tick(max_framerate)
             current_tick += 1
+
+
+    def run_menu(self):
+        self.event_controller.run_events()
+
+        self.menu.main_menu.draw(self.window)
+
+        pygame.display.flip()
+
+        self.clock.tick(max_framerate)
 
 
 if __name__ == '__main__':
