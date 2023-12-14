@@ -16,7 +16,7 @@ class GameMenu(pygame.Surface):
         # True si on est sur le jeu et false sinon
         self.game_is_on = False
         
-
+        self.zoom_slider_event = pygame.event.Event(pygame.USEREVENT+1,message= 'zoommustchange')
         #self.engine=sound.Sound()
         #self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
         #self.engine.set_sound(sound.SOUND_TYPE_OPEN_MENU, '/home/me/open.ogg')
@@ -58,14 +58,21 @@ class GameMenu(pygame.Surface):
         self.main_menu.draw(self.surface)
         #self.main_menu.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
+        def zoom_changer(n):
+            #print('the function was called')
+            pygame.event.post(self.zoom_slider_event)
+        
         #self.game_screen.set_controller(KeyboardInterrupt,apply_to_widgets = False)
         self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200,25))
         self.quitbutton.translate(-20,0)
         self.quitbutton.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
-        self.zoom_slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='zoom_slider',value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
+        self.zoom_slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='zoom_slider',onchange= zoom_changer,value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
         self.zoom_slider.translate(-20,0)
         self.zoom_slider.set_controls(keyboard=False)
+        
+        
+        
         self.game_screen.add.vertical_margin(25)
         self.optionbtn=self.game_screen.add.button('option', self.change_game_is_on, align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
         self.optionbtn.translate(-20,0)
@@ -129,6 +136,8 @@ class GameMenu(pygame.Surface):
         
     def change_volume(self):
         pygame.mixer.music.set_volume( self.volume /100)
+
+    
 
 
         #self.interface.generate_ground(self.interface.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset)))

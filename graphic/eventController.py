@@ -86,13 +86,20 @@ class EventController:
                 if event.type == pygame.QUIT:
                     self.quit()
 
+                if event.type == pygame.USEREVENT+1:
+                    self.tozoom = self.menu.zoom_slider.get_value()
+                    print(self.tozoom)
+                    #print('event user')
+                    self.camera.change_zoom_with_slider(self.tozoom)
+                
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 4:
                         self.camera.zoom_in()
                     elif event.button == 5:
                         self.camera.zoom_out()
                     self.menu.zoom_slider.set_value(self.camera.get_zoom_ratio())
-
+    
+                
             self.keyboard_pressed()
 
             if move_with_mouse:
