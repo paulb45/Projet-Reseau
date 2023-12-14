@@ -86,13 +86,13 @@ class CameraController:
         return int((1 - (self.zoom_map_width - zoom_min*tile_size) / (zoom_max*tile_size - zoom_min*tile_size)) * 100)
 
     
-    def change_zoom_with_slider(self, ratio:int) -> None:
+    def change_zoom_with_slider(self, ratio:float) -> None:
         """Changer le zoom grace à la valeur du slider du menu du jeu
 
         Args:
-            ratio (int): taux entre 0 et 100
+            ratio (float): taux entre 0 et 100
         """
-        new_zoom = int((zoom_max*tile_size - zoom_min*tile_size) * (ratio / 100) + zoom_min*tile_size)
+        new_zoom = int((zoom_max*tile_size - zoom_min*tile_size) * (1-(ratio / 100)) + zoom_min*tile_size)
 
         if new_zoom < self.zoom_map_width:
             self.zoom_in(self.zoom_map_width - new_zoom)
@@ -165,7 +165,7 @@ class CameraController:
                 position_camera_x_next = self.position_camera_x - ((zoom_map_width_next - self.zoom_map_width) // 2)
             else:
                 position_camera_y_next = self.position_camera_y - ((zoom_map_height_next - self.zoom_map_height) // 2)
-                position_camera_x_next = self.position_camera_x - tile_size
+                position_camera_x_next = self.position_camera_x - _zoom_step // 2
 
             # haut
             if position_camera_y_next < 0:
