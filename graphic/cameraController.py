@@ -72,9 +72,27 @@ class CameraController:
         return viewpoint
 
 
-    def modify_speed(self):
+    def modify_speed(self) -> None:
         # mise à l'echelle linéaire en fonction du zoom
         self.speed = SPEED_MIN + ((self.zoom_map_width - zoom_min*tile_size) * (SPEED_MAX - SPEED_MIN)) // (zoom_max*tile_size + zoom_min*tile_size)
+
+
+    def get_zoom_ratio(self) -> int:
+        """Obtenir la valeur actuel du zoom sur une échelle de 1 à 100
+
+        Returns:
+            int: taux de zoom entre 0 et 100
+        """
+        return int(((self.zoom_map_width - zoom_min*tile_size) / (zoom_max*tile_size - zoom_min*tile_size)) * 100)
+
+    
+    def change_zoom_with_slider(self, ratio:int) -> None:
+        """Changer le zoom grace à la valeur du slider du menu du jeu
+
+        Args:
+            ratio (int): taux entre 0 et 100
+        """
+        new_zoom = int((zoom_max*tile_size - zoom_min*tile_size) * (ratio / 100) + zoom_min*tile_size)
 
 
     def modify_size_window(self):
@@ -101,10 +119,13 @@ class CameraController:
         # rétrecissement de la zone affichée
         zoom_map_width_next = self.zoom_map_width - tile_size * 2
 
-        if not (zoom_map_width_next <= (tile_size * zoom_min)):
+        if (zoom_map_width_next <= (tile_size * zoom_min)):
+            zoom_map_width_next = (tile_size * zoom_min)
+
+        if (zoom_map_width_next != self.zoom_map_width):
             zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
-            self.position_camera_x += tile_size
+            self.position_camera_x += (self.zoom_map_width - zoom_map_width_next) // 2
             self.position_camera_y += (self.zoom_map_height - zoom_map_height_next) // 2
 
             self.zoom_map_width = zoom_map_width_next
