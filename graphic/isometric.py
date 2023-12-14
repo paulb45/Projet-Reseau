@@ -16,10 +16,10 @@ transfer_cart_to_iso = np.array([
 transfer_iso_to_cart = np.linalg.inv(transfer_cart_to_iso)
 
 def cart_to_iso(pos: tuple) -> list:
-    return (transfer_cart_to_iso @ pos) + (interface_x_offset, interface_y_offset)
+    return (transfer_cart_to_iso @ pos) + (Config.interface_x_offset, Config.interface_y_offset)
 
 def iso_to_cart(pos: tuple) -> list:
-    return transfer_iso_to_cart @ (pos - (interface_x_offset, interface_y_offset))
+    return transfer_iso_to_cart @ (pos - (Config.interface_x_offset, Config.interface_y_offset))
 
 def iso_to_print(pos: tuple) -> tuple:
     return pos + (M*tile_size/2, 0)

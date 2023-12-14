@@ -196,13 +196,13 @@ class Interface(pygame.Surface):
         return image_copy
 
     def apply_bob_border(self, bob) -> pygame.image:
-        health_ratio = bob.get_E() / bob.get_Emax()
+        health_ratio = abs( bob.get_E() / bob.get_Emax())
         red = int((1 - health_ratio) * 255)
         green = int(health_ratio * 255)
         blue = 0
         #print( red, green, abs(green), blue , bob.get_E(), bob.get_Emax() , health_ratio)
         #bob.get_E afin d'avoir une interface fonctionnelle pour l'instant je passe les valeurs absolu mais il faudra voir a corriger get_E
-        bob_with_border = self.apply_border(self.bob, (abs(red), abs(green), blue), self.bob_image_border, self.bob_border_thinkness)
+        bob_with_border = self.apply_border(self.bob, (red, green, blue), self.bob_image_border, self.bob_border_thinkness)
         return bob_with_border
     
     # --- Autre ---
@@ -212,7 +212,7 @@ class Interface(pygame.Surface):
             Place le centre de la carte au centre de la fenêtre
         """
         window_center = (window_size[0] // 2, window_size[1] // 2)
-        interface_center = (screen_size[0] // 2, screen_size[1] // 2)
+        interface_center = (Config.screen_size[0] // 2, Config.screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)       
     
