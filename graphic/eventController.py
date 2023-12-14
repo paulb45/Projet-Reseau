@@ -54,8 +54,10 @@ class EventController:
             self.camera.move_down()
         if keystate[pygame.K_p]:
             self.camera.zoom_in()
+            self.menu.zoom_slider.set_value(self.camera.get_zoom_ratio())
         if keystate[pygame.K_m]:
             self.camera.zoom_out()
+            self.menu.zoom_slider.set_value(self.camera.get_zoom_ratio())
 
 
     def run_events(self):
@@ -84,6 +86,7 @@ class EventController:
                         self.camera.zoom_in()
                     elif event.button == 5:
                         self.camera.zoom_out()
+                    self.menu.zoom_slider.set_value(self.camera.get_zoom_ratio())
 
             self.keyboard_pressed()
 

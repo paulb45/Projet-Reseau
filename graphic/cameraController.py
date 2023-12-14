@@ -83,7 +83,7 @@ class CameraController:
         Returns:
             int: taux de zoom entre 0 et 100
         """
-        return int(((self.zoom_map_width - zoom_min*tile_size) / (zoom_max*tile_size - zoom_min*tile_size)) * 100)
+        return int((1 - (self.zoom_map_width - zoom_min*tile_size) / (zoom_max*tile_size - zoom_min*tile_size)) * 100)
 
     
     def change_zoom_with_slider(self, ratio:int) -> None:
