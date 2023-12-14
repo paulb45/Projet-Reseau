@@ -205,7 +205,9 @@ class Interface(pygame.Surface):
         red = int((1 - health_ratio) * 255)
         green = int(health_ratio * 255)
         blue = 0
-        bob_with_border = self.apply_border(self.bob, (red, green, blue), self.bob_image_border, self.bob_border_thinkness)
+        #print( red, green, abs(green), blue , bob.get_E(), bob.get_Emax() , health_ratio)
+        #bob.get_E afin d'avoir une interface fonctionnelle pour l'instant je passe les valeurs absolu mais il faudra voir a corriger get_E
+        bob_with_border = self.apply_border(self.bob, (abs(red), abs(green), blue), self.bob_image_border, self.bob_border_thinkness)
         return bob_with_border
     
     # --- Autre ---

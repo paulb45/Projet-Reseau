@@ -29,7 +29,12 @@ class Bob():
     def get_Emax(cls):
         return cls.Emax
     def get_E(self):
-        return self.E
+        # modifier temporairement car retourner une valeur négative
+        if self.E <= 0:
+            return 0
+        else :
+            return self.E
+        #todo
     @classmethod
     def get_Emother(cls):
         return cls.Emother
