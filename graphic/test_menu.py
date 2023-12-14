@@ -66,20 +66,27 @@ class GameMenu(pygame.Surface):
         def change_volume(n):
             pygame.mixer.music.set_volume( n /100)
         
-        #self.game_screen.set_controller(KeyboardInterrupt,apply_to_widgets = False)
+        
+        self.daydisplay = self.game_screen.add.label(' day : 0')
+        self.daydisplay.translate(-20,- self.game_screen.get_height()/3 )
+        self.game_screen.add.vertical_margin(25)
+        self.tickdisplay = self.game_screen.add.label('tick : 0')
+        self.tickdisplay.translate(-20,- self.game_screen.get_height()/3 )
+        self.game_screen.add.vertical_margin(25)
         self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200,25))
-        self.quitbutton.translate(-20,0)
+        self.quitbutton.translate(-20,- self.game_screen.get_height()/3 )
         self.quitbutton.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
+        self.optionbtn=self.game_screen.add.button('option', self.change_game_is_on, align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
+        self.optionbtn.translate(-20,- self.game_screen.get_height()/3 )
+        self.optionbtn.set_controls(keyboard=False)
+        
         self.zoom_slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='zoom_slider',onchange= zoom_changer,value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
-        self.zoom_slider.translate(-20,0)
+        self.zoom_slider.translate(-20,self.game_screen.get_height()/3 )
         self.zoom_slider.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
-        self.optionbtn=self.game_screen.add.button('option', self.change_game_is_on, align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
-        self.optionbtn.translate(-20,0)
-        self.optionbtn.set_controls(keyboard=False)
-        self.volume_slider =self.game_screen.add.range_slider('volume', 5, (0, 100), 1,rangeslider_id='volume_slider',onchange = change_volume ,value_format=lambda x: str(int(x)), background_color=(200,200,200,25))
-        self.volume_slider.translate(-20,0)
+        self.volume_slider =self.game_screen.add.range_slider('volume',5, (0, 100), 1,rangeslider_id='volume_slider',onchange = change_volume ,value_format=lambda x: str(int(x)), background_color=(200,200,200,25))
+        self.volume_slider.translate(-20,self.game_screen.get_height()/3 )
         self.volume_slider.set_controls(keyboard=False)
  
 

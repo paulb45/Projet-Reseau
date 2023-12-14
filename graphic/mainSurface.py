@@ -19,6 +19,7 @@ class MainSurface:
         pygame.mixer.music.load(music_path + "2-15. Crossing the Iron Bridge.flac")
         pygame.mixer.music.play(-1,0.0)
         pygame.mixer.music.set_volume( 0.05)
+        self.current_day =0
 
         # Création de la fenêtre
         self.window = pygame.display.set_mode(window_size, pygame.RESIZABLE)
@@ -52,7 +53,9 @@ class MainSurface:
         
 
     def run(self, map):
+        
         current_tick = 1
+        #current day ne sert qu'a l'affichage
         self.game_surface.init_values_bobs_day(map)
 
         while(current_tick < max_framerate):
@@ -75,6 +78,11 @@ class MainSurface:
 
             self.clock.tick(max_framerate)
             current_tick += 1
+            if current_tick == max_framerate - 1:
+                self.current_day += 1
+                self.menu.daydisplay.set_title('day :' + str(self.current_day))
+            self.menu.tickdisplay.set_title('tick :' + str(current_tick))
+            
 
 
     def run_menu(self):
