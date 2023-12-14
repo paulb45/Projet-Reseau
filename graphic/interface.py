@@ -212,7 +212,7 @@ class Interface(pygame.Surface):
             Place le centre de la carte au centre de la fenêtre
         """
         window_center = (window_size[0] // 2, window_size[1] // 2)
-        interface_center = (screen_size[0] // 2, screen_size[1] // 2)
+        interface_center = (Config.screen_size[0] // 2, Config.screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)       
     

@@ -12,9 +12,8 @@ while not window.menu.game_is_on:
     window.run_menu()
 
 # Initilisation de la logique
-game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0,Config.nb_day)
-
 window.start_game()
+game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0,Config.nb_day)
 
 while True:
     map = game.grid.map.copy()

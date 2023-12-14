@@ -175,7 +175,15 @@ class Game():
         position = self.grid.get_position(obj)
         if position is not None:
             x, y = position
-            self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]      
+            if obj not in self.grid.map[(x, y)]:
+                print("Objet n'exsiste pas!!!")
+            else:
+                self.grid.map[(x, y)].remove(obj)
+            if len(self.grid.map[tuple(position)])==0:
+                del self.grid.map[tuple(position)]
+            
+            
+              
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture

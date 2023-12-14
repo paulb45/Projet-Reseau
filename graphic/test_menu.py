@@ -113,17 +113,9 @@ class GameMenu(pygame.Surface):
             Config.width_map = data['map_width']
             Config.height_map = data['map_height']
             # Variables d'interface
-            screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
-            interface_y_offset = 50 # Valeur de l'offset sur chaque côté
-            interface_x_offset = interface_y_offset
-            screen_size[0] += 2*interface_x_offset
-            screen_size[1] += 2*interface_y_offset
-
-            # Variables d'interface
-            interface_y_offset = 50 # Valeur de l'offset sur chaque côté
-            interface_x_offset = interface_y_offset
-            screen_size[0] += 2*interface_x_offset
-            screen_size[1] += 2*interface_y_offset
+            Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
+            Config.screen_size[0] += 2*Config.interface_x_offset
+            Config.screen_size[1] += 2*Config.interface_y_offset
             print(f"map: ({Config.width_map},{Config.height_map})")
         self.new_game.add.button('Store data', data_fun, button_id='store')
         self.new_game.add.button('Restore original values', self.new_game.reset_value)

@@ -45,15 +45,9 @@ class Config():
     P0 = pop_init
     nb_day = nbs_day
 
-# Variables d'interface
-screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
-interface_y_offset = 50 # Valeur de l'offset sur chaque côté
-interface_x_offset = interface_y_offset
-screen_size[0] += 2*interface_x_offset
-screen_size[1] += 2*interface_y_offset
-
-# Variables d'interface
-interface_y_offset = 50 # Valeur de l'offset sur chaque côté
-interface_x_offset = interface_y_offset
-screen_size[0] += 2*interface_x_offset
-screen_size[1] += 2*interface_y_offset
+    # Variables d'interface
+    screen_size = [ np.ceil(tile_size*(N+M)/2 / i) for i in range(1,3)]
+    interface_y_offset = 50 # Valeur de l'offset sur chaque côté
+    interface_x_offset = interface_y_offset
+    screen_size[0] += 2*interface_x_offset
+    screen_size[1] += 2*interface_y_offset
