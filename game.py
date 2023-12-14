@@ -116,7 +116,7 @@ class Game():
                             #energie consommee
                             Bc=bob.get_speed() ** 2
                             cost_energy=max(Etmin,Bc)
-                            cost+=bob.get_mass()*np.cbrt(bob.get_speed())
+                            cost_energy+=bob.get_mass()*np.cbrt(bob.get_speed())
                             
                             #cost_energy=
                             bob.set_E(bob.get_E()-cost_energy)
