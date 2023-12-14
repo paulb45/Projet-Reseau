@@ -94,6 +94,11 @@ class CameraController:
         """
         new_zoom = int((zoom_max*tile_size - zoom_min*tile_size) * (ratio / 100) + zoom_min*tile_size)
 
+        if new_zoom < self.zoom_map_width:
+            self.zoom_in(self.zoom_map_width - new_zoom)
+        elif new_zoom > self.zoom_map_width:
+            self.zoom_out(new_zoom - self.zoom_map_width)
+
 
     def modify_size_window(self):
         """Méthode à appeler s'il y a redimension de la taille de la fenetre
@@ -113,11 +118,14 @@ class CameraController:
 
 
     # TODO implémenter la vérif de sorti de map
-    def zoom_in(self):
+    def zoom_in(self, _zoom_step = tile_size*2):
         """zoom vers l'avant de la caméra, de 2 cases. On ne peux pas zoomer sur plus petit que 4 cases de large
+
+        Args:
+            _zoom_step (int, optional): pas du zoom. Defaults to tile_size*2.
         """
         # rétrecissement de la zone affichée
-        zoom_map_width_next = self.zoom_map_width - tile_size * 2
+        zoom_map_width_next = self.zoom_map_width - _zoom_step
 
         if (zoom_map_width_next <= (tile_size * zoom_min)):
             zoom_map_width_next = (tile_size * zoom_min)
@@ -134,11 +142,14 @@ class CameraController:
             self.modify_speed()
 
 
-    def zoom_out(self):
+    def zoom_out(self, _zoom_step = tile_size*2):
         """zoom vers l'arrière de la caméra, de 2 cases
+
+        Args:
+            _zoom_step (int, optional): pas du dezoom. Defaults to tile_size*2.
         """
         # le dezoom est un poil plus complex au niveau des vérifications
-        zoom_map_width_next = self.zoom_map_width + tile_size * 2
+        zoom_map_width_next = self.zoom_map_width + _zoom_step
         zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
         if (zoom_map_width_next <= min((tile_size * zoom_max), self.main_surface.get_width())):
