@@ -51,15 +51,18 @@ class GameMenu(pygame.Surface):
         self.main_menu.draw(self.surface)
         #self.main_menu.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
-        
+        self.game_screen.set_controller(KeyboardInterrupt,apply_to_widgets = False)
         self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200,25))
         self.quitbutton.translate(-20,0)
+        self.quitbutton.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
         self.slider=self.game_screen.add.range_slider('zoom', 50, (0, 100), 1,rangeslider_id='range_slider',value_format=lambda x: str(int(x)),background_color=(200,200,200,25))
         self.slider.translate(-20,0)
+        self.slider.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
         self.optionbtn=self.game_screen.add.button('option', pygame_menu.events.BACK,align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
         self.optionbtn.translate(-20,0)
+        self.optionbtn.set_controls(keyboard=False)
         #self.game_screen.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
         # erreur en cas de récursion
         self.new_game.add.vertical_margin(30)
