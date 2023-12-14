@@ -4,13 +4,14 @@ from graphic.mainSurface import MainSurface
 from config import *
 from logic.game import Game
 
+# initialisation de la fenetre principale
 window = MainSurface()
 
+# boucle menu post jeu
 while not window.menu.game_is_on:
     window.run_menu()
 
 # Initilisation de la logique
-global game
 game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0,Config.nb_day)
 
 window.start_game()
