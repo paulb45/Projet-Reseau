@@ -1,26 +1,29 @@
-import time
-import  grid ,food
-from bob import Bob
-from food import Food
-import numpy as np 
-from affichage_term import *
+from logic.bob import Bob
+from logic.food import Food
+from logic.grid import Grid
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
 
-import random
+import time, random
 
 #var test bob 
-speed = 1
+speed = 10
 Etmin=0.5
 E = 100
 speed_buff=1
 
 class Game():
-    def __init__(self,quantity_food,init_energy_food,nb_tick_day,P0,grid,nb_day):
+    def __init__(self,quantity_food,init_energy_food,nb_tick_day,P0,nb_day):
         self.init_quantity_food=quantity_food
         self.init_energy_food=init_energy_food
         self.init_nb_tick_day=nb_tick_day
         self.P0=P0 #nombre des bobs a initialiser
-        self.grid=grid
+        self.grid=Grid()
         self.nb_day=nb_day
+        
+        self.init_bobs()
+        self.spawn_food()
         
         """GETTERS"""
     def get_quantity_food(self):
@@ -59,17 +62,17 @@ class Game():
     def init_bobs(self):
         """init bob
             initialisation des P0 bobs dans exactement P0 places
-
         """
         positions_occupees=[] #pour stocker les positions qui sont deja occupées
         for i in range(self.P0):
             while True :
-                x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
+                x, y = random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
                 if (x, y) not in positions_occupees:
                     break  # Sortez de la boucle si la position n'est pas occupée 
             bob= Bob( E)
             self.create_bob( bob, x, y)
             positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
+            
     def spawn_food(self):
         """generer la nouritures
 
@@ -77,7 +80,7 @@ class Game():
             position (_type_): _description_
         """
         for i in range(self.get_quantity_food()):
-            x, y = random.randint(0, self.grid.N-1), random.randint(0, self.grid.M-1)
+            x, y = random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
             if (x, y) not in self.grid.map:
                 self.grid.map[(x, y)] = []
             self.grid.map[x,y].append(Food(self.init_energy_food)) 
@@ -101,8 +104,9 @@ class Game():
                     #sinon il se déplace    
                     else:
                         mouvement=bob.move()
+                        new_coords = (coords[0] + mouvement[0], coords[1] + mouvement[1])
                         #si bob sort de la grill, il meurt
-                        if(mouvement[0]<0 or mouvement[0]>=self.grid.get_N() or mouvement[1]<0 or mouvement[1]>=self.grid.get_M()):
+                        if(new_coords[0]<0 or new_coords[0]>=Config.width_map or new_coords[1]<0 or new_coords[1]>=Config.width_map):
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:
@@ -175,15 +179,15 @@ class Game():
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
+        self.destroy_food()
+        self.spawn_food()   #generation de la nourriture
         tick = self.get_nb_tick_day()  #recupuration du nombre des ticks par jour
         fd_quantity = self.get_quantity_food()  #la quantite de la nourriture par jour
         
         self.spawn_food()   #generation de la nourriture
         
-        while tick>0:
-            self.bob_play()
             
-            tick-=1
+        tick-=1
             
         #supprimer tous les food qui restent
         

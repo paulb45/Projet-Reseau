@@ -1,7 +1,6 @@
-from food import Food
-from grid import *
 import random
 import config
+from logic.food import Food
 
 class Bob():
     
