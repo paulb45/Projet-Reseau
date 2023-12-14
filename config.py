@@ -9,10 +9,10 @@ window_size = (1280, 720)
 max_framerate = 60
 
 # Initilisation de la logique
-init_quantity_food = 300
+init_quantity_food = 100
 init_energy_food = 10
 nb_ticks_day = 5
-pop_init = 99
+pop_init = 100
 nbs_day = 1
 
 #varaibles pour la musique

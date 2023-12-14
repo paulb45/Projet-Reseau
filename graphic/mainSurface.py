@@ -41,6 +41,7 @@ class MainSurface:
 
     def run(self, map):
         current_tick = 1
+        self.game_surface.init_values_bobs_day(map)
         while(current_tick < max_framerate):
             self.event_controller.run_events()
                 
@@ -51,7 +52,7 @@ class MainSurface:
             #     self.menu.game_screen.draw(self.window)
 
             if self.menu.game_is_on:
-                self.game_surface.render_game(map, current_tick)
+                self.game_surface.render_game(map)
                 self.window.blit(self.camera.get_viewpoint(), (0,0))
                 self.menu.game_screen.draw(self.window)
             else:

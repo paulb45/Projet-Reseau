@@ -19,6 +19,8 @@ class Interface(pygame.Surface):
         self._images = {}
         self.ground = pygame.Surface(size)
         self.load_images()
+        self.bob_border_thinkness = 2
+        self.bob_image_border = self.calc_border_sprite(self.bob,self.bob_border_thinkness)
         
         self.generate_ground(self.grass_tile)
 
@@ -65,6 +67,7 @@ class Interface(pygame.Surface):
             )
 
     # --- Placement des sprites ---
+    
     def place_top_position(self, image: pygame.image, pos: tuple) -> tuple:
         pos[0] -= image.get_width()//2
         return pos
@@ -92,12 +95,6 @@ class Interface(pygame.Surface):
         pos_iso = isometric.cart_to_iso(pos)
         self.ground.blit(tile, self.place_top_position(tile, isometric.iso_to_print(pos_iso)))
         
-    def generate_ground(self, tile: pygame.image):
-        for i in range(N):
-            for j in range(M):
-                self.place_tile(tile, (i,j))
-        self.print_ground()
-    
     def print_ground(self):
         self.blit(self.ground, (0,0))
 
@@ -106,18 +103,43 @@ class Interface(pygame.Surface):
             for item in l:
                 if isinstance(item, logic.food.Food):
                     self.place_entity(self.apple, key)
-
+    
+    def print_bobs(self):
+        for bob_info in self._bobs_infos:
+            incremente_dep = [0,0]
+            for i in range(len(bob_info["buffer_dep"])):
+                bob_info["buffer_dep"][i] += bob_info["unit_dep"][i]
+                if abs(bob_info["buffer_dep"][i])>=1:
+                    # Update des buffers
+                    incremente_dep[i] = int(bob_info["buffer_dep"][i])
+                    bob_info["buffer_dep"][i] -= incremente_dep[i]
+                    
+                    bob_info["start_coords"][i] += incremente_dep[i]
+            self.place_entity(bob_info["image"], (bob_info["start_coords"][0], bob_info["start_coords"][1]))
+    
+    """
     def move_bobs(self, map, current_tick):
         bobs_list = self.get_all_bobs(map)      
         for key, bob in bobs_list:
             # Calcul de l'incrément de déplacement sur le prochain tick
             new_x_tick = int(bob.last_move[0] * (1- current_tick/ max_framerate))
             new_y_tick = int(bob.last_move[1] * (1- current_tick/ max_framerate))
-
             new_pos = (key[0] - new_x_tick, key[1] - new_y_tick)
             #bob_with_border = self.apply_bob_border(bob)
             self.place_entity(self.bob, new_pos) 
-
+    """    
+    
+    # --- Génération ---
+    
+    def generate_ground(self, tile: pygame.image):
+        for i in range(N):
+            for j in range(M):
+                self.place_tile(tile, (i,j))
+        self.print_ground()
+        
+    def bob_tick_unit(self, bob):
+        return [bob.last_move[0] * 1/ max_framerate,
+                bob.last_move[1] * 1/ max_framerate]
 
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
         for key, l in map.items():
@@ -136,11 +158,49 @@ class Interface(pygame.Surface):
                 text_count.get_rect().center = (0,0)
             """
 
-    def render_game(self, map, current_tick):
+    def render_game(self, map):
         self.print_ground()
         self.print_food(map)
-        self.move_bobs(map, current_tick)
+        self.print_bobs()
         #self.generate_map(map)
+    
+    # --- Gestion du liseré ---
+    
+    def calc_border_sprite(self, image: pygame.image, border_thickness) -> list:
+        border_coords = []
+        #pixels = pygame.PixelArray(image_copy)
+        for x in range(image.get_width()):
+            for y in range(image.get_height()):
+                pixel = image.get_at((x,y))
+                # Vérifiez si le pixel est transparent et s'il a un voisin non transparent
+                if pixel == (0, 0, 0, 0) and any(
+                        0 <= i < image.get_width() and 0 <= j < image.get_height() and image.get_at((i,j)) != (0, 0, 0, 0)
+                        for i in range(x - border_thickness, x + border_thickness + 1)
+                        for j in range(y - border_thickness, y + border_thickness + 1)
+                    ):
+                    border_coords.append((x,y))
+        return border_coords
+    
+    def apply_border(self, image: pygame.image, color: tuple, coords: tuple, border_thickness) -> pygame.image :
+        """
+        Applique un liserai de couleur à une image
+        """
+        image_copy = image.copy()
+        # Appliquez le liseré bleu autour du personnage avec l'épaisseur spécifiée
+        for coord in coords:
+            x,y = coord[0], coord[1]
+            for i in range(max(0, x - border_thickness), min(image_copy.get_width(), x + border_thickness + 1)):
+                for j in range(max(0, y - border_thickness), min(image_copy.get_height(), y + border_thickness + 1)):
+                    image_copy.set_at((x, y), pygame.Color(color[0], color[1], color[2]))
+        return image_copy
+
+    def apply_bob_border(self, bob) -> pygame.image:
+        health_ratio = bob.get_E() / bob.get_Emax()
+        red = int((1 - health_ratio) * 255)
+        green = int(health_ratio * 255)
+        blue = 0
+        bob_with_border = self.apply_border(self.bob, (red, green, blue), self.bob_image_border, self.bob_border_thinkness)
+        return bob_with_border
     
     # --- Autre ---
 
@@ -151,34 +211,8 @@ class Interface(pygame.Surface):
         window_center = (window_size[0] // 2, window_size[1] // 2)
         interface_center = (screen_size[0] // 2, screen_size[1] // 2)
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
-        window.blit(self, offset_to_place)
-
-    def apply_border(self, image: pygame.image, color: tuple) -> pygame.image :
-        border_thickness = 10
-        image_copy = image.copy()
-        #pixels = pygame.PixelArray(image_copy)
-        for x in range(image_copy.get_width()):
-            for y in range(image_copy.get_height()):
-                pixel = image_copy.get_at((x,y))
-                # Vérifiez si le pixel est transparent et s'il a un voisin non transparent
-                if pixel == (0, 0, 0, 0) and any(
-                        0 <= i < image_copy.get_width() and 0 <= j < image_copy.get_height() and image_copy.get_at((i,j)) != (0, 0, 0, 0)
-                        for i in range(x - border_thickness, x + border_thickness + 1)
-                        for j in range(y - border_thickness, y + border_thickness + 1)
-                    ):
-                    # Appliquez le liseré bleu autour du personnage avec l'épaisseur spécifiée
-                    for i in range(max(0, x - border_thickness), min(image_copy.get_width(), x + border_thickness + 1)):
-                        for j in range(max(0, y - border_thickness), min(image_copy.get_height(), y + border_thickness + 1)):
-                            image_copy.set_at((x, y), pygame.Color(color[0], color[1], color[2]))
-        return image_copy
-
-    def apply_bob_border(self, bob) -> pygame.image:
-        health_ratio = bob.get_E() / bob.get_Emax()
-        red = int((1 - health_ratio) * 255)
-        green = int(health_ratio * 255)
-        blue = 0
-        bob_with_border = self.apply_border(self.bob, (red, green, blue))
-        return bob_with_border
+        window.blit(self, offset_to_place)       
+    
     
     def get_all_bobs(self, map) -> list:
         bobs_list = []
@@ -187,3 +221,17 @@ class Interface(pygame.Surface):
                 if isinstance(item, logic.bob.Bob):
                     bobs_list.append([key, item])
         return bobs_list
+    
+    def init_values_bob_day(self, coord, bob):
+        bob_attribs = {}
+        bob_attribs["start_coords"] = [coord[0]-bob.last_move[0], coord[1]-bob.last_move[1]]
+        bob_attribs["unit_dep"] = self.bob_tick_unit(bob)
+        bob_attribs["image"] = self.apply_bob_border(bob)
+        bob_attribs["buffer_dep"] = [0,0]
+        return bob_attribs
+        
+    def init_values_bobs_day(self, map):
+        self._bobs_infos = []
+        for coord, bob in self.get_all_bobs(map):
+            self._bobs_infos.append(self.init_values_bob_day(coord, bob))
+            
