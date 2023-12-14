@@ -144,16 +144,19 @@ class Game():
                             foods.remove(foods[0])
                             
             #**********************************attack section******************************# 
-                     
+                        nb_bobs,nb_foods,bobs,foods=self.count(mouvement[0],mouvement[1])
                        #s'il y a plus qu'un bob dans la case
                         if(len(bobs)>1 and bob_is_alive):
                             #bob il va essayer d'attaquer tous les bobs qui se trouvent dans la meme case que lui
                             for i in range(len(bobs)):
                                 attack=bob.attack(bobs[i])                                
-                                print(bob,"attacking ",bobs[i])
+                                
                                 #quand bob reussi d'attaquer une target  
                                 if(attack):
+                                    print(" ", self.grid.map[mouvement[0],mouvement[1]])
+                                    print(bob,"attacking ",bobs[i],end="")
                                     self.destroy_object(bobs[i])
+                                    print(" ", self.grid.map[mouvement[0],mouvement[1]])
                                     break
                                                            
 

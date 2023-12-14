@@ -45,9 +45,7 @@ for coords ,foods in copy_dict.items():
             game.destroy_object(food)
 affiche_map(game.grid.map)
 """ 
-#game.partie()
+game.partie()
 bob2=Bob(100)
 
-bob1=game.create_bob(bob2,10,10)
-bob2.perception=1
-print(bob2.scan_around(grid))
+

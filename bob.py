@@ -144,9 +144,11 @@ class Bob():
         """
         #big_boy,small_boy=self.get_E(),target.get_E()if self.get_E()>target.get_E()else target.get_E(),self.get_E()
         if(target.get_E()/self.get_E()<2/3):
-            #
+            print("ei",self.get_E(),end="")
             E_gain=0.5*target.get_E()*(1-(target.get_E()/self.get_E()))
             self.set_E(self.get_E()+E_gain)
+            print("ef",self.get_E())
+            
             return True
         return False
         
