@@ -6,14 +6,8 @@ from logic.game import Game
 window = MainSurface()
 
 # Initilisation de la logique
-quantity_food = 300
-init_energy_food = 10
-nb_tick_day = 5
-P0 = 5
-nb_day = 1
-
 global game
-game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0,Config.nb_day)
+game = Game(int(get_value("quantity_food")),int(get_value("energy_food")),int(get_value("nb_ticks_day")),int(get_value("pop_init")),int(get_value("nb_days")))
 
 map = game.grid.map
 
