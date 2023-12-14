@@ -1,4 +1,3 @@
-import time, random
 from logic.bob import Bob
 from logic.food import Food
 from logic.grid import Grid
@@ -6,9 +5,11 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
+import time, random
+
 #var test bob 
 speed = 10
-mass = 10
+Etmin=0.5
 E = 100
 speed_buff=1
 
@@ -18,7 +19,7 @@ class Game():
         self.init_energy_food=init_energy_food
         self.init_nb_tick_day=nb_tick_day
         self.P0=P0 #nombre des bobs a initialiser
-        self.grid=Grid()
+        self.grid=Grid(N, M)
         self.nb_day=nb_day
         
         self.init_bobs()
@@ -68,7 +69,7 @@ class Game():
                 x, y = random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
                 if (x, y) not in positions_occupees:
                     break  # Sortez de la boucle si la position n'est pas occupée 
-            bob= Bob( speed, mass, E, speed_buff)
+            bob= Bob( E)
             self.create_bob( bob, x, y)
             positions_occupees.append((x,y)) #ajouter la nouvelle position a la liste des positions occupees
             
@@ -91,7 +92,8 @@ class Game():
             for bob in bobs:
                 if isinstance(bob,Bob):
                     position = self.grid.get_position(bob)
-                    nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
+                    if position is not None:
+                        nb_bobs,nb_foods,bobs,foods=self.count(position[0],position[1])
                     #quand bob il sort de la grid il meurt et cette variable aide à ne pas traiter ce bob dans la section eat comme il est mort ce qui est logic
                     bob_is_alive=True
             #*******************deplacement section **********************#       
@@ -108,18 +110,25 @@ class Game():
                             self.destroy_object(bob)
                             bob_is_alive=False
                         else:
-                            self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
-                            if tuple(new_coords) not in self.grid.map:
-                                self.grid.map[tuple(new_coords)] = []
-                            self.grid.map[tuple(new_coords)].append(bob) #ajouter le bob pour la nouvelle position
+                            if position is not None:
+                                self.grid.map[tuple(position)].remove(bob) #suppression de la dernière position
+                            if tuple(mouvement) not in self.grid.map:
+                                self.grid.map[tuple(mouvement)] = []
+                            self.grid.map[tuple(mouvement)].append(bob) #ajouter le bob pour la nouvelle position
                             #ici bob il a bien reussi son move
+                            #l'energy que bob va perdre
+                            #energie consommee
+                            Bc=bob.get_speed() ** 2
+                            cost_energy=max(Etmin,Bc)
+                            cost_energy+=bob.get_mass()*np.cbrt(bob.get_speed())
                             
-                            bob.set_E(bob.get_E()-1)
+                            #cost_energy=
+                            bob.set_E(bob.get_E()-cost_energy)
                             #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
                             if(bob.is_dead()):
                                 self.destroy_object(bob)
                                 bob_is_alive=False
-                                
+                                    
             #******************************eating section***************************#             
                         
                     #s'il y a plus qu'un bob dans la nouvelle case un seul qui va manger la nourriture      
@@ -137,6 +146,23 @@ class Game():
                         if(eating):
                             self.grid.map[self.grid.get_position(foods[0])].remove(foods[0])
                             foods.remove(foods[0])
+                            
+            #**********************************attack section******************************# 
+                        """
+                       #s'il y a plus qu'un bob dans la case
+                        if(len(bobs)>1 and bob_is_alive):
+                            #bob il va essayer d'attaquer tous les bobs qui se trouvent dans la meme case que lui
+                            for i in range(len(bobs)):
+                                attack=bob.attack(bobs[i])                                
+                                
+                                #quand bob reussi d'attaquer une target  
+                                if(attack):
+                                    print(" ", self.grid.map[mouvement[0],mouvement[1]])
+                                    print(bob,"attacking ",bobs[i],end="")
+                                    self.destroy_object(bobs[i])
+                                    print(" ", self.grid.map[mouvement[0],mouvement[1]])
+                                    break
+                        """                                 
 
     def destroy_object(self,obj):
         """_Destroys the given object.__
@@ -144,27 +170,37 @@ class Game():
         Args:
             obj (food / bob): 
         """
-        (x,y) = self.grid.get_position(obj)
-        self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]     
-         
+        position = self.grid.get_position(obj)
+        if position is not None:
+            x, y = position
+            self.grid.map[(x, y)] = [element for element in self.grid.map[(x, y)] if id(obj) != id(element)]      
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
-        self.destroy_food()
-        self.spawn_food()   #generation de la nourriture
         tick = self.get_nb_tick_day()  #recupuration du nombre des ticks par jour
         fd_quantity = self.get_quantity_food()  #la quantite de la nourriture par jour
-        self.bob_play()
         
+        self.spawn_food()   #generation de la nourriture
         
+        while tick>0:
+            self.bob_play()
             
-    def destroy_food(self):
-        for _ ,foods in self.grid.map.items():
+            tick-=1
+            
+        #supprimer tous les food qui restent
+        
+        
+        for coords ,foods in list(self.grid.map.items()):
             for food in foods:
                 if isinstance(food,Food):
                     self.destroy_object(food)
+    def partie(self):
+        self.init_bobs()    #Initialisation des bobs
+        while(self.nb_day > 0):
+            self.day_play()
+            self.nb_day-=1
         
     def create_bob(self,Bob, x,y):
         if (x, y) in self.grid.map:
