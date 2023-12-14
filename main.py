@@ -7,7 +7,7 @@ from logic.game import Game
 window = MainSurface()
 
 while not window.menu.game_is_on:
-    window.run()
+    window.run_menu()
 
 # Initilisation de la logique
 global game
