@@ -19,7 +19,7 @@ class Game():
         self.init_energy_food=init_energy_food
         self.init_nb_tick_day=nb_tick_day
         self.P0=P0 #nombre des bobs a initialiser
-        self.grid=Grid()
+        self.grid=Grid(N, M)
         self.nb_day=nb_day
         
         self.init_bobs()
@@ -179,15 +179,15 @@ class Game():
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
-        self.destroy_food()
-        self.spawn_food()   #generation de la nourriture
         tick = self.get_nb_tick_day()  #recupuration du nombre des ticks par jour
         fd_quantity = self.get_quantity_food()  #la quantite de la nourriture par jour
         
         self.spawn_food()   #generation de la nourriture
         
+        while tick>0:
+            self.bob_play()
             
-        tick-=1
+            tick-=1
             
         #supprimer tous les food qui restent
         
