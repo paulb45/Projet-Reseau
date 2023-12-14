@@ -78,7 +78,7 @@ class GameMenu(pygame.Surface):
         self.optionbtn=self.game_screen.add.button('option', self.change_game_is_on, align=pygame_menu.locals.ALIGN_RIGHT,background_color=(200,200,200,25))
         self.optionbtn.translate(-20,0)
         self.optionbtn.set_controls(keyboard=False)
-        self.volume_slider =self.game_screen.add.range_slider('volume', 50, (0, 100), 1,rangeslider_id='volume_slider',onchange = change_volume ,value_format=lambda x: str(int(x)), background_color=(200,200,200,25))
+        self.volume_slider =self.game_screen.add.range_slider('volume', 0, (0, 100), 1,rangeslider_id='volume_slider',onchange = change_volume ,value_format=lambda x: str(int(x)), background_color=(200,200,200,25))
         self.volume_slider.translate(-20,0)
         self.volume_slider.set_controls(keyboard=False)
  
