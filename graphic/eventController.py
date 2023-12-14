@@ -65,33 +65,36 @@ class EventController:
     
         events = pygame.event.get()
 
-        for event in events:
-            
-            if event.type == pygame.VIDEORESIZE:               
-                self.camera.modify_size_window()
-                self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
-                self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
-                self.menu.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
-
-            if event.type == pygame.QUIT:
-                self.quit()
-
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 4:
-                    self.camera.zoom_in()
-                elif event.button == 5:
-                    self.camera.zoom_out()
-
-        self.keyboard_pressed()
-
-        if move_with_mouse:
-            self.move_map_with_mouse_on_border()
-
-        
-        
-        if self.menu.game_is_on:
-            # events = [e for e in events if e.type != 768]
-            self.menu.game_screen.update([e for e in events if e.type != 768])
-        else:    
+        if self.camera == None:
             self.menu.main_menu.update(events)
+        else:
+            for event in events:
+                
+                if event.type == pygame.VIDEORESIZE:               
+                    self.camera.modify_size_window()
+                    self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
+                    self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
+                    self.menu.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
+
+                if event.type == pygame.QUIT:
+                    self.quit()
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 4:
+                        self.camera.zoom_in()
+                    elif event.button == 5:
+                        self.camera.zoom_out()
+
+            self.keyboard_pressed()
+
+            if move_with_mouse:
+                self.move_map_with_mouse_on_border()
+
+            
+            
+            if self.menu.game_is_on:
+                # events = [e for e in events if e.type != 768]
+                self.menu.game_screen.update([e for e in events if e.type != 768])
+            else:    
+                self.menu.main_menu.update(events)
 
