@@ -19,7 +19,7 @@ class Game():
         self.init_energy_food=init_energy_food
         self.init_nb_tick_day=nb_tick_day
         self.P0=P0 #nombre des bobs a initialiser
-        self.grid=Grid(N, M)
+        self.grid=Grid(Config.width_map, Config.height_map)
         self.nb_day=nb_day
         
         self.init_bobs()
