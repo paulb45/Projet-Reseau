@@ -7,7 +7,7 @@ window = MainSurface()
 
 # Initilisation de la logique
 global game
-game = Game(get_value_int("quantity_food"),get_value_int("energy_food"),get_value_int("nb_ticks_day"),get_value_int("pop_init"),get_value_int("nb_days"))
+game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0,Config.nb_day)
 
 map = game.grid.map
 
