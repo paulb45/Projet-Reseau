@@ -18,6 +18,7 @@ class MainSurface:
         pygame.mixer.init()
         pygame.mixer.music.load(music_path + "2-15. Crossing the Iron Bridge.flac")
         pygame.mixer.music.play(-1,0.0)
+        pygame.mixer.music.set_volume( 0.05)
 
         # Création de la fenêtre
         self.window = pygame.display.set_mode(window_size, pygame.RESIZABLE)
