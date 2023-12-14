@@ -116,8 +116,9 @@ class Game():
                             #energie consommee
                             Bc=bob.get_speed() ** 2
                             cost_energy=max(Etmin,Bc)
+                            cost+=bob.get_mass()*np.cbrt(bob.get_speed())
                             
-                            #cost_energy=bob.get_mass()*np.cbrt(bob.get_speed())
+                            #cost_energy=
                             bob.set_E(bob.get_E()-cost_energy)
                             #bob quand il se deplace il perd 1 de son energy donc il faut verifier s'il est encore vivant
                             if(bob.is_dead()):
@@ -143,7 +144,7 @@ class Game():
                             foods.remove(foods[0])
                             
             #**********************************attack section******************************# 
-                    """ 
+                     
                        #s'il y a plus qu'un bob dans la case
                         if(len(bobs)>1 and bob_is_alive):
                             #bob il va essayer d'attaquer tous les bobs qui se trouvent dans la meme case
@@ -153,8 +154,7 @@ class Game():
                                     if(attack):
                                         self.destroy_object(i)
                                         break
-                                    """
-                                         
+                                                           
 
     def destroy_object(self,obj):
         """_Destroys the given object.__
@@ -200,6 +200,7 @@ class Game():
         else:
             self.grid.map[(x, y)] = [Bob]
         Bob.set_last_move([x,y])
+        
     def count(self,x,y)->list:
         """count et return les bobs et les foods d'une case données _
 
