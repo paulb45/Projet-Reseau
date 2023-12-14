@@ -18,35 +18,7 @@ class Grid():
     def set_M(self,nv_M):
         self.M = nv_M
     
-        """ la fonction scan_around retourne les places possibles ou le bob peut se deplacer ( donne une vision )
 
-        """
-
-    def scan_around(self,position, distance):
-        
-        x, y = position
-        positions_disponibles = []
-        if distance == 1:
-            for i, j in [(0, -1), (-1, 0), (1, 0), (0, 1)]: #la liste des coordonnees sert a donner des cordonnes qui sont pas en diagonale
-                new_x = x + i
-                new_y = y + j
-                if 0 <= new_x < self.N and 0 <= new_y < self.N : 
-                        
-                        positions_disponibles.append((new_x, new_y))
-
-        
-        else:
-            for i in range(-distance, distance + 1):
-                for j in range(-distance, distance + 1):
-                    new_x = x + i
-                    new_y = y + j
-
-                    # Vérification que la nouvelle position est à l'intérieur de la grille
-                    # et que x et y diffèrent, excluant ainsi la diagonale lorsque la distance vaut 1
-                    if 0 <= new_x < self.N and 0 <= new_y < self.N :
-                        positions_disponibles.append((new_x, new_y))
-
-        return positions_disponibles
     
     
         """ la fonction get_position permet de donner la position dans la grille d'un objet passe en parametres
@@ -66,5 +38,16 @@ class Grid():
     def get_items(self,x,y):
         position = (x, y)
         return self.map[position]  
-       
+    """    def scan_around(self,grid):
+        mon_cercle=[]
+        x,y=self.last_move
+        for i in range(-self.perception,self.perception):
+            x+=i
+            for j in range(-self.perception,self.perception):
+                if i+j<self.perception:
+                    y+=j
+                    mon_cercle.append((x,y))
+                    
+            return mon_cercle                     
+"""         
         

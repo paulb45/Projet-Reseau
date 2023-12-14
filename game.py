@@ -147,13 +147,14 @@ class Game():
                      
                        #s'il y a plus qu'un bob dans la case
                         if(len(bobs)>1 and bob_is_alive):
-                            #bob il va essayer d'attaquer tous les bobs qui se trouvent dans la meme case
+                            #bob il va essayer d'attaquer tous les bobs qui se trouvent dans la meme case que lui
                             for i in range(len(bobs)):
-                                if(id(bob)!=id(i)):
-                                    attack=bob.attack(i)
-                                    if(attack):
-                                        self.destroy_object(i)
-                                        break
+                                attack=bob.attack(bobs[i])                                
+                                print(bob,"attacking ",bobs[i])
+                                #quand bob reussi d'attaquer une target  
+                                if(attack):
+                                    self.destroy_object(bobs[i])
+                                    break
                                                            
 
     def destroy_object(self,obj):
@@ -192,7 +193,7 @@ class Game():
         self.init_bobs()    #Initialisation des bobs
         while(self.nb_day > 0):
             self.day_play()
-            self.nb_day-=1;
+            self.nb_day-=1
         
     def create_bob(self,Bob, x,y):
         if (x, y) in self.grid.map:

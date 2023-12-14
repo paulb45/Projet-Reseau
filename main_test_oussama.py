@@ -1,17 +1,14 @@
-# FAITE DES TESTS POUR VOIR SI CA FONCTIONNE ICI... SVP...
-# On a vraiment besoin d'avoir la certitude que tout fonctionne dès qu'on va l'implémenter sur notre interface graphique
-# Donc utilisez ce qu'il y a dans affichage term (comme avec l'exemple dessous)
 
 from affichage_term import *
 from game import Game
 import time
 
-quantity_food = 200
+quantity_food = 10
 init_energy_food = 100
 nb_tick_day = 5
-P0 = 100
-grid = Grid(10,10)
-nb_day = 1
+P0 = 1000
+grid = Grid(100,100)
+nb_day = 100
 ########################## Foncction pour faciliter les testes##############################
 def count_obj(grid, name):
     nb_bob = 0
@@ -48,13 +45,9 @@ for coords ,foods in copy_dict.items():
             game.destroy_object(food)
 affiche_map(game.grid.map)
 """ 
-game.partie()
+#game.partie()
+bob2=Bob(100)
 
-    
-
-for coords ,bobs in game.grid.map.items():
-    for bob in bobs:
-        if isinstance(bob,Bob):
-            print("la velocity de ce bob est :"+str(bob.speed))
-            
-print("nombre des bobs a la fin est "+str(count_obj(game.grid, "Bobs")))
+bob1=game.create_bob(bob2,10,10)
+bob2.perception=1
+print(bob2.scan_around(grid))

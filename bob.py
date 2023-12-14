@@ -17,6 +17,7 @@ class Bob():
         self.E=E
         self.last_move=[None,None]
         self.speed_buff = 0.0
+        self.perception=0
     
     """ Getters """
     def get_speed(self):
@@ -129,7 +130,7 @@ class Bob():
             return bebe_bob 
         else:
             return -1   
-    #TODO TESTER ATTACK    
+        
     def attack(self,target)->bool:
         """si bm/Bm<2/3 --> bob il peut attaqué target
 
@@ -148,5 +149,8 @@ class Bob():
             self.set_E(self.get_E()+E_gain)
             return True
         return False
+        
             
+            
+                
         
