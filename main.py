@@ -5,7 +5,7 @@ window = MainSurface()
 
 
 
-game = Game(int(get_value("quantity_food")),int(get_value("energy_food")),int(get_value("nb_ticks_day")),int(get_value("pop_init")),int(get_value("nb_days")))
+game = Game(get_value_int("quantity_food"),get_value_int("energy_food"),get_value_int("nb_ticks_day"),get_value_int("pop_init"),get_value_int("nb_days"))
 # Gestion du menu ? -> où dans main surface
 
 while True:

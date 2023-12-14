@@ -73,7 +73,7 @@ def set_default_values():
         config_object.write(conf)
 
 
-def get_value(key):
+def get_value_int(key):
     key = str(key)
 
     #Get the configparser object
@@ -81,7 +81,17 @@ def get_value(key):
     config_object.read("config.ini")
 
     #Get the value
-    return config_object["DEFAULT"][key]
+    return int(config_object["DEFAULT"][key])
+
+def get_value_str(key):
+    key = str(key)
+
+    #Get the configparser object
+    config_object = ConfigParser()
+    config_object.read("config.ini")
+
+    #Get the value
+    return str(config_object["DEFAULT"][key])
 
 def update_value(key, value):
     key = str(key)
