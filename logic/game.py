@@ -10,6 +10,7 @@ class Game():
         self.grid=Grid()
         self.init_bobs()
         self.spawn_food()
+        
     
     def init_bobs(self):
         """init bob
@@ -38,11 +39,12 @@ class Game():
             self.grid.place_child(bob.parthenogenesis(), pos)          
         elif (food := self.grid.has_food(pos)):
             can_eat = True
-            """
-        elif (bob := self.grid.has_bob(pos)):
-            # Mettre l'attaque ici
-            pass 
-            """
+        
+        
+                
+             
+        
+            
         else:
             mouv = bob.move()
             new_pos = pos[0] + mouv[0], pos[1] + mouv[1]
@@ -53,7 +55,15 @@ class Game():
                     bob.E += 0.5 # Compence l'effet de manger juste après
             self.grid.destroy_object(bob, pos)
             pos = new_pos
+        
+        if (target := self.grid.has_bob(pos)):
+            attacked= bob.attack(target)
+            if attacked:
+                self.grid.destroy_object(target,pos)
+                   
             
+                
+        
         if can_eat:
             if bob.eat(food):
                 self.grid.destroy_object(food, pos)
