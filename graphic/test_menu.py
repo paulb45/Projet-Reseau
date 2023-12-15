@@ -127,6 +127,7 @@ class GameMenu(pygame.Surface):
         Config.P0 = data['population_bob']
         Config.quantity_food = data['daily_food']
         Config.energy_food = data['energy_to_mate']
+        Config.bob_speed = data['movement_bob']
     
         # Variables d'interface
         Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
