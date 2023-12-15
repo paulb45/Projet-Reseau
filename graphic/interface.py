@@ -132,7 +132,6 @@ class Interface(pygame.Surface):
     # --- Génération ---
     
     def generate_ground(self, tile: pygame.image):
-        print(Config.width_map, Config.height_map)
         for i in range(Config.width_map):
             for j in range(Config.height_map):
                 self.place_tile(tile, (i,j))
@@ -237,4 +236,3 @@ class Interface(pygame.Surface):
         self._bobs_infos = []
         for coord, bob in self.get_all_bobs(map):
             self._bobs_infos.append(self.init_values_bob_day(coord, bob))
-            
