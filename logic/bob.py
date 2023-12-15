@@ -9,14 +9,16 @@ class Bob():
     Echild=50
     
     
-    def __init__(self,E):
-        self.speed=1
-        self.mass=1
-        self.memory=None
+    def __init__(self,E=Emax//2, speed=1, mass=1, memory=0, perception=0):
         self.E=E
-        self.last_move=[None,None]
+        self.speed=speed
+        self.mass=mass
+        self.memory=memory
+        self.perception=perception
+        self.stats = [self.speed, self.mass, self.memory, self.perception]
+        self.last_move=[0,0]
         self.speed_buff = 0.0
-        self.perception=0
+        
     
     """ Getters """
     def get_speed(self):
@@ -29,9 +31,7 @@ class Bob():
     def get_Emax(cls):
         return cls.Emax
     def get_E(self):
-    
         return self.E
-        #todo
     @classmethod
     def get_Emother(cls):
         return cls.Emother
@@ -55,7 +55,7 @@ class Bob():
         self.E=E
     def set_last_move(self,lst_mv):
         self.last_move=lst_mv
-    def set_speed_buff(self,spd_buff):
+    def set_speed_buff(self,spd_buff): # WTF
         self.speed_buff
     @classmethod    
     def set_Emother(cls,E):
@@ -65,7 +65,7 @@ class Bob():
         cls.Echild=E  
     
       
-    def move(self)->tuple:
+    def move(self) -> tuple:
         """Déplace Bob en choisissant aléatoirement une direction  
             la gestion ce fait dans la class Game
             return: les nouvelles coordonnées de bob 
@@ -74,14 +74,14 @@ class Bob():
         self.speed_buff += self.speed
         speed_mouvement= int(self.speed_buff)
         self.speed_buff -= speed_mouvement
-        coords=self.get_last_move()
         self.set_last_move((
                             x:=random.randint(0, speed_mouvement) * random.choice((1,-1)), 
                             (speed_mouvement - abs(x)) * random.choice((1,-1))
                            ))
+        self.E -= 0.5 * self.mass * (self.speed**2)
         return self.get_last_move()
 
-    def eat(self,food: Food)->bool: 
+    def eat(self,food: Food) -> bool: 
         
         # cette fonction renvoie True la nourriture doit être détruite 
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
@@ -93,38 +93,43 @@ class Bob():
             false -->Efood>0
             la gestion se fait dans la class Game
         """
+        self.E -= 0.5
         self.E+=food.energy
         if(self.E>self.Emax):
             food.set_energy(self.E-self.Emax)
             self.E=self.Emax
         else:
-            food.set_energy(0)    
+            food.set_energy(0)
         return food.is_dead() 
      
-    def is_dead(self)->bool:
+    def is_dead(self) -> bool:
         """vérifie si Bob dead ou non
 
         Returns:
             bool: true si BOB est mort non sinon 
         """
         return self.E <=0
-    def parthenogenesis(self):
+    
+    def parthenogenesis(self) -> object:
         """si bob atteint l'energie maximal il aura un bebe
         Returns:
             BOB: si il ya une parthenogenesis
             -1 sinon
         """
-        if(self.E>=self.Emax):
-            self.E=self.Emax-self.Emother
-            bebe_bob= Bob(self.Echild)
-            bebe_bob.last_move=self.last_move
-            mutation = random.uniform(-config.mutation_speed, config.mutation_speed)
-            bebe_bob.set_speed(self.speed+mutation)
-            return bebe_bob 
-        else:
-            return -1   
+        self.E=self.Emax-self.Emother
+        child_stats = []
+        for stat in self.stats:
+            child_stat = stat + random.uniform(-config.mutation_rate, config.mutation_rate)
+            if child_stat < 0:
+                child_stat = 0
+            child_stats.append(child_stat)
+            
+        return Bob(Bob.Echild, *child_stats)   
         
-    def attack(self,target)->bool:
+    def get_stats(self):
+        return [self.E, self.speed, self.mass, self.memory, self.perception]
+    # NE MARCHE PAS
+    def attack(self,target) -> bool:
         """si bm/Bm<2/3 --> bob il peut attaqué target
 
         Args:

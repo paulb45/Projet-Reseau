@@ -1,53 +1,89 @@
-class Grid():
-    def __init__(self,N,M):
-        
-        self.N=N
-        self.M=M
-        self.map={}
-        
-    
-        """GETTERS"""
-    def get_N(self):
-        return self.N
-    def get_M(self):
-        return self.M
-    
-    """SETTERS"""
-    def set_N(self,nv_N):
-        self.N = nv_N
-    def set_M(self,nv_M):
-        self.M = nv_M
-    
+from collections import defaultdict
+import random
 
+import logic.bob
+import logic.food
+
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
+
+class Grid():
+    def __init__(self):
+        self.map=defaultdict(lambda:[])
     
-    
+    def get_position(self,obj) -> tuple:
         """ la fonction get_position permet de donner la position dans la grille d'un objet passe en parametres
         """
-    def get_position(self,obj):
-        
         for key, itms in self.map.items():
             for itm in itms:
                 if id(itm) == id(obj):
                     return key  # Retourne les coordonnées (x, y) d'objet recherché
-        return None  # Retourne None si l'objet n'est pas trouvé
-
-        """
-        #Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
-        """
     
-    def get_items(self,x,y):
-        position = (x, y)
-        return self.map[position]  
-    """    def scan_around(self,grid):
-        mon_cercle=[]
-        x,y=self.last_move
-        for i in range(-self.perception,self.perception):
-            x+=i
-            for j in range(-self.perception,self.perception):
-                if i+j<self.perception:
-                    y+=j
-                    mon_cercle.append((x,y))
-                    
-            return mon_cercle                     
-"""         
+    def get_items(self,pos) -> list:
+        """ Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
+        """
+        return self.map[pos]
+    
+    def has_object(self, obj, pos):
+        for item in self.get_items(pos):
+            if isinstance(item, type(obj)):
+                return item
+        return False
         
+    def has_bob(self, pos) -> bool:
+        return self.has_object(logic.bob.Bob(), pos)
+    
+    def has_food(self, pos) -> bool:
+        return self.has_object(logic.food.Food(), pos)
+    
+    def choose_random_tile(self):
+        return random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
+    
+    def destroy_object(self,obj, pos=None):
+        """_Destroys the given object.__
+
+        Args:
+            obj (food / bob): 
+        """
+        if pos == None :
+            pos = self.get_position(obj)
+        self.map[pos].remove(obj)
+        if self.map[pos] == []:
+            del self.map[pos]
+    
+    def get_all_object_in_map(self, obj) -> dict:
+        obj_dict=defaultdict(lambda:[])
+        for pos, items in self.map.items():
+            #print(pos, items)
+            for item in items:
+                if isinstance(item,type(obj)):
+                    obj_dict[pos].append(item)
+        return obj_dict
+    
+    def get_all_bobs(self):
+        return self.get_all_object_in_map(logic.bob.Bob())
+    
+    def get_all_foods(self):
+        return self.get_all_object_in_map(logic.food.Food())
+    
+    def is_pos_in_map(self, pos: tuple) -> bool:
+        if 0<=pos[0]<=Config.width_map-1 and 0<=pos[1]<=Config.height_map-1:
+            return True
+        return False
+    
+    def destroy_all_foods(self):
+        for coord, foods in self.get_all_foods().items():
+            for food in foods:
+                self.destroy_object(food, coord)
+
+    def create_bob(self, pos: tuple, stats=None):
+        if stats == None: bob = logic.bob.Bob()
+        else: bob = logic.bob.Bob(*stats)
+        self.map[pos].append(bob)
+    
+    # TESTER LE CAS LIMITE DE MAP
+    def place_child(self, bob, pos: tuple):
+        if self.is_pos_in_map(new_pos :=(pos[0]+1,pos[1])):
+            self.map[new_pos].append(bob)
+        else: self.map[(pos[0]-1, pos[1])].append(bob)

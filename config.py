@@ -2,18 +2,19 @@ import numpy as np
 from configparser import ConfigParser
 
 
-N=100
-M=100
+N=10
+M=10
 ticks = 100
 window_size = (1280, 720)
 max_framerate = 60
 
 # Initilisation de la logique
-init_quantity_food = 100
+init_quantity_food = 1
 init_energy_food = 10
 nb_ticks_day = 5
-pop_init = 100
-nbs_day = 1
+pop_init = 10
+nbs_day = 0
+mutation_rate = 0.2
 
 #varaibles pour la musique
 music_path ="music/"

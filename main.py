@@ -13,15 +13,15 @@ while not window.menu.game_is_on:
 
 # Initilisation de la logique
 window.start_game()
-game = Game(Config.quantity_food,Config.energy_food,Config.nb_tick_day,Config.P0,Config.nb_day)
+game = Game()
 
 while True:
-    map = game.grid.map.copy()
+    #map = game.grid.map.copy()
 
     logic_thread = threading.Thread(target=game.day_play)
 
     logic_thread.start()
     
-    window.run(map)
+    window.run(game.grid.map)
 
     logic_thread.join()
