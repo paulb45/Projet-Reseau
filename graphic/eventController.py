@@ -72,14 +72,14 @@ class EventController:
             for event in events:
                 if event.type == pygame.VIDEORESIZE:  
                     self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
-                    #self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
+                    self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
                     self.menu.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
         else:
             for event in events:
                 
                 if event.type == pygame.VIDEORESIZE:               
                     self.camera.modify_size_window()
-                    #self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
+                    self.menu.main_menu.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
                     self.menu.game_screen.resize(pygame.display.get_surface().get_width(),pygame.display.get_surface().get_height())
                     self.menu.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
