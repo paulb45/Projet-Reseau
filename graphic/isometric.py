@@ -22,4 +22,4 @@ def iso_to_cart(pos: tuple) -> list:
     return transfer_iso_to_cart @ (pos - (Config.interface_x_offset, Config.interface_y_offset))
 
 def iso_to_print(pos: tuple) -> tuple:
-    return pos + (M*tile_size/2, 0)
+    return pos + (Config.height_map*tile_size/2, 0)
