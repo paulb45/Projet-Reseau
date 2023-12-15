@@ -284,15 +284,18 @@ class CameraController:
         Returns:
             bool: Vrai si le nombre de coin requis sont bien sur la map, Faux sinon
         """
-        # haut-gauche, haut-droite, bas-droite, bas-gauche
-        points = (
-            Point(top_left_corner if top_left_corner is not None else (self.position_camera_x, self.position_camera_y)),
-            Point(top_right_corner if top_right_corner is not None else (self.position_camera_x + self.zoom_map_width, self.position_camera_y)),
-            Point(bottom_right_corner if bottom_right_corner is not None else (self.position_camera_x + self.zoom_map_width, self.position_camera_y + self.zoom_map_height)),
-            Point(bottom_left_corner if bottom_left_corner is not None else (self.position_camera_x, self.position_camera_y + self.zoom_map_height))
-        )
+        if self.zoom_map_width < self.main_surface.get_width() // 2:
+            # haut-gauche, haut-droite, bas-droite, bas-gauche
+            points = (
+                Point(top_left_corner if top_left_corner is not None else (self.position_camera_x, self.position_camera_y)),
+                Point(top_right_corner if top_right_corner is not None else (self.position_camera_x + self.zoom_map_width, self.position_camera_y)),
+                Point(bottom_right_corner if bottom_right_corner is not None else (self.position_camera_x + self.zoom_map_width, self.position_camera_y + self.zoom_map_height)),
+                Point(bottom_left_corner if bottom_left_corner is not None else (self.position_camera_x, self.position_camera_y + self.zoom_map_height))
+            )
 
-        return sum(1 for p in points if p.within(self.mathematic_map)) >= number_corner
+            return sum(1 for p in points if p.within(self.mathematic_map)) >= number_corner
+        else:
+            return True
 
 
     def _debug(self):
