@@ -1,6 +1,8 @@
 import random
-import config
 from logic.food import Food
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
 
 class Bob():
     
@@ -9,7 +11,7 @@ class Bob():
     Echild=50
     
     
-    def __init__(self,E=Emax//2, speed=1, mass=1, memory=0, perception=0):
+    def __init__(self,E=Emax//2, speed=Config.bob_speed, mass=1, memory=0, perception=0):
         self.E=E
         self.speed=speed
         self.mass=mass

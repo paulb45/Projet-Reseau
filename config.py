@@ -2,8 +2,8 @@ import numpy as np
 from configparser import ConfigParser
 
 
-N=10
-M=10
+N=100
+M=100
 ticks = 100
 window_size = (1280, 720)
 max_framerate = 60
@@ -47,6 +47,7 @@ class Config():
     nb_tick_day = nb_ticks_day
     P0 = pop_init
     nb_day = nbs_day
+    bob_speed=1
 
     # Variables d'interface
     screen_size = [ np.ceil(tile_size*(N+M)/2 / i) for i in range(1,3)]
