@@ -4,10 +4,9 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
-# TODO A IMPLEMENTER
-def is_coordinate_in_map(x, y) -> bool:
-    return True
-# TODO A IMPLEMENTER
+# python3 -m pip install shapely
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
 
 SPEED_MIN = 2
 SPEED_MAX = 8
@@ -52,6 +51,14 @@ class CameraController:
         # calcul de la position du point de vue, au milieu par défaut
         self.position_camera_x = (self.main_surface.get_width() // 2) - (self.zoom_map_width // 2)
         self.position_camera_y = (self.main_surface.get_height() // 2) - (self.zoom_map_height // 2)
+
+        # forme de losange pour la vérification de sorti de map
+        self.mathematic_map = Polygon((
+            (self.main_surface.get_width() // 2, Config.interface_y_offset),
+            (self.main_surface.get_width() - Config.interface_x_offset, self.main_surface.get_height() // 2),
+            (self.main_surface.get_width() // 2, self.main_surface.get_height() - Config.interface_y_offset),
+            (Config.interface_x_offset, self.main_surface.get_height() // 2)
+        ))
          
 
     def get_viewpoint(self) -> pygame.Surface:
@@ -59,7 +66,7 @@ class CameraController:
 
         Returns:
             Surface: surface à afficher à l'écran
-        """  
+        """ 
         # on prend la sous surface
         subview = self.main_surface.subsurface(pygame.Rect(self.position_camera_x, 
                                                     self.position_camera_y, 
@@ -199,9 +206,10 @@ class CameraController:
         if (position_camera_x_next + self.zoom_map_width) > self.main_surface.get_width():
             position_camera_x_next = self.main_surface.get_width() - self.zoom_map_width
 
-        if (((position_camera_x_next + self.zoom_map_width) <= self.main_surface.get_width()) 
-            and (is_coordinate_in_map(position_camera_x_next, self.position_camera_y)
-                or is_coordinate_in_map(position_camera_x_next, self.position_camera_y + self.zoom_map_height))):
+        if self._is_camera_in_map(
+            top_right_corner = (position_camera_x_next + self.zoom_map_width, self.position_camera_y), 
+            bottom_right_corner = (position_camera_x_next + self.zoom_map_width, self.position_camera_y + self.zoom_map_height)
+        ):
             self.position_camera_x = position_camera_x_next
 
 
@@ -213,8 +221,10 @@ class CameraController:
         if position_camera_x_next < 0:
             position_camera_x_next = 0
 
-        if ((is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y)
-                or is_coordinate_in_map(position_camera_x_next + self.zoom_map_width, self.position_camera_y))):
+        if self._is_camera_in_map(
+            top_left_corner = (position_camera_x_next, self.position_camera_y),
+            bottom_left_corner = (position_camera_x_next, self.position_camera_y + self.zoom_map_height)
+        ):
             self.position_camera_x = position_camera_x_next
 
 
@@ -226,8 +236,10 @@ class CameraController:
         if (position_camera_y_next < 0):
             position_camera_y_next = 0
 
-        if ((is_coordinate_in_map(self.position_camera_x, position_camera_y_next + self.zoom_map_height)
-                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next + self.zoom_map_height))):
+        if self._is_camera_in_map(
+            top_left_corner = (self.position_camera_x, position_camera_y_next),
+            top_right_corner = (self.position_camera_x + self.zoom_map_width, position_camera_y_next)
+        ):
             self.position_camera_y = position_camera_y_next
 
 
@@ -239,8 +251,10 @@ class CameraController:
         if (position_camera_y_next + self.zoom_map_height) > self.main_surface.get_height():
             position_camera_y_next = self.main_surface.get_height() - self.zoom_map_height
 
-        if ((is_coordinate_in_map(self.position_camera_x, position_camera_y_next)
-                or is_coordinate_in_map(self.position_camera_x + self.zoom_map_width, position_camera_y_next))):
+        if self._is_camera_in_map(
+            bottom_left_corner = (self.position_camera_x, position_camera_y_next + self.zoom_map_height),
+            bottom_right_corner = (self.position_camera_x + self.zoom_map_width, position_camera_y_next + self.zoom_map_height)
+        ):
             self.position_camera_y = position_camera_y_next
 
 
@@ -257,7 +271,36 @@ class CameraController:
         return self.position_camera_x + x, self.position_camera_y + y
 
 
+    def _is_camera_in_map(self, number_corner = 2, /, top_left_corner = None, top_right_corner = None, bottom_right_corner = None, bottom_left_corner = None) -> bool:
+        """ Prédicat pour savoir si le nombre de coins de la caméra indiqués est sur la map du jeu
+
+        Args:
+            number_corner (int, optional): nombre de coins qui doivent être sur la map. Defaults to 2.
+            top_left_corner (tuple(int, int), optional): coin supérieur gauche de la caméra. Defaults to None.
+            top_right_corner (tuple(int, int), optional): coin supérieur droit de la caméra. Defaults to None.
+            bottom_right_corner (tuple(int, int), optional): coin inférieur droit de la caméra. Defaults to None.
+            bottom_left_corner (tuple(int, int), optional): coin inférieur gauche de la caméra. Defaults to None.
+
+        Returns:
+            bool: Vrai si le nombre de coin requis sont bien sur la map, Faux sinon
+        """
+        if self.zoom_map_width < self.main_surface.get_width() // 2:
+            # haut-gauche, haut-droite, bas-droite, bas-gauche
+            points = (
+                Point(top_left_corner if top_left_corner is not None else (self.position_camera_x, self.position_camera_y)),
+                Point(top_right_corner if top_right_corner is not None else (self.position_camera_x + self.zoom_map_width, self.position_camera_y)),
+                Point(bottom_right_corner if bottom_right_corner is not None else (self.position_camera_x + self.zoom_map_width, self.position_camera_y + self.zoom_map_height)),
+                Point(bottom_left_corner if bottom_left_corner is not None else (self.position_camera_x, self.position_camera_y + self.zoom_map_height))
+            )
+
+            return sum(1 for p in points if p.within(self.mathematic_map)) >= number_corner
+        else:
+            return True
+
+
     def _debug(self):
+        """Méthode pour afficher quelque information utils, pratique pour faire du debugage dans le terminal
+        """
         print(
             f"main_surface.width = {self.main_surface.get_width()}\n",
             f"main_surface.height = {self.main_surface.get_height()}\n",
@@ -266,73 +309,3 @@ class CameraController:
             f"position_camera_x = {self.position_camera_x}\n",
             f"position_camera_y = {self.position_camera_y}\n"
         )
-
-
-if __name__ == '__main__':
-    import pygame
-    import time
-
-    from interface import Interface
-
-    pygame.init()
-
-    # Création de la fenêtre
-    window = pygame.display.set_mode(window_size)
-
-    clock = pygame.time.Clock()
-
-    screen = Interface(screen_size)
-
-    screen.render_game()
-
-    camera = CameraController(screen)
-
-    move_mouse_timer = time.time()
-
-    while True:
-        # Faire une fonction event_handler ?
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    camera.zoom_in()
-                elif event.key == pygame.K_m:
-                    camera.zoom_out()
-
-        keystate = pygame.key.get_pressed()
-
-        if keystate[pygame.K_LEFT]:
-            camera.move_left()
-        if keystate[pygame.K_RIGHT]:
-            camera.move_right()
-        if keystate[pygame.K_UP]:
-            camera.move_up()
-        if keystate[pygame.K_DOWN]:
-            camera.move_down()
-
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        # réduire la vitesse de déplacement avec la souris
-        if (time.time() - move_mouse_timer) >= .02:
-            # voir où est le curseur de la souris
-            if (mouse_x < 10):
-                camera.move_left()
-            if (mouse_x > (window_size[0] - 10)):
-                camera.move_right()
-            if (mouse_y < 10):
-                camera.move_up()
-            if (mouse_y > (window_size[1] - 10)):
-                camera.move_down()
-
-            move_mouse_timer = time.time()
-
-        window.fill("black")
-
-        window.blit(camera.get_viewpoint(), (0,0))
-
-
-        pygame.display.flip()
-        clock.tick(max_framerate)
