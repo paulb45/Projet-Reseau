@@ -85,12 +85,12 @@ class CameraController:
 
 
     def get_zoom_ratio(self) -> int:
-        """Obtenir la valeur actuel du zoom sur une échelle de 1 à 100
+        """Obtenir la valeur actuel du zoom sur une échelle de 0 à 100
 
         Returns:
             int: taux de zoom entre 0 et 100
         """
-        return int((1 - (self.zoom_map_width - zoom_min*tile_size) / (zoom_max*tile_size - zoom_min*tile_size)) * 100)
+        return int((1 - (self.zoom_map_width - zoom_min*tile_size) / (min(self.main_surface.get_width(), zoom_max*tile_size) - zoom_min*tile_size)) * 100)
 
     
     def change_zoom_with_slider(self, ratio:float) -> None:
@@ -99,7 +99,7 @@ class CameraController:
         Args:
             ratio (float): taux entre 0 et 100
         """
-        new_zoom = int((zoom_max*tile_size - zoom_min*tile_size) * (1-(ratio / 100)) + zoom_min*tile_size)
+        new_zoom = int((min(self.main_surface.get_width(), zoom_max*tile_size) - zoom_min*tile_size) * (1-(ratio / 100)) + zoom_min*tile_size)
 
         if new_zoom < self.zoom_map_width:
             self.zoom_in(self.zoom_map_width - new_zoom)
