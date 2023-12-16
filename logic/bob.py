@@ -121,7 +121,7 @@ class Bob():
         self.E=self.Emax-self.Emother
         child_stats = []
         for stat in self.stats:
-            child_stat = stat + random.uniform(-config.mutation_rate, config.mutation_rate)
+            child_stat = stat + random.uniform(-mutation_rate, mutation_rate)
             if child_stat < 0:
                 child_stat = 0
             child_stats.append(child_stat)
