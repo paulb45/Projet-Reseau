@@ -155,11 +155,15 @@ class CameraController:
         Args:
             _zoom_step (int, optional): pas du dezoom. Defaults to tile_size*2.
         """
-        # le dezoom est un poil plus complex au niveau des vérifications
-        zoom_map_width_next = self.zoom_map_width + _zoom_step
-        zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
+        # si on est déjà au zoom max on ne fais rien
+        if self.zoom_map_width < min((tile_size * zoom_max), self.main_surface.get_width()):
+            # le dezoom est un poil plus complex au niveau des vérifications
+            zoom_map_width_next = self.zoom_map_width + _zoom_step
+            zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
-        if (zoom_map_width_next <= min((tile_size * zoom_max), self.main_surface.get_width())):
+            # si zoom suivant plus grand que le zoom max
+            if zoom_map_width_next > min((tile_size * zoom_max), self.main_surface.get_width()):
+                zoom_map_width_next = min((tile_size * zoom_max), self.main_surface.get_width())
 
             position_camera_y_next = 0
             position_camera_x_next = 0
