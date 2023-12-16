@@ -11,13 +11,9 @@ class Bob():
     Echild=50
     
     
-    def __init__(self,E=Emax//2, speed=Config.bob_speed, mass=1, memory=0, perception=0):
+    def __init__(self,E=Emax//2, speed=0, mass=0, memory=0, perception=0):
         self.E=E
-        self.speed=speed
-        self.mass=mass
-        self.memory=memory
-        self.perception=perception
-        self.stats = [self.speed, self.mass, self.memory, self.perception]
+        self.apply_stats(speed, mass, memory, perception)
         self.last_move=[0,0]
         self.speed_buff = 0.0
         
@@ -65,6 +61,18 @@ class Bob():
     @classmethod        
     def set_Echild(cls,E):
         cls.Echild=E  
+
+    def apply_stats(self, speed=0, mass=0, memory=0, perception=0):
+        if not speed: speed=Config.bob_speed
+        if not mass: mass=Config.bob_mass
+        if not memory: memory=Config.bob_memory
+        if not perception: perception=Config.bob_perception
+
+        self.speed = speed
+        self.mass = mass
+        self.memory = memory
+        self.perception = perception
+        self.stats = [self.speed, self.mass, self.memory, self.perception]
     
       
     def move(self) -> tuple:

@@ -48,6 +48,9 @@ class Config():
     P0 = pop_init
     nb_day = nbs_day
     bob_speed=1
+    bob_mass=1
+    bob_memory=0
+    bob_perception=0
 
     # Variables d'interface
     screen_size = [ np.ceil(tile_size*(N+M)/2 / i) for i in range(1,3)]
