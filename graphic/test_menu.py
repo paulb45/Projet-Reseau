@@ -100,10 +100,11 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('Mouvement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('vision de bob :', default='1',textinput_id='vision_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('masse de bob :', default='1',textinput_id='mass_bob',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('Energie de la nourriture', default=str(init_energy_food),textinput_id='energy_to_mate',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('energy des parent apres reproduction', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Energie de la nourriture :', default=str(init_energy_food),textinput_id='energy_to_mate',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('energy des parent apres reproduction :', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.toggle_switch('move with mouse ? :', False, toggleswitch_id='move_with_mouse')
         self.new_game.add.button('Quit', pygame.QUIT)
         # self.new_game.add.button('start', self.game_screen)
         self.new_game.add.button('Start', self.change_game_is_on)
@@ -128,6 +129,7 @@ class GameMenu(pygame.Surface):
         Config.quantity_food = data['daily_food']
         Config.energy_food = data['energy_to_mate']
         Config.bob_speed = data['movement_bob']
+        Config.move_with_cursor = data['move_with_mouse']
     
         # Variables d'interface
         Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
