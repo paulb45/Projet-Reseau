@@ -99,7 +99,7 @@ class EventController:
                 
             self.keyboard_pressed()
 
-            if move_with_mouse:
+            if Config.move_with_cursor:
                 self.move_map_with_mouse_on_border()
 
             
