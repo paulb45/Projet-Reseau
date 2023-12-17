@@ -33,6 +33,7 @@ class Interface(pygame.Surface):
         self.grass_tile = self.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset))
 
         self.bob = self.load_sprite('bob.png')
+        self.bob_with_border = self.load_sprite_with_halo(self.bob, 10)
         self.apple = self.load_sprite('food.png')
         self.apple = pygame.transform.scale_by(self.apple, 0.5)
     
@@ -194,15 +195,26 @@ class Interface(pygame.Surface):
                     image_copy.set_at((x, y), pygame.Color(color[0], color[1], color[2]))
         return image_copy
 
-    def apply_bob_border(self, bob) -> pygame.image:
-        health_ratio = abs( bob.get_E() / bob.get_Emax())
-        red = int((1 - health_ratio) * 255)
-        green = int(health_ratio * 255)
-        blue = 0
-        #print( red, green, abs(green), blue , bob.get_E(), bob.get_Emax() , health_ratio)
-        #bob.get_E afin d'avoir une interface fonctionnelle pour l'instant je passe les valeurs absolu mais il faudra voir a corriger get_E
-        bob_with_border = self.apply_border(self.bob, (red, green, blue), self.bob_image_border, self.bob_border_thinkness)
-        return bob_with_border
+    def choose_bob_border(self, bob) -> pygame.image:
+        health_ratio = bob.get_E() / bob.get_Emax() * 100
+        if health_ratio <= 20: return self.bob_with_border["20%"]
+        elif health_ratio <= 40: return self.bob_with_border["40%"]
+        elif health_ratio <= 60: return self.bob_with_border["60%"]
+        elif health_ratio <= 80: return self.bob_with_border["80%"]
+        else: return self.bob_with_border["100%"]
+    
+        
+         
+    
+    def load_sprite_with_halo(self, image: pygame.image, border_thickness):
+        sprite_border = self.calc_border_sprite(self.bob, border_thickness)
+        return {
+            "100%" : self.apply_border(image, (0,255,0), sprite_border, border_thickness),
+            "80%" : self.apply_border(image, (55,200,0), sprite_border, border_thickness),
+            "60%" : self.apply_border(image, (128,127,0), sprite_border, border_thickness),
+            "40%" : self.apply_border(image, (200,50,0), sprite_border, border_thickness),
+            "20%" : self.apply_border(image, (255,0,0), sprite_border, border_thickness)
+        }
     
     # --- Autre ---
 
@@ -228,7 +240,7 @@ class Interface(pygame.Surface):
         bob_attribs = {}
         bob_attribs["start_coords"] = [coord[0]-bob.last_move[0], coord[1]-bob.last_move[1]]
         bob_attribs["unit_dep"] = self.bob_tick_unit(bob)
-        bob_attribs["image"] = self.apply_bob_border(bob)
+        bob_attribs["image"] = self.choose_bob_border(bob)
         bob_attribs["buffer_dep"] = [0,0]
         return bob_attribs
         
