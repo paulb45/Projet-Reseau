@@ -142,26 +142,24 @@ class Bob():
         return [self.E, self.speed, self.mass, self.memory, self.perception]
     
     # NE MARCHE PAS
-    def attack(self,target) -> bool:
-        """si bm/Bm<2/3 --> bob il peut attaqué target
+    def attack(self, target) -> bool:
+        """
+        si bm/Bm<2/3 --> bob il peut attaqué target
 
         Args:
             target (Bob): bob qui se trouve dans la meme case que notre bob
 
         Returns:
             bool: True si bob il a bien attaqué
-                  False sinon
-                  ce retour sert dans game pour destroy target  
+                False sinon
+                ce retour sert dans game pour destroy target  
         """
-        #big_boy,small_boy=self.get_E(),target.get_E()if self.get_E()>target.get_E()else target.get_E(),self.get_E()
-        if(target.get_mass()/self.get_mass()<2/3):
-            
-            E_gain=0.5*target.get_E()*(1-(target.get_E()/self.get_E()))
-            self.set_E(self.get_E()+E_gain)
-            
-            
+        if isinstance(target, Bob) and target.get_mass() / self.get_mass() < 2 / 3:
+            E_gain = 0.5 * target.get_E() * (1 - (target.get_E() / self.get_E()))
+            self.set_E(self.get_E() + E_gain)
             return True
         return False
+
         
             
             

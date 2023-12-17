@@ -55,13 +55,14 @@ class Game():
             else: self.grid.destroy_object(bob, pos)
             
             
-        # PAS BON
-        """
-        if (target := self.grid.has_bob(pos)):
-            attacked= bob.attack(target)
+        
+        for objet in  self.grid.get_all_bobs():
+            attacked= bob.attack(objet)
             if attacked:
-                self.grid.destroy_object(target,pos)
-        """      
+                self.grid.destroy_object(objet,pos)
+            
+            
+              
     def reset_bobs_last_move(self):
         bobs_map = self.grid.get_all_bobs()
         for _, bobs in bobs_map.items():
