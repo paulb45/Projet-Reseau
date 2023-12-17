@@ -31,57 +31,59 @@ class Game():
             pos = self.grid.choose_random_tile()
             self.grid.map[pos].append(Food())
 
-    def bob_play(self, bob: Bob, pos=None):
-        can_eat = False
+    def bob_play_tick(self, bob: Bob, pos=None):
         if pos == None:
             pos = self.grid.get_position(bob)
         if bob.get_E() == Bob.get_Emax():
             self.grid.place_child(bob.parthenogenesis(), pos)          
         elif (food := self.grid.has_food(pos)):
-            can_eat = True
-        
-        
-                
-             
-        
+            if bob.eat(food):
+                self.grid.destroy_object(food, pos)
             
         else:
             mouv = bob.move()
             new_pos = pos[0] + mouv[0], pos[1] + mouv[1]
             if self.grid.is_pos_in_map(new_pos):
                 self.grid.map[new_pos].append(bob)
+                self.grid.destroy_object(bob, pos)
                 if (food := self.grid.has_food(new_pos)):
-                    can_eat = True
                     bob.E += 0.5 # Compence l'effet de manger juste après
-            self.grid.destroy_object(bob, pos)
-            pos = new_pos
-        
+                    if bob.eat(food):
+                        self.grid.destroy_object(food, new_pos)
+                if bob.is_dead():
+                    self.grid.destroy_object(bob, new_pos)
+            else: self.grid.destroy_object(bob, pos)
+            
+            
+        # PAS BON
+        """
         if (target := self.grid.has_bob(pos)):
             attacked= bob.attack(target)
             if attacked:
                 self.grid.destroy_object(target,pos)
-                   
-            
-                
-        
-        if can_eat:
-            if bob.eat(food):
-                self.grid.destroy_object(food, pos)
-        
-        if bob.is_dead():
-            self.grid.destroy_object(bob, pos)
-        
-    def bobs_play(self):
+        """      
+    def reset_bobs_last_move(self):
+        bobs_map = self.grid.get_all_bobs()
+        for _, bobs in bobs_map.items():
+            for bob in bobs:
+                bob.reset_last_move()
+
+    def bobs_play_tick(self):
         bobs_map = self.grid.get_all_bobs()
         for pos, bobs in bobs_map.items():
             for bob in bobs:
-                self.bob_play(bob, pos)
+                self.bob_play_tick(bob, pos)
+    
+    def bobs_play_day(self):
+        for _ in (0,1):
+            self.bobs_play_tick()
                 
     def day_play(self):
         """chaque jour d=100 ticks
            chaque jours f=200 points de nourriture
            Ef=100 energie de la nourriture
         """
-        self.bobs_play()
+        self.reset_bobs_last_move()
+        self.bobs_play_day()
         self.grid.destroy_all_foods()
         self.spawn_food()

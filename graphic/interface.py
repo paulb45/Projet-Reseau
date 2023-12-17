@@ -99,11 +99,10 @@ class Interface(pygame.Surface):
     def print_ground(self):
         self.blit(self.ground, (0,0))
 
-    def print_food(self, map):
-        for key, l in map.items():
-            for item in l:
-                if isinstance(item, logic.food.Food):
-                    self.place_entity(self.apple, key)
+    def print_food(self, grid):
+        for key, foods in grid.get_all_foods().items():
+            for food in foods:
+                self.place_entity(self.apple, key)
     
     def print_bobs(self):
         for bob_info in self._bobs_infos:
@@ -159,9 +158,9 @@ class Interface(pygame.Surface):
                 text_count.get_rect().center = (0,0)
             """
 
-    def render_game(self, map):
+    def render_game(self, grid):
         self.print_ground()
-        self.print_food(map)
+        self.print_food(grid)
         self.print_bobs()
         #self.generate_map(map)
     
@@ -227,15 +226,6 @@ class Interface(pygame.Surface):
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)       
     
-    
-    def get_all_bobs(self, map) -> list:
-        bobs_list = []
-        for key, l in map.items():
-            for item in l:
-                if isinstance(item, logic.bob.Bob):
-                    bobs_list.append([key, item])
-        return bobs_list
-    
     def init_values_bob_day(self, coord, bob):
         bob_attribs = {}
         bob_attribs["start_coords"] = [coord[0]-bob.last_move[0], coord[1]-bob.last_move[1]]
@@ -244,7 +234,8 @@ class Interface(pygame.Surface):
         bob_attribs["buffer_dep"] = [0,0]
         return bob_attribs
         
-    def init_values_bobs_day(self, map):
+    def init_values_bobs_day(self, grid):
         self._bobs_infos = []
-        for coord, bob in self.get_all_bobs(map):
-            self._bobs_infos.append(self.init_values_bob_day(coord, bob))
+        for coord, bobs in grid.get_all_bobs().items():
+            for bob in bobs:
+                self._bobs_infos.append(self.init_values_bob_day(coord, bob))

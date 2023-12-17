@@ -1,4 +1,5 @@
 import threading
+from copy import deepcopy
 
 from graphic.mainSurface import MainSurface
 from config import *
@@ -16,12 +17,13 @@ window.start_game()
 game = Game()
 
 while True:
-    #map = game.grid.map.copy()
+    grid_copy = deepcopy(game.grid)
 
     logic_thread = threading.Thread(target=game.day_play)
 
     logic_thread.start()
     
-    window.run(game.grid.map)
+    window.run(grid_copy)
 
     logic_thread.join()
+

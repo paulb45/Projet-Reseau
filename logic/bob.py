@@ -53,8 +53,8 @@ class Bob():
         self.E=E
     def set_last_move(self,lst_mv):
         self.last_move=lst_mv
-    def set_speed_buff(self,spd_buff): # WTF
-        self.speed_buff
+    def set_speed_buff(self,spd_buff):
+        self.speed_buff = spd_buff
     @classmethod    
     def set_Emother(cls,E):
         cls.Emother=E
@@ -74,6 +74,9 @@ class Bob():
         self.perception = perception
         self.stats = [self.speed, self.mass, self.memory, self.perception]
     
+    def reset_last_move(self):
+        self.set_last_move([0,0])
+    
       
     def move(self) -> tuple:
         """Déplace Bob en choisissant aléatoirement une direction  
@@ -84,16 +87,15 @@ class Bob():
         self.speed_buff += self.speed
         speed_mouvement= int(self.speed_buff)
         self.speed_buff -= speed_mouvement
-        self.set_last_move((
-                            x:=random.randint(0, speed_mouvement) * random.choice((1,-1)), 
-                            (speed_mouvement - abs(x)) * random.choice((1,-1))
-                           ))
+        last_mov = self.get_last_move()
+        self.last_move=[
+                            x:=random.randint(0, speed_mouvement) * random.choice((1,-1)) + last_mov[0], 
+                            (speed_mouvement - abs(x)) * random.choice((1,-1)) + last_mov[1]
+                        ]
         self.E -= 0.5 * self.mass * (self.speed**2)
         return self.get_last_move()
 
     def eat(self,food: Food) -> bool: 
-        
-        # cette fonction renvoie True la nourriture doit être détruite 
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
 
         Args:
@@ -138,6 +140,7 @@ class Bob():
         
     def get_stats(self):
         return [self.E, self.speed, self.mass, self.memory, self.perception]
+    
     # NE MARCHE PAS
     def attack(self,target) -> bool:
         """si bm/Bm<2/3 --> bob il peut attaqué target

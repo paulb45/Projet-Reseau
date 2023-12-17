@@ -55,7 +55,6 @@ class Grid():
     def get_all_object_in_map(self, obj) -> dict:
         obj_dict=defaultdict(lambda:[])
         for pos, items in self.map.items():
-            #print(pos, items)
             for item in items:
                 if isinstance(item,type(obj)):
                     obj_dict[pos].append(item)

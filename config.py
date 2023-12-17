@@ -9,11 +9,10 @@ window_size = (1280, 720)
 max_framerate = 60
 
 # Initilisation de la logique
-init_quantity_food = 1
-init_energy_food = 10
-nb_ticks_day = 5
-pop_init = 10
-nbs_day = 0
+init_quantity_food = 200
+init_energy_food = 100
+nb_ticks_day = 100
+pop_init = 100
 mutation_rate = 0.2
 
 #varaibles pour la musique
@@ -46,7 +45,6 @@ class Config():
     energy_food = init_energy_food
     nb_tick_day = nb_ticks_day
     P0 = pop_init
-    nb_day = nbs_day
     bob_speed=1
     bob_mass=1
     bob_memory=0

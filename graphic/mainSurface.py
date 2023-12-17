@@ -51,26 +51,18 @@ class MainSurface:
         #print(Config.width_map,Config.height_map)
         self.camera = CameraController(self.game_surface)
         self.menu.zoom_slider.set_value(self.camera.get_zoom_ratio())
-
         self.event_controller.camera = self.camera
-        
 
-    def run(self, map):
-        
+    def run(self, grid):
         current_tick = 1
         #current day ne sert qu'a l'affichage
-        self.game_surface.init_values_bobs_day(map)
+        self.game_surface.init_values_bobs_day(grid)
 
         while(current_tick < max_framerate):
             self.event_controller.run_events()
-            # LAG DANS CE IF
-            # if self.menu.main_menu.get_current() == self.menu.game_screen:
-            #     self.game_surface.render_game(map, current_tick)
-            #     self.window.blit(self.camera.get_viewpoint(), (0,0))
-            #     self.menu.game_screen.draw(self.window)
 
             if self.menu.game_is_on:
-                self.game_surface.render_game(map)
+                self.game_surface.render_game(grid)
                 self.window.blit(self.camera.get_viewpoint(), (0,0))
                 self.menu.game_screen.draw(self.window)
                 
