@@ -178,6 +178,7 @@ class CameraController:
             # si zoom suivant plus grand que le zoom max
             if zoom_map_width_next > min((tile_size * zoom_max), self.main_surface.get_width()):
                 zoom_map_width_next = min((tile_size * zoom_max), self.main_surface.get_width())
+                zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
             position_camera_y_next = 0
             position_camera_x_next = 0
@@ -309,7 +310,7 @@ class CameraController:
         Returns:
             bool: Vrai si le nombre de coin requis sont bien sur la map, Faux sinon
         """
-        if self.zoom_map_width < self.main_surface.get_width() // 2:
+        if (self.zoom_map_width < self.main_surface.get_width() // 2) and (Config.width_map > zoom_max):
             # haut-gauche, haut-droite, bas-droite, bas-gauche
             points = (
                 Point(top_left_corner if top_left_corner is not None else (self.position_camera_x, self.position_camera_y)),
