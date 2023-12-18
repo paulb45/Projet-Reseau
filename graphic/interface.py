@@ -109,7 +109,7 @@ class Interface(pygame.Surface):
             incremente_dep = [0,0]
             for i in range(len(bob_info["buffer_dep"])):
                 bob_info["buffer_dep"][i] += bob_info["unit_dep"][i]
-                if abs(bob_info["buffer_dep"][i])>=1:
+                if abs(bob_info["buffer_dep"][i])>=1: # COMPARAISON FLOTTANT NP
                     # Update des buffers
                     incremente_dep[i] = int(bob_info["buffer_dep"][i])
                     bob_info["buffer_dep"][i] -= incremente_dep[i]
@@ -160,8 +160,9 @@ class Interface(pygame.Surface):
 
     def render_game(self, grid):
         self.print_ground()
-        self.print_food(grid)
         self.print_bobs()
+        self.print_food(grid)
+        
         #self.generate_map(map)
     
     # --- Gestion du liseré ---
@@ -239,3 +240,4 @@ class Interface(pygame.Surface):
         for coord, bobs in grid.get_all_bobs().items():
             for bob in bobs:
                 self._bobs_infos.append(self.init_values_bob_day(coord, bob))
+                print(self._bobs_infos)

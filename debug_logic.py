@@ -10,8 +10,9 @@ def print_bobs_stat():
             print(bob.get_stats())
             
 game = Game()
+bob = Bob(speed=10)
+game.grid.map[(10,10)].append(bob)
+for _ in range(3):
+    print(bob.move())
 
-print(game.grid.map)
-game.bobs_play()
-print("\n\n")
-print(game.grid.map)
+print(bob.last_move)

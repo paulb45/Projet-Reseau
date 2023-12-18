@@ -55,11 +55,12 @@ class Game():
             else: self.grid.destroy_object(bob, pos)
             
             
-        
+        """
         for objet in  self.grid.get_all_bobs():
             attacked= bob.attack(objet)
             if attacked:
                 self.grid.destroy_object(objet,pos)
+        """
             
             
               

@@ -88,12 +88,15 @@ class Bob():
         speed_mouvement= int(self.speed_buff)
         self.speed_buff -= speed_mouvement
         last_mov = self.get_last_move()
+        add_x = random.randint(0, speed_mouvement) * random.choice((1,-1))
+        add_y = (speed_mouvement - abs(add_x)) * random.choice((1,-1))
+        
         self.last_move=[
-                            x:=random.randint(0, speed_mouvement) * random.choice((1,-1)) + last_mov[0], 
-                            (speed_mouvement - abs(x)) * random.choice((1,-1)) + last_mov[1]
+                            last_mov[0] + add_x, 
+                            last_mov[1] + add_y
                         ]
         self.E -= 0.5 * self.mass * (self.speed**2)
-        return self.get_last_move()
+        return add_x, add_y
 
     def eat(self,food: Food) -> bool: 
         """Fait en sorte que BOB mange la nourriture spécifiée et augmente son énergie.
