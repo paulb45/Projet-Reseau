@@ -144,7 +144,7 @@ class Bob():
     def get_stats(self):
         return [self.E, self.speed, self.mass, self.memory, self.perception]
     
-    # NE MARCHE PAS
+    
     def attack(self, target) -> bool:
         """
         si bm/Bm<2/3 --> bob il peut attaqué target

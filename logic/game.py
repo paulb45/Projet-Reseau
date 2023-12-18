@@ -32,6 +32,7 @@ class Game():
             self.grid.map[pos].append(Food())
 
     def bob_play_tick(self, bob: Bob, pos=None):
+        has_moved=False
         if pos == None:
             pos = self.grid.get_position(bob)
         if bob.get_E() == Bob.get_Emax():
@@ -42,6 +43,7 @@ class Game():
             
         else:
             mouv = bob.move()
+            has_moved=True
             new_pos = pos[0] + mouv[0], pos[1] + mouv[1]
             if self.grid.is_pos_in_map(new_pos):
                 self.grid.map[new_pos].append(bob)
@@ -55,12 +57,17 @@ class Game():
             else: self.grid.destroy_object(bob, pos)
             
             
-        """
-        for objet in  self.grid.get_all_bobs():
-            attacked= bob.attack(objet)
-            if attacked:
-                self.grid.destroy_object(objet,pos)
-        """
+        coords=pos if not has_moved else new_pos
+        bobs=self.grid.bobs_in_case(coords)
+        
+        if bobs is not None and bobs:
+            for target in bobs :
+                attacked= bob.attack(target)
+                if attacked:
+                    print("attack")
+                    self.grid.destroy_object(target,coords)
+                    pass
+        
             
             
               

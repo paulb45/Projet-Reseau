@@ -85,3 +85,10 @@ class Grid():
         if self.is_pos_in_map(new_pos :=(pos[0]+1,pos[1])):
             self.map[new_pos].append(bob)
         else: self.map[(pos[0]-1, pos[1])].append(bob)
+        
+    def bobs_in_case(self, coord: tuple) -> list:
+        if coord in self.map:
+            return [i for i in self.map[coord] if isinstance(i, logic.bob.Bob)]
+        else:
+            return []  # or handle the case when coord is not in self.map
+
