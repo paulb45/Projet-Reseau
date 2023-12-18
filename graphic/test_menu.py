@@ -53,9 +53,9 @@ class GameMenu(pygame.Surface):
         #self.main_menu.set_sound(self.engine,recursive=True)
         self.main_menu.add.label('Evolutionnary game of life',font_size=self.myfontsize*2,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(50)
-        self.main_menu.add.button('new game', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
+        self.main_menu.add.button('Nouvelle partie', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(10)
-        self.main_menu.add.button('Quit', pygame.QUIT,align=pygame_menu.locals.ALIGN_CENTER)
+        self.main_menu.add.button('Quitter', pygame.QUIT,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.draw(self.surface)
         #self.main_menu.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
@@ -73,7 +73,7 @@ class GameMenu(pygame.Surface):
         self.tickdisplay = self.game_screen.add.label('tick : 0')
         self.tickdisplay.translate(-20,0)
         self.game_screen.add.vertical_margin(25)
-        self.quitbutton = self.game_screen.add.button('Quit', pygame_menu.events.EXIT,background_color=(200,200,200,25))
+        self.quitbutton = self.game_screen.add.button('Quitter', pygame_menu.events.EXIT,background_color=(200,200,200,25))
         self.quitbutton.translate(-20,0 )
         self.quitbutton.set_controls(keyboard=False)
         self.game_screen.add.vertical_margin(25)
@@ -95,23 +95,23 @@ class GameMenu(pygame.Surface):
         self.new_game.add.vertical_margin(30)
         self.new_game.add.text_input('Largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('Population de départ :', default=str(pop_init),textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Population de depart :', default=str(pop_init),textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Nouriture par jour :', default='1',textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Mouvement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('vision de bob :', default='1',textinput_id='vision_bob',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('masse de bob :', default='1',textinput_id='mass_bob',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Vision de bob :', default='1',textinput_id='vision_bob',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Masse de bob :', default='1',textinput_id='mass_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Energie de la nourriture :', default=str(init_energy_food),textinput_id='energy_to_mate',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('energy des parent apres reproduction :', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.toggle_switch('move with mouse ? :', False, toggleswitch_id='move_with_mouse')
-        self.new_game.add.button('Quit', pygame.QUIT)
+        self.new_game.add.text_input('Energy des parent apres reproduction :', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
+        self.new_game.add.button('Quitter', pygame.QUIT)
         # self.new_game.add.button('start', self.game_screen)
-        self.new_game.add.button('Start', self.change_game_is_on)
+        self.new_game.add.button('Jouer', self.change_game_is_on)
 
         # self.new_game.add.button('Store data', data_fun, button_id='store')
-        self.new_game.add.button('Restore original values', self.new_game.reset_value)
-        self.new_game.add.button('Return to main menu', pygame_menu.events.BACK)
+        self.new_game.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
+        self.new_game.add.button('Retourner au menu principal', pygame_menu.events.BACK)
         self.new_game.add.vertical_margin(10)
         #self.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
         
@@ -121,8 +121,6 @@ class GameMenu(pygame.Surface):
         """
         print('Settings data:')
         data = self.new_game.get_input_data()
-        for k in data.keys():
-            print(f'\t{k}\t=>\t{data[k]}')
         Config.width_map = data['map_width']
         Config.height_map = data['map_height']
         Config.P0 = data['population_bob']
@@ -135,7 +133,6 @@ class GameMenu(pygame.Surface):
         Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
         Config.screen_size[0] += 2*Config.interface_x_offset
         Config.screen_size[1] += 2*Config.interface_y_offset
-        print(f"map: ({Config.width_map},{Config.height_map})")
 
     def change_game_is_on(self):
         self.data_fun()

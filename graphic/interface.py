@@ -19,7 +19,7 @@ class Interface(pygame.Surface):
         self._images = {}
         self.ground = pygame.Surface(size)
         self.load_images()
-        self.bob_border_thinkness = 2
+        self.bob_border_thinkness = 1
         self.bob_image_border = self.calc_border_sprite(self.bob,self.bob_border_thinkness)
         
         self.generate_ground(self.grass_tile)
