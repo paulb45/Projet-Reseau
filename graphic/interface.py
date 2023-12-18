@@ -109,7 +109,8 @@ class Interface(pygame.Surface):
             incremente_dep = [0,0]
             for i in range(len(bob_info["buffer_dep"])):
                 bob_info["buffer_dep"][i] += bob_info["unit_dep"][i]
-                if abs(bob_info["buffer_dep"][i])>=1: # COMPARAISON FLOTTANT NP
+                #print(bob_info["buffer_dep"][i])
+                if abs(bob_info["buffer_dep"][i]) - 0.999 >= 0: # Check comparaison proche de 0
                     # Update des buffers
                     incremente_dep[i] = int(bob_info["buffer_dep"][i])
                     bob_info["buffer_dep"][i] -= incremente_dep[i]
@@ -138,8 +139,9 @@ class Interface(pygame.Surface):
         self.print_ground()
         
     def bob_tick_unit(self, bob):
-        return [bob.last_move[0] * 1/ max_framerate,
-                bob.last_move[1] * 1/ max_framerate]
+        x_tick = round(bob.last_move[0] * 1/ max_framerate, 3) + 0.001
+        y_tick = round(bob.last_move[1] * 1/ max_framerate, 3) + 0.001
+        return [x_tick, y_tick]
 
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
         for key, l in map.items():
@@ -201,10 +203,7 @@ class Interface(pygame.Surface):
         elif health_ratio <= 40: return self.bob_with_border["40%"]
         elif health_ratio <= 60: return self.bob_with_border["60%"]
         elif health_ratio <= 80: return self.bob_with_border["80%"]
-        else: return self.bob_with_border["100%"]
-    
-        
-         
+        else: return self.bob_with_border["100%"] 
     
     def load_sprite_with_halo(self, image: pygame.image, border_thickness):
         sprite_border = self.calc_border_sprite(self.bob, border_thickness)
@@ -240,4 +239,3 @@ class Interface(pygame.Surface):
         for coord, bobs in grid.get_all_bobs().items():
             for bob in bobs:
                 self._bobs_infos.append(self.init_values_bob_day(coord, bob))
-                print(self._bobs_infos)

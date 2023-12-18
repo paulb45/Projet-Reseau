@@ -81,7 +81,6 @@ class Grid():
         else: bob = logic.bob.Bob(*stats)
         self.map[pos].append(bob)
     
-    # TESTER LE CAS LIMITE DE MAP
     def place_child(self, bob, pos: tuple):
         if self.is_pos_in_map(new_pos :=(pos[0]+1,pos[1])):
             self.map[new_pos].append(bob)

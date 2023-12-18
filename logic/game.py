@@ -77,7 +77,7 @@ class Game():
                 self.bob_play_tick(bob, pos)
     
     def bobs_play_day(self):
-        for _ in (0,1):
+        for _ in range(nb_ticks_day):
             self.bobs_play_tick()
                 
     def day_play(self):
