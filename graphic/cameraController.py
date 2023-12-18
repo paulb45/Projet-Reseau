@@ -39,8 +39,8 @@ class CameraController:
         
         # calcul du zoom initial
         # on va partir par défaut sur l'affichage de 20 cases sur la largeur
-        if (Config.width_map > (zoom_max - zoom_min)):
-            self.zoom_map_width = tile_size * (zoom_max - zoom_min)
+        if Config.width_map > 20:
+            self.zoom_map_width = tile_size * 20
         else:
             self.zoom_map_width = tile_size * Config.width_map
 
@@ -67,16 +67,21 @@ class CameraController:
         Returns:
             Surface: surface à afficher à l'écran
         """ 
-        # on prend la sous surface
-        subview = self.main_surface.subsurface(pygame.Rect(self.position_camera_x, 
-                                                    self.position_camera_y, 
-                                                    self.zoom_map_width, 
-                                                    self.zoom_map_height))
+        try:
+            # on prend la sous surface
+            subview = self.main_surface.subsurface(pygame.Rect(self.position_camera_x, 
+                                                        self.position_camera_y, 
+                                                        self.zoom_map_width, 
+                                                        self.zoom_map_height))
 
-        # on adapte la sous-surface à la taille de la fenetre
-        viewpoint = pygame.transform.scale(subview, pygame.display.get_surface().get_size())
+            # on adapte la sous-surface à la taille de la fenetre
+            viewpoint = pygame.transform.scale(subview, pygame.display.get_surface().get_size())
 
-        return viewpoint
+            return viewpoint
+
+        except ValueError:
+            print("Une erreur est survenu lors de l'affichage, nous sommes désolés de ce contretemps")
+            exit()
 
 
     def modify_speed(self) -> None:
@@ -124,7 +129,6 @@ class CameraController:
         self.zoom_map_height = zoom_map_height_next
 
 
-    # TODO implémenter la vérif de sorti de map
     def zoom_in(self, _zoom_step = tile_size*2):
         """zoom vers l'avant de la caméra, de 2 cases. On ne peux pas zoomer sur plus petit que 4 cases de large
 
@@ -140,13 +144,23 @@ class CameraController:
         if (zoom_map_width_next != self.zoom_map_width):
             zoom_map_height_next = int(zoom_map_width_next * self.aspect_ratio)
 
-            self.position_camera_x += (self.zoom_map_width - zoom_map_width_next) // 2
-            self.position_camera_y += (self.zoom_map_height - zoom_map_height_next) // 2
+            position_camera_x_next = self.position_camera_x + (self.zoom_map_width - zoom_map_width_next) // 2
+            position_camera_y_next = self.position_camera_y + (self.zoom_map_height - zoom_map_height_next) // 2
 
-            self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height = zoom_map_height_next
+            # vérification de sortie de map
+            if (self._is_camera_in_map(
+                top_left_corner = (position_camera_x_next, position_camera_y_next),
+                top_right_corner = (position_camera_x_next + zoom_map_width_next, position_camera_y_next),
+                bottom_right_corner = (position_camera_x_next, position_camera_y_next + zoom_map_height_next),
+                bottom_left_corner = (position_camera_x_next + zoom_map_width_next, position_camera_y_next + zoom_map_height_next)
+            )):
+                self.position_camera_x = position_camera_x_next
+                self.position_camera_y = position_camera_y_next
 
-            self.modify_speed()
+                self.zoom_map_width = zoom_map_width_next
+                self.zoom_map_height = zoom_map_height_next
+
+                self.modify_speed()
 
 
     def zoom_out(self, _zoom_step = tile_size*2):
@@ -191,15 +205,22 @@ class CameraController:
             if (position_camera_x_next + zoom_map_width_next) > self.main_surface.get_width():
                 position_camera_x_next = self.main_surface.get_width() - zoom_map_width_next
 
-            # le dezoom se replace sur le milieu du zoom précédent
-            self.position_camera_x = position_camera_x_next
-            self.position_camera_y = position_camera_y_next
-            
-            # agrandissement de la zone affiché
-            self.zoom_map_width = zoom_map_width_next
-            self.zoom_map_height = zoom_map_height_next   
+            # vérification de sortie de map
+            if (self._is_camera_in_map(
+                top_left_corner = (position_camera_x_next, position_camera_y_next),
+                top_right_corner = (position_camera_x_next + zoom_map_width_next, position_camera_y_next),
+                bottom_right_corner = (position_camera_x_next, position_camera_y_next + zoom_map_height_next),
+                bottom_left_corner = (position_camera_x_next + zoom_map_width_next, position_camera_y_next + zoom_map_height_next)
+            )):
+                # le dezoom se replace sur le milieu du zoom précédent
+                self.position_camera_x = position_camera_x_next
+                self.position_camera_y = position_camera_y_next
+                
+                # agrandissement de la zone affiché
+                self.zoom_map_width = zoom_map_width_next
+                self.zoom_map_height = zoom_map_height_next   
 
-            self.modify_speed()     
+                self.modify_speed()     
 
 
     def move_right(self):
