@@ -62,7 +62,7 @@ class MainSurface:
             self.event_controller.run_events()
 
             if self.menu.game_is_on:
-                self.game_surface.render_game(grid)
+                self.game_surface.render_game(grid, current_tick)
                 self.window.blit(self.camera.get_viewpoint(), (0,0))
                 self.menu.game_screen.draw(self.window)
                 

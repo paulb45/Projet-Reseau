@@ -91,7 +91,7 @@ class Interface(pygame.Surface):
         pos_iso = isometric.cart_to_iso(pos)
         foot_pos = self.place_bottom_position(sprite, pos_iso)
         self.blit(sprite, isometric.iso_to_print(foot_pos))
-
+    
     def place_tile(self, tile: pygame.image, pos: tuple):
         pos_iso = isometric.cart_to_iso(pos)
         self.ground.blit(tile, self.place_top_position(tile, isometric.iso_to_print(pos_iso)))
@@ -103,7 +103,7 @@ class Interface(pygame.Surface):
         for key, foods in grid.get_all_foods().items():
             for food in foods:
                 self.place_entity(self.apple, key)
-    
+    """
     def print_bobs(self):
         for bob_info in self._bobs_infos:
             incremente_dep = [0,0]
@@ -117,18 +117,20 @@ class Interface(pygame.Surface):
                     
                     bob_info["start_coords"][i] += incremente_dep[i]
             self.place_entity(bob_info["image"], (bob_info["start_coords"][0], bob_info["start_coords"][1]))
-    
     """
-    def move_bobs(self, map, current_tick):
-        bobs_list = self.get_all_bobs(map)      
-        for key, bob in bobs_list:
-            # Calcul de l'incrément de déplacement sur le prochain tick
-            new_x_tick = int(bob.last_move[0] * (1- current_tick/ max_framerate))
-            new_y_tick = int(bob.last_move[1] * (1- current_tick/ max_framerate))
-            new_pos = (key[0] - new_x_tick, key[1] - new_y_tick)
-            #bob_with_border = self.apply_bob_border(bob)
-            self.place_entity(self.bob, new_pos) 
-    """    
+    
+    def move_bob(self, end_coord, last_move, bob_sprite, current_tick):
+        # Calcul de l'incrément de déplacement sur le prochain tick
+        new_x_tick = last_move[0] * (1- current_tick/ max_framerate)
+        new_y_tick = last_move[1] * (1- current_tick/ max_framerate)
+        new_pos = (end_coord[0] - new_x_tick, end_coord[1] - new_y_tick)
+        self.place_entity(bob_sprite, new_pos) 
+    
+    def move_bobs(self, current_tick):
+        for bob_info in self._bobs_infos:
+            self.move_bob(bob_info["end_coords"], bob_info["last_move"], bob_info["image"], current_tick)
+
+       
     
     # --- Génération ---
     
@@ -143,6 +145,7 @@ class Interface(pygame.Surface):
         y_tick = round(bob.last_move[1] * 1/ max_framerate, 3) + 0.001
         return [x_tick, y_tick]
 
+    """
     def generate_map(self, map): # Renommer en add_text et arrêter la regénération de la map dedans ?
         for key, l in map.items():
             # Setup du comptage
@@ -154,15 +157,16 @@ class Interface(pygame.Surface):
             if bob_count: self.place_entity(self.bob, key)
             if food_count: self.place_entity(self.apple, key)
             # Ajoue du texte
-            """
+            
             if (bob_count > 1) or (food_count > 1):
                 text_count = self.font.render(f'[{bob_count};{food_count}]', True, (0, 255, 0))
                 text_count.get_rect().center = (0,0)
-            """
+            
+    """
 
-    def render_game(self, grid):
+    def render_game(self, grid, current_tick):
         self.print_ground()
-        self.print_bobs()
+        self.move_bobs(current_tick)
         self.print_food(grid)
         
         #self.generate_map(map)
@@ -226,6 +230,7 @@ class Interface(pygame.Surface):
         offset_to_place = (window_center[0] - interface_center[0], window_center[1] - interface_center[1])
         window.blit(self, offset_to_place)       
     
+    """
     def init_values_bob_day(self, coord, bob):
         bob_attribs = {}
         bob_attribs["start_coords"] = [coord[0]-bob.last_move[0], coord[1]-bob.last_move[1]]
@@ -233,6 +238,15 @@ class Interface(pygame.Surface):
         bob_attribs["image"] = self.choose_bob_border(bob)
         bob_attribs["buffer_dep"] = [0,0]
         return bob_attribs
+    """
+    def init_values_bob_day(self, coord, bob):
+        bob_attribs = {}
+        bob_attribs["end_coords"] = coord
+        bob_attribs["last_move"] = bob.last_move
+        bob_attribs["image"] = self.choose_bob_border(bob)
+        return bob_attribs
+
+
         
     def init_values_bobs_day(self, grid):
         self._bobs_infos = []
