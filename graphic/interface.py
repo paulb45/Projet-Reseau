@@ -166,8 +166,8 @@ class Interface(pygame.Surface):
 
     def render_game(self, grid, current_tick):
         self.print_ground()
-        self.move_bobs(current_tick)
         self.print_food(grid)
+        self.move_bobs(current_tick)
         
         #self.generate_map(map)
     

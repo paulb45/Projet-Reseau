@@ -48,9 +48,10 @@ class Grid():
         """
         if pos == None :
             pos = self.get_position(obj)
-        self.map[pos].remove(obj)
-        if self.map[pos] == []:
-            del self.map[pos]
+        if obj in self.map[pos]:
+            self.map[pos].remove(obj)
+            if self.map[pos] == []:
+                del self.map[pos]
     
     def get_all_object_in_map(self, obj) -> dict:
         obj_dict=defaultdict(lambda:[])
