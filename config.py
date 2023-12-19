@@ -13,7 +13,7 @@ init_quantity_food = 200
 init_energy_food = 100
 nb_ticks_day = 2
 pop_init = 100
-mutation_rate = 0.2
+mutation_rate = 0.1
 
 #varaibles pour la musique
 music_path ="music/"
