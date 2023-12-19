@@ -1,4 +1,10 @@
 # Evolutionary-Game-of-Life
+ 
+## Bibliothèques nécessaires :
+ - pygame
+ - pygame_menu
+ - numpy
+ - shapely
 
-python 3.11
-pygame 2.5.2
+
+Toutes ces bibliothèques sont installable avec l'outil **pip**
