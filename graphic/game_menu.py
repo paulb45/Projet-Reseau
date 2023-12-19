@@ -5,22 +5,14 @@ from pygame_menu import sound
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
-#from graphic.interface import Interface
 
 class GameMenu(pygame.Surface):
 
     def __init__(self, surface):
         super().__init__(pygame.display.get_surface().get_size())
-        #self.interface = Interface
-        #self.interface.load_images()
-        # True si on est sur le jeu et false sinon
         self.game_is_on = False
-        
         self.zoom_slider_event = pygame.event.Event(pygame.USEREVENT+1,message= 'zoommustchange')
         self.volume_change_event = pygame.event.Event(pygame.USEREVENT+2,message= 'volumemustchange')
-        #self.engine=sound.Sound()
-        #self.engine.set_sound(sound.SOUND_TYPE_CLICK_MOUSE,music_path +'mixkit-cool-interface-click-tone-2568.ogg')
-        #self.engine.set_sound(sound.SOUND_TYPE_OPEN_MENU, '/home/me/open.ogg')
         self.surface = surface
         self.myfont=pygame_menu.font.FONT_MUNRO
         self.myfontsize = 30
@@ -37,7 +29,6 @@ class GameMenu(pygame.Surface):
         self.mytheme2.widget_font = self.myfont
         self.mytheme2.widget_font_size = self.myfontsize
         self.mytheme2.widget_title_font = self.myfont
-        #self.mytheme2.widget_alignment = pygame_menu.locals.ALIGN_LEFT
         self.mytheme2.title = False
         pygame_menu.themes.THEME_BLUE.widget_font_size = self.myfontsize
         pygame_menu.themes.THEME_BLUE.widget_font = self.myfont
@@ -46,18 +37,12 @@ class GameMenu(pygame.Surface):
         self.game_screen = pygame_menu.Menu('Gaming',pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme1)
         self.new_game = pygame_menu.Menu('New Game', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
 
-        #self.load_new_game()
-        #self.load_main_menu()
-        #self.load_game_screen_menu()
-        
-        #self.main_menu.set_sound(self.engine,recursive=True)
         self.main_menu.add.label('Evolutionnary game of life',font_size=self.myfontsize*2,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(50)
         self.main_menu.add.button('Nouvelle partie', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(10)
         self.main_menu.add.button('Quitter', pygame.QUIT,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.draw(self.surface)
-        #self.main_menu.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
         def zoom_changer(n):
             #print('the function was called')
@@ -89,9 +74,6 @@ class GameMenu(pygame.Surface):
         self.volume_slider.translate(-20,0 )
         self.volume_slider.set_controls(keyboard=False)
  
-
-        #self.game_screen.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
-        # erreur en cas de récursion
         self.new_game.add.vertical_margin(30)
         self.new_game.add.text_input('Largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
@@ -106,14 +88,10 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
         self.new_game.add.button('Quitter', pygame.QUIT)
-        # self.new_game.add.button('start', self.game_screen)
         self.new_game.add.button('Jouer', self.change_game_is_on)
-
-        # self.new_game.add.button('Store data', data_fun, button_id='store')
         self.new_game.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
         self.new_game.add.button('Retourner au menu principal', pygame_menu.events.BACK)
         self.new_game.add.vertical_margin(10)
-        #self.new_game.resize(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
         
     def data_fun(self) -> None:
         """
@@ -128,7 +106,6 @@ class GameMenu(pygame.Surface):
         Config.energy_food = data['energy_to_mate']
         Config.bob_speed = data['movement_bob']
         Config.move_with_cursor = data['move_with_mouse']
-    
         # Variables d'interface
         Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
         Config.screen_size[0] += 2*Config.interface_x_offset
@@ -140,23 +117,7 @@ class GameMenu(pygame.Surface):
             pygame_menu.events.BACK
 
         self.game_is_on = not self.game_is_on
-        
-        #self.interface.generate_ground(self.interface.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset)))
-        #print("size change bich")
 
-    # def to_print(self, menu_name: str):
-    #     match menu_name:
-    #         case "main_menu":
-    #             events =  pygame.event.get()
-    #             self.main_menu.update(events)
-    #             self.main_menu.draw(self.surface)
-    #             #self.main_menu.mainloop(self.surface)
-    #         case "game_screen":
-    #             self.game_screen.draw(self.subsurface)
-    #             #self.game_screen.mainloop(self.surface)
-    #         case "new_game":
-    #             self.new_game.draw(self.surface)
-    #             #self.new_game.mainloop(self.subsurface)
                 
 if __name__ == '__main__':
     pygame.init()

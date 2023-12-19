@@ -7,7 +7,7 @@ from config import *
 from graphic.interface import Interface
 from graphic.cameraController import CameraController
 from graphic.eventController import EventController
-from graphic.test_menu import GameMenu
+from graphic.game_menu import GameMenu
 
 from logic.game import Game
 
