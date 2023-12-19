@@ -97,7 +97,6 @@ class GameMenu(pygame.Surface):
         """
         Print data of the menu.
         """
-        print('Settings data:')
         data = self.new_game.get_input_data()
         Config.width_map = data['map_width']
         Config.height_map = data['map_height']

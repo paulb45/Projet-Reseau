@@ -76,7 +76,6 @@ class Bob():
     
     def reset_last_move(self):
         self.set_last_move([0,0])
-    
       
     def move(self) -> tuple:
         """Déplace Bob en choisissant aléatoirement une direction  
@@ -157,7 +156,7 @@ class Bob():
                 False sinon
                 ce retour sert dans game pour destroy target  
         """
-        if isinstance(target, Bob) and target.get_mass() / self.get_mass() < 2 / 3:
+        if target.get_mass() / self.get_mass() < (2 / 3):
             E_gain = 0.5 * target.get_E() * (1 - (target.get_E() / self.get_E()))
             self.set_E(self.get_E() + E_gain)
             return True

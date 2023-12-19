@@ -32,7 +32,6 @@ class Game():
             self.grid.map[pos].append(Food())
 
     def bob_play_tick(self, bob: Bob, pos=None):
-        has_moved=False
         if pos == None:
             pos = self.grid.get_position(bob)
         if bob.get_E() == Bob.get_Emax():
@@ -43,7 +42,6 @@ class Game():
             
         else:
             mouv = bob.move()
-            has_moved=True
             new_pos = pos[0] + mouv[0], pos[1] + mouv[1]
             if self.grid.is_pos_in_map(new_pos):
                 self.grid.map[new_pos].append(bob)
@@ -54,23 +52,14 @@ class Game():
                         self.grid.destroy_object(food, new_pos)
                 if bob.is_dead():
                     self.grid.destroy_object(bob, new_pos)
+                else:
+                    bobs=self.grid.bobs_in_case(new_pos)
+                    for target in bobs :
+                        if bob.attack(target):
+                            self.grid.destroy_object(target,new_pos)
+                            break
             else: self.grid.destroy_object(bob, pos)
-            
-            
-        coords=pos if not has_moved else new_pos
-        bobs=self.grid.bobs_in_case(coords)
-        
-        if bobs is not None and bobs:
-            for target in bobs :
-                attacked= bob.attack(target)
-                if attacked:
-                    print("attack")
-                    self.grid.destroy_object(target,coords)
-                    pass
-        
-            
-            
-              
+
     def reset_bobs_last_move(self):
         bobs_map = self.grid.get_all_bobs()
         for _, bobs in bobs_map.items():
@@ -88,10 +77,6 @@ class Game():
             self.bobs_play_tick()
                 
     def day_play(self):
-        """chaque jour d=100 ticks
-           chaque jours f=200 points de nourriture
-           Ef=100 energie de la nourriture
-        """
         self.reset_bobs_last_move()
         self.bobs_play_day()
         self.grid.destroy_all_foods()
