@@ -39,8 +39,8 @@ class GameMenu(pygame.Surface):
 
         self.main_menu.add.label('Evolutionnary game of life',font_size=self.myfontsize*2,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.vertical_margin(50)
-        self.main_menu.add.button('Nouvelle partie', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
-        self.main_menu.add.vertical_margin(10)
+        self.main_menu.add.button('SinglePlayer', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
+        self.main_menu.add.button('Multiplayer', self.new_game,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.add.button('Quitter', pygame.QUIT,align=pygame_menu.locals.ALIGN_CENTER)
         self.main_menu.draw(self.surface)
 
@@ -87,10 +87,11 @@ class GameMenu(pygame.Surface):
         # self.new_game.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
-        self.new_game.add.button('Quitter', pygame.QUIT)
         self.new_game.add.button('Jouer', self.change_game_is_on)
+        self.new_game.add.vertical_margin(10)
         self.new_game.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
         self.new_game.add.button('Retourner au menu principal', pygame_menu.events.BACK)
+        self.new_game.add.button('Quitter', pygame.QUIT)
         self.new_game.add.vertical_margin(10)
         
     def data_fun(self) -> None:
