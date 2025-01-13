@@ -7,4 +7,4 @@
  - shapely
 
 
-Toutes ces bibliothèques sont installable avec l'outil **pip**
+Toutes ces bibliothèques sont installable avec l'outil **pip**  
