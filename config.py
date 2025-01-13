@@ -56,3 +56,7 @@ class Config():
     interface_x_offset = interface_y_offset
     screen_size[0] += 2*interface_x_offset
     screen_size[1] += 2*interface_y_offset
+
+
+    # Variables pour le mode multijoueur
+    host_ip = "127.0.0.1"

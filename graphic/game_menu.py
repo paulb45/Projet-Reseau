@@ -93,26 +93,47 @@ class GameMenu(pygame.Surface):
         # self.new_game.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
-        self.new_game.add.button('Jouer', self.change_game_is_on)
+        self.new_game.add.button('Jouer', lambda : self.change_game_is_on("singleplayer"))
         self.new_game.add.vertical_margin(10)
         self.new_game.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
         self.new_game.add.button('Retourner au menu principal', pygame_menu.events.BACK)
         self.new_game.add.button('Quitter', pygame.QUIT)
         self.new_game.add.vertical_margin(10)
 
+        #Menu multi 
+        self.caracteristic_selector_host = pygame_menu.Menu('caracteristic_selector', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
+        self.caracteristic_selector_client = pygame_menu.Menu('caracteristic_selector', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
 
         #Menu pour choisir si on host ou pas :
-        self.host_or_client_menu.add.button("Hosting Game", self.create_caracteristic_selector(True), align=pygame_menu.locals.ALIGN_CENTER)
-        self.host_or_client_menu.add.button("Joining Game", self.create_caracteristic_selector(False), align=pygame_menu.locals.ALIGN_CENTER)
+        self.host_or_client_menu.add.button("Hosting Game", self.create_caracteristic_selector(self.caracteristic_selector_host, True))
+        self.host_or_client_menu.add.button("Joining Game", self.create_caracteristic_selector(self.caracteristic_selector_client, False))
         self.host_or_client_menu.add.button('Retour au menu principal', pygame_menu.events.BACK)
         
-    def data_fun(self) -> None:
+        
+
+    #Fonction pour récupérer les données sélectionnées dans les menus. 
+    #Arg : str "singleplayer" ou "multiplayer"
+    def data_fun(self, game_type) -> None:
         """
         Register game options
         """
-        data = self.new_game.get_input_data()
-        Config.width_map = data['map_width']
-        Config.height_map = data['map_height']
+        match game_type:
+            case "singleplayer":
+                data = self.new_game.get_input_data()
+                print("DATA SINGLEPLAYER : " + str(data))
+                Config.width_map = data['map_width']
+                Config.height_map = data['map_height']
+            case "multiplayer/hosting":
+                data = self.caracteristic_selector_host.get_input_data()
+                Config.width_map = data['map_width']
+                Config.height_map = data['map_height']
+                print("DATA MULTIPLAYER HOSTING : " + str(data))
+
+            case "multiplayer/joining":
+                data = self.caracteristic_selector_client.get_input_data()
+                print("DATA MULTIPLAYER JOINING : " + str(data))
+                Config.host_ip = data['host_ip']
+
         Config.P0 = data['population_bob']
         Config.quantity_food = data['daily_food']
         Config.energy_food = data['energy_to_mate']
@@ -122,9 +143,11 @@ class GameMenu(pygame.Surface):
         Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
         Config.screen_size[0] += 2*Config.interface_x_offset
         Config.screen_size[1] += 2*Config.interface_y_offset
+        print(data)
 
-    def change_game_is_on(self):
-        self.data_fun()
+    #gametype : soit singleplayer soit multiplayer
+    def change_game_is_on(self, game_type: str):
+        self.data_fun(game_type)
         if self.main_menu.get_current() == self.game_screen:
             pygame_menu.events.BACK
 
@@ -133,16 +156,18 @@ class GameMenu(pygame.Surface):
 
     #méthode pour récupérer le type de sélecteur de caractéristique en fonction du boolean hosting
     
-    def create_caracteristic_selector(self, hosting):
+    def create_caracteristic_selector(self, caracteristic_selector, hosting : bool):
         #MENU POUR CHOISIR LES CARACTERISTIQUE DE SA TRIBUT EN MULTIJOUEUR, AVEC UNE LIMITE DE CREDIT credit_max
-        caracteristic_selector = pygame_menu.Menu('caracteristic_selector', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
+
         caracteristic_selector.add.label('Credits : ' + str(self.credit_max))
         caracteristic_selector.add.vertical_margin(30)
         if hosting: #L'hote a la possibilité de changer la taille de la carte, contrairement aux clients. 
+            game_status = "hosting"
             caracteristic_selector.add.text_input('Largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
             caracteristic_selector.add.text_input('Hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
         else :
-            caracteristic_selector.add.text_input("IP de l'host :", default=str("127.0.0.1"),textinput_id='ip_host')
+            game_status = "joining"
+            caracteristic_selector.add.text_input("IP de l'host :", default=str("127.0.0.1"),textinput_id='host_ip')
         caracteristic_selector.add.text_input('Population de depart :', default=str(pop_init),textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
         caracteristic_selector.add.text_input('Nouriture par jour :', default='100',textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
         caracteristic_selector.add.text_input('Mouvement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
@@ -153,7 +178,7 @@ class GameMenu(pygame.Surface):
         # caracteristic_selector.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         # caracteristic_selector.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         caracteristic_selector.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
-        caracteristic_selector.add.button('Jouer', self.change_game_is_on)
+        caracteristic_selector.add.button('Jouer', lambda : self.change_game_is_on("multiplayer/" + game_status))
         caracteristic_selector.add.vertical_margin(10)
         caracteristic_selector.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
         caracteristic_selector.add.button('Retour', pygame_menu.events.BACK)
@@ -185,3 +210,4 @@ if __name__ == '__main__':
 
         pygame.display.flip()
         pygame.display.update()
+        
