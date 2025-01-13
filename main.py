@@ -5,6 +5,8 @@ from graphic.mainSurface import MainSurface
 from config import *
 from logic.game import Game
 
+from socket_broadcast import send_grid
+
 # initialisation de la fenetre principale
 window = MainSurface()
 
@@ -18,6 +20,8 @@ game = Game()
 
 while True:
     grid_copy = deepcopy(game.grid)
+
+    send_grid(grid_copy)
 
     logic_thread = threading.Thread(target=game.day_play)
 
