@@ -4,10 +4,9 @@
 #include <unistd.h>
 
 void traiter_message(const char *message) {
-    // Décoder le message du format "DEPLACE|x_source,y_source|x_dest,y_dest"
     int x_source, y_source, x_dest, y_dest;
     
-    // Extraire les coordonnées à partir du message
+    // Extraire les coordonnées du message
     if(sscanf(message, "DEPLACE|%d,%d|%d,%d", &x_source, &y_source, &x_dest, &y_dest)){
         printf("Déplacement demandé: Source(%d, %d) -> Destination(%d, %d)\n", x_source, y_source, x_dest, y_dest);
     } else {
@@ -19,15 +18,12 @@ void traiter_message(const char *message) {
 int main() {
     char buffer[256];
 
-    // Lire les messages depuis stdin
+    // Lire les messages
     while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-        // Supprimer le caractère de nouvelle ligne s'il existe
         buffer[strcspn(buffer, "\n")] = '\0';
 
-        // Afficher le message reçu
         printf("Message reçu: %s\n", buffer);
 
-        // Traiter le message
         traiter_message(buffer);
     }
 

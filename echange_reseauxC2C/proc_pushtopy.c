@@ -31,8 +31,7 @@ int main() {
         close(sockfd);
         exit(EXIT_FAILURE);
     }
-
-    // Supprimer le caractère de nouvelle ligne à la fin du message
+    
     buffer[strcspn(buffer, "\n")] = '\0';
 
     // Envoi du message à Python
