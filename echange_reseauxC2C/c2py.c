@@ -9,34 +9,23 @@
 //                      Emmission du message au receiver en pyhton
 // ====================================================================================================
 
-#define PORT 55006
+#define PORT 55005 // Port sur lequel python écoute
 #define DEST_IP "127.0.0.1"  
-#define BROADCAST_PORT 12345  // Le port sur lequel écouter les broadcasts
+#define BROADCAST_PORT 50002  // Le port sur lequel écouter les broadcasts
 #define MAX_BUF_SIZE 50
 
 int main() {
 
-    //Init du socket de transmission à Python
-    int socket_topy;
-    struct sockaddr_in py_addr;
-
-    //Init du socket de réception depuis le broadcast
-    int sockfd;
-    struct sockaddr_in listen_addr;
+    //Init du socket 
+    int socket_c2py;
+    struct sockaddr_in py_addr,bind_addr,from_addr;
     char message[MAX_BUF_SIZE];
-    socklen_t listen_addr_len = sizeof(listen_addr);
+    socklen_t from_len = sizeof(from_addr);
 
-    // Création du socket UDP de transmission à Python
-    socket_topy = socket(AF_INET, SOCK_DGRAM, 0);
-    if (socket_topy < 0) {
+    // Création du socket UDP 
+    socket_c2py = socket(AF_INET, SOCK_DGRAM, 0);
+    if (socket_c2py < 0) {
         perror("Erreur de création du socket de transmission à Python");
-        exit(EXIT_FAILURE);
-    }
-
-    // Création du socket UDP de réception
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd < 0) {
-        perror("Erreur lors de la création du socket de réception");
         exit(EXIT_FAILURE);
     }
 
@@ -46,55 +35,55 @@ int main() {
     py_addr.sin_port = htons(PORT);             // Port de destination
     py_addr.sin_addr.s_addr = inet_addr(DEST_IP); // Adresse IP de Python
 
-     // Autoriser la réception des broadcasts
+    // Autoriser la réception des broadcasts
     int broadcast = 1;
-    if (setsockopt(sockfd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) < 0) {
+    if (setsockopt(socket_c2py, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) < 0) {
         perror("Erreur lors de la configuration de l'option SO_BROADCAST");
-        close(sockfd);
+        close(socket_c2py);
         exit(EXIT_FAILURE);
     }
 
-    // Configuration de l'adresse du socket de réception
-    memset(&listen_addr, 0, sizeof(listen_addr));
-    listen_addr.sin_family = AF_INET;
-    listen_addr.sin_port = htons(BROADCAST_PORT);
-    listen_addr.sin_addr.s_addr = INADDR_ANY;  
+    // Configuration de l'adresse d'écoute
+    memset(&bind_addr, 0, sizeof(bind_addr));
+    bind_addr.sin_family = AF_INET;
+    bind_addr.sin_port = htons(BROADCAST_PORT); // Port d'écoute BROADCAST_PORT
+    bind_addr.sin_addr.s_addr = INADDR_ANY;  
 
     // Lier le socket à l'adresse et au port spécifiés
-    if (bind(sockfd, (struct sockaddr *)&listen_addr, sizeof(listen_addr)) < 0) {
+    if (bind(socket_c2py, (struct sockaddr *)&bind_addr, sizeof(bind_addr)) < 0) {
         perror("Erreur lors de la liaison du socket de réception");
-        close(sockfd);
+        close(socket_c2py);
         exit(EXIT_FAILURE);
     }
 
-    printf("En attente de messages broadcast sur le port %d...\n", BROADCAST_PORT);
+    printf("En attente de messages broadcast depuis %d...\n", ntohs(bind_addr.sin_port));
 
 
     while(1){
         
         // Ecouter les messages broadcast
-        ssize_t len = recvfrom(sockfd, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&listen_addr, &listen_addr_len);
+        ssize_t len = recvfrom(socket_c2py, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&from_addr, &from_len);
         if (len < 0) {
             perror("Erreur lors de la réception des données");
-            close(sockfd);
+            close(socket_c2py);
             exit(EXIT_FAILURE);
         }
+        printf("Message reçu de %s:%d\n", inet_ntoa(from_addr.sin_addr), ntohs(from_addr.sin_port));
 
-        printf("Message reçu: %s\n", message);
+        printf("Message: %s\n", message);
 
         // Envoi du message à Python
-        ssize_t sent_bytes = sendto(socket_topy, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&py_addr, sizeof(py_addr));
+        ssize_t sent_bytes = sendto(socket_c2py, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&py_addr, sizeof(py_addr));
         if (sent_bytes == -1) {
             perror("Erreur lors de l'envoi du message");
-            close(socket_topy);
+            close(socket_c2py);
             exit(EXIT_FAILURE);
         }
 
-        printf("Message envoyé : %s\n", message);
+        printf("Message envoyé à python %s:%d\n", inet_ntoa(py_addr.sin_addr), ntohs(py_addr.sin_port));
     }
 
-    close(socket_topy);
-    close(sockfd);
+    close(socket_c2py);
 
     return 0;
 }
