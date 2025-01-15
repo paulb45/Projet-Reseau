@@ -10,6 +10,7 @@ def texttotuple(input_str):
     return tuple(map(int, input_str.split(',')))
 
 def startlisten(IP="127.0.0.1",port=55005):
+    #opens a socket to listen to the C process
     UDP_IP =  IP
     UDP_PORT = port
 
@@ -18,9 +19,11 @@ def startlisten(IP="127.0.0.1",port=55005):
     sock.bind((UDP_IP, UDP_PORT))
 
     boolstop=True
+    #the while loop analyses the messages as they arrive if a message matches the protocol adds an acction to the action buffer
     while boolstop:
         data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
         data=data.decode('ascii')
+        #socket messages arrive encoded in ASCII they are decoded for ease of use
         if data == 'STOP':
             boolstop=False
         elif data.startswith('DEPLACE'):
@@ -39,4 +42,5 @@ def startlisten(IP="127.0.0.1",port=55005):
     sock.close()
     #print("ended successfuly")
     
-startlisten()
+if __name__ =='__main__':
+    startlisten()
