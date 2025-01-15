@@ -44,8 +44,6 @@ int main() {
             exit(EXIT_FAILURE);
         }
 
-        buffer[n] = '\0';
-
         printf("Message reçu de %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
         printf("Message reçu: %s\n", buffer);
