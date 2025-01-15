@@ -70,7 +70,8 @@ class Game():
         bobs_map = self.grid.get_all_bobs()
         for pos, bobs in bobs_map.items():
             for bob in bobs:
-                self.bob_play_tick(bob, pos)
+                if (bob.is_local()):
+                    self.bob_play_tick(bob, pos)
                 
     def day_play(self):
         self.reset_bobs_last_move()
