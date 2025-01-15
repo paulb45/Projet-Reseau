@@ -1,4 +1,6 @@
 import socket
+import re
+
 from action_buffer  import ActionBuffer
 
 def splitwithpipe(input_str,i):
@@ -9,11 +11,19 @@ def texttotuple(input_str):
     #turns text into a tuple useful for getting slime adress in a usable format
     return tuple(map(int, input_str.split(',')))
 
+def checkpattern(stringtocheck,pattern):
+    #checks if the string matches the input pattern and returns bool 
+    print(pattern)
+    print(stringtocheck)
+    if re.fullmatch(pattern, stringtocheck):
+        return True
+    else: return False
+
 def startlisten(IP="127.0.0.1",port=55005):
     #opens a socket to listen to the C process
     UDP_IP =  IP
     UDP_PORT = port
-
+    Deplace_pattern = r"^\d+,\d+\|\d+,\d+$"
     sock = socket.socket(socket.AF_INET, # Internet
                       socket.SOCK_DGRAM) # UDP
     sock.bind((UDP_IP, UDP_PORT))
@@ -28,16 +38,17 @@ def startlisten(IP="127.0.0.1",port=55005):
             boolstop=False
         elif data.startswith('DEPLACE'):
             data=data[8:]
-            #print("received message: %s" % data)
-            lastpostion=splitwithpipe(data,0)
-            #print(lastpostion)
-            lastpostion=texttotuple(lastpostion)
-            #print(lastpostion)
-            nextposition=splitwithpipe(data,1)
-            #print(nextposition)
-            nextposition=texttotuple(nextposition)
-            #print(nextposition)
-            ActionBuffer.add_move(lastpostion,nextposition)
+            if checkpattern(data,Deplace_pattern):
+                #print("received message: %s" % data)
+                lastpostion=splitwithpipe(data,0)
+                #print(lastpostion)
+                lastpostion=texttotuple(lastpostion)
+                #print(lastpostion)
+                nextposition=splitwithpipe(data,1)
+                #print(nextposition)
+                nextposition=texttotuple(nextposition)
+                #print(nextposition)
+                ActionBuffer.add_move(lastpostion,nextposition)
 
     sock.close()
     #print("ended successfuly")
