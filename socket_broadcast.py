@@ -32,4 +32,5 @@ def send_info_to_C (portnum=55005, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
     sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
-send_info_to_C(55005,b'DEPLACE|10,10|12,12')
+if __name__ =='__main__':
+    send_info_to_C(55005,b'DEPLACE|10,10|12,12')
