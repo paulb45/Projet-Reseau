@@ -121,6 +121,11 @@ Un message de disparition aura la structure suivante :
 |---------------|---------|---------|
 |      `RNP`    |    x    |    y    |
 
+#### Annonce de déconnexion
+| Type d'action | id joueur |
+|---------------|-----------|
+|      `DEC`    |     id    | 
+
 ---
 
 #### **Connexion d'un joueur**
@@ -133,4 +138,12 @@ Le protocole pour rejoindre une partie en cours est le suivant :
 
 #### **Déconnexion d'un joueur**
 
-A DEFINIR
+Cas 1 - déconnexion propre :
+1. Le joueur envoie un message de déconnexion
+
+Cas 2 - déconnexion non propre :
+1. Un joueur demande une propriété d'un joueur déconnecté de façon non propre
+2. Au bout de 3 demande sans réponse (5s d'attente après la 3ème demande), il envoie un message pour annoncer la deconnexion du joueur
+
+
+A noter : Dès qu'une personne demande la propriété réseau d'une personne deconnecté, il fait deux demande en broadcast et si personne ne répond, il s'approprit la propriété réseau. 
