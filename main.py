@@ -5,7 +5,7 @@ from graphic.mainSurface import MainSurface
 from config import *
 from logic.game import Game
 
-from socket_broadcast import send_grid
+from pytoc_sender import send_grid
 from socket_listen import startlisten
 from action_buffer import ActionBuffer
 
