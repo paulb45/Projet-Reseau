@@ -27,6 +27,9 @@ def send_info_to_C (portnum=55005, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
  
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
     sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
-
-send_info_to_C(55005,b'DEPLACE|x1,y1|x2,y2 \0')
+send_info_to_C(55005,b'DEPLACE|10,10|12,12')
