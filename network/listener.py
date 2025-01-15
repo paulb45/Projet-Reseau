@@ -1,7 +1,7 @@
 import socket
 import re
 
-from action_buffer  import ActionBuffer
+from network.action_buffer  import ActionBuffer
 
 def splitwithpipe(input_str,i):
     #splits text along the pipe use i=0 for first half i=1 for second half
