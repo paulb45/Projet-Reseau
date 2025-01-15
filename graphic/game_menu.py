@@ -88,7 +88,7 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('Mouvement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Vision de bob :', default='1',textinput_id='vision_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Masse de bob :', default='1',textinput_id='mass_bob',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('Energie de la nourriture :', default=str(init_energy_food),textinput_id='energy_to_mate',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Energie de la nourriture :', default=str(init_energy_food),textinput_id='energy_food',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Energy des parent apres reproduction :', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
@@ -136,7 +136,7 @@ class GameMenu(pygame.Surface):
 
         Config.P0 = data['population_bob']
         Config.quantity_food = data['daily_food']
-        Config.energy_food = data['energy_to_mate']
+        Config.energy_food = data['energy_food']
         Config.bob_speed = data['movement_bob']
         Config.move_with_cursor = data['move_with_mouse']
         # Variables d'interface
@@ -144,6 +144,43 @@ class GameMenu(pygame.Surface):
         Config.screen_size[0] += 2*Config.interface_x_offset
         Config.screen_size[1] += 2*Config.interface_y_offset
         print(data)
+
+    #Méthode qui wrap la méthode change_game_is_on et dont le but est de checker si les valeurs des sliders dépassent le seuil autorisé. 
+    def check_and_change_game_is_on(self, game_type: str):
+        if game_type == "multiplayer/hosting":
+            sliders = {
+            'population_bob': self.caracteristic_selector_host.get_widget('population_bob'),
+            'daily_food': self.caracteristic_selector_host.get_widget('daily_food'),
+            'movement_bob': self.caracteristic_selector_host.get_widget('movement_bob'),
+            'masse_slider': self.caracteristic_selector_host.get_widget('masse_slider'),
+            'energy_food': self.caracteristic_selector_host.get_widget('energy_food')
+            }
+            selector = self.caracteristic_selector_host
+
+        else :
+            sliders = {
+            'population_bob': self.caracteristic_selector_client.get_widget('population_bob'),
+            'daily_food': self.caracteristic_selector_client.get_widget('daily_food'),
+            'movement_bob': self.caracteristic_selector_client.get_widget('movement_bob'),
+            'masse_slider': self.caracteristic_selector_client.get_widget('masse_slider'),
+            'energy_food': self.caracteristic_selector_client.get_widget('energy_food')
+            }
+            selector = self.caracteristic_selector_client
+       
+        total = sum(int(slider.get_value()) for slider in sliders.values())
+        if not (total <= self.credit_max):
+            print("ERREUR : Le crédit maximal autorisé est dépassé")
+            selector.add.label(
+                f"La somme des sliders ({total}) dépasse la limite ({self.credit_max}) !", 
+                font_size=20, 
+                margin=(0, 20),
+                selectable=False
+            )
+            return '' #peut-être mettre un retour d'erreur quand on aura une vrai gestion d'erreur.
+        else : 
+            print ("Credit max respecté")
+            self.change_game_is_on(game_type)
+
 
     #gametype : soit singleplayer soit multiplayer
     def change_game_is_on(self, game_type: str):
@@ -153,9 +190,7 @@ class GameMenu(pygame.Surface):
 
         self.game_is_on = not self.game_is_on
 
-
     #méthode pour récupérer le type de sélecteur de caractéristique en fonction du boolean hosting
-    
     def create_caracteristic_selector(self, caracteristic_selector, hosting : bool):
         #MENU POUR CHOISIR LES CARACTERISTIQUE DE SA TRIBUT EN MULTIJOUEUR, AVEC UNE LIMITE DE CREDIT credit_max
 
@@ -168,17 +203,58 @@ class GameMenu(pygame.Surface):
         else :
             game_status = "joining"
             caracteristic_selector.add.text_input("IP de l'host :", default=str("127.0.0.1"),textinput_id='host_ip')
-        caracteristic_selector.add.text_input('Population de depart :', default=str(pop_init),textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
-        caracteristic_selector.add.text_input('Nouriture par jour :', default='100',textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
-        caracteristic_selector.add.text_input('Mouvement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
-        # caracteristic_selector.add.text_input('Vision de bob :', default='1',textinput_id='vision_bob',input_type=pygame_menu.locals.INPUT_INT)
-        caracteristic_selector.add.text_input('Masse de bob :', default='1',textinput_id='mass_bob',input_type=pygame_menu.locals.INPUT_INT)
-        caracteristic_selector.add.text_input('Energie de la nourriture :', default=str(init_energy_food),textinput_id='energy_to_mate',input_type=pygame_menu.locals.INPUT_INT)
-        # caracteristic_selector.add.text_input('Energy des parent apres reproduction :', default='100',textinput_id='energy_after_mating',input_type=pygame_menu.locals.INPUT_INT)
-        # caracteristic_selector.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
-        # caracteristic_selector.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
+        caracteristic_selector.add.range_slider(
+        'Population de depart :',
+        rangeslider_id = 'population_bob',
+        default=20,
+        range_values= (1,100),
+        range_box_enabled= False,
+        increment=1,
+        onchange=lambda value: int(round(value)),
+        value_format=lambda x: str(int(round(x)))
+        )
+        caracteristic_selector.add.range_slider(
+        'Nourriture par jour :',
+        rangeslider_id = 'daily_food',
+        default=28,
+        range_values= (1,100),
+        range_box_enabled= False,
+        increment=1,
+        onchange=lambda value: int(round(value)),
+        value_format=lambda x: str(int(round(x)))
+        )
+        caracteristic_selector.add.range_slider(
+        'Mouvement des bobs :',
+        rangeslider_id = 'movement_bob',
+        default=1,
+        range_values= (1,100),
+        range_box_enabled= False,
+        increment=1,
+        onchange=lambda value: int(round(value)),
+        value_format=lambda x: str(int(round(x)))
+        )
+        caracteristic_selector.add.range_slider(
+        'Masse des bobs :',
+        rangeslider_id = 'masse_slider',
+        default=1,
+        range_values= (1,100),
+        range_box_enabled= False,
+        increment=1,
+        onchange=lambda value: int(round(value)),
+        value_format=lambda x: str(int(round(x)))
+        )
+        caracteristic_selector.add.range_slider(
+        'Energie de la nourriture :',
+        rangeslider_id = 'energy_food',
+        default=30,
+        range_values= (1,100),
+        range_box_enabled= False,
+        increment=1,
+        onchange=lambda value: int(round(value)),
+        value_format=lambda x: str(int(round(x)))
+        )
         caracteristic_selector.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
-        caracteristic_selector.add.button('Jouer', lambda : self.change_game_is_on("multiplayer/" + game_status))
+        caracteristic_selector.add.button('Jouer', lambda : self.check_and_change_game_is_on("multiplayer/" + game_status))
         caracteristic_selector.add.vertical_margin(10)
         caracteristic_selector.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
         caracteristic_selector.add.button('Retour', pygame_menu.events.BACK)
