@@ -66,15 +66,12 @@ class Game():
             for bob in bobs:
                 bob.reset_last_move()
 
-    def bobs_play_tick(self):
+    def bobs_play_day(self):
         bobs_map = self.grid.get_all_bobs()
         for pos, bobs in bobs_map.items():
             for bob in bobs:
-                self.bob_play_tick(bob, pos)
-    
-    def bobs_play_day(self):
-        for _ in range(nb_ticks_day):
-            self.bobs_play_tick()
+                if (bob.is_local()):
+                    self.bob_play_tick(bob, pos)
                 
     def day_play(self):
         self.reset_bobs_last_move()

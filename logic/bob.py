@@ -11,11 +11,14 @@ class Bob():
     Echild=50
     
     
-    def __init__(self,E=Emax//2, speed=0, mass=0, memory=0, perception=0):
+    def __init__(self,E=Emax//2, speed=0, mass=0, memory=0, perception=0, local=True):
         self.E=E
         self.apply_stats(speed, mass, memory, perception)
         self.last_move=[0,0]
         self.speed_buff = 0.0
+
+        # true si le bob provient de cette instance du jeu, false sinon
+        self.local = local
         
     
     """ Getters """
@@ -38,6 +41,8 @@ class Bob():
     @classmethod
     def get_Echild(cls):
         return cls.Echild
+    def is_local(self):
+        return self.local
     
     """ Setters """
     def set_speed(self,spd):
