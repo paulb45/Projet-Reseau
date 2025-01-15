@@ -21,7 +21,6 @@ music_path ="music/"
 assets_path = "assets/"
 
 # Variables pour les sprites
-sprite_path = "sprites/"
 tileset_x_offset, tileset_y_offset = 0, 0
 pos_x_tile, pos_y_tile = 2,2
 tile_size = 32
@@ -60,3 +59,9 @@ class Config():
 
     # Variables pour le mode multijoueur
     host_ip = "127.0.0.1"
+
+    #Variable pour le choix du sprite
+    sprite_path = "sprites/halloween/"
+    bob_sprite = "bob.png"
+    food_sprite = "food.png"
+    tileset_sprite = "Tileset.png"

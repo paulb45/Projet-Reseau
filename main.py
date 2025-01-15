@@ -5,9 +5,9 @@ from graphic.mainSurface import MainSurface
 from config import *
 from logic.game import Game
 
-from pytoc_sender import send_grid
-from socket_listen import startlisten
-from action_buffer import ActionBuffer
+from network.pytoc_sender import send_grid
+from network.listener import startlisten
+from network.action_buffer import ActionBuffer
 
 # initialisation de la fenetre principale
 window = MainSurface()
