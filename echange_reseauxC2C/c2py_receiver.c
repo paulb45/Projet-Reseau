@@ -4,6 +4,11 @@
 #include <arpa/inet.h>  // Pour la gestion des adresses réseau
 #include <unistd.h>     // Pour la fonction close()
 
+// ====================================================================================================
+//     Programme pour Emmettre un message provenant de C broadcast (d'une autre machine théoriquement)
+//                      Emmission du message au receiver en pyhton
+// ====================================================================================================
+
 #define PORT 55006
 #define DEST_IP "127.0.0.1"  
 #define BROADCAST_PORT 12345  // Le port sur lequel écouter les broadcasts

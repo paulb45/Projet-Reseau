@@ -3,7 +3,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-
+// =========================================================================================
+//                Programme pour réceptionner un message provenant de python
+//     Emmission du message en broadcast au receiver en C (autre machine théoriquement)
+// =========================================================================================
 #define PORT 55005 //Port sur lequel Python envoie les informations
 #define BROADCAST_PORT 12345  // Le port sur lequel envoyer les broadcasts
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
