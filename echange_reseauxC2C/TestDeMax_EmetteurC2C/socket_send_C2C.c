@@ -7,7 +7,7 @@
 
 #define BROADCAST_PORT 12345  // Le port sur lequel envoyer les broadcasts
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
-#define MAX_BUF_SIZE 1024
+#define MAX_BUF_SIZE 50
 
 int main(int ac, char **av) {
     int sockfd;
