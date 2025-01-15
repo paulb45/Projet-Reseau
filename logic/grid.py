@@ -93,3 +93,21 @@ class Grid():
         else:
             return []  # or handle the case when coord is not in self.map
 
+    def add_bob(self, pos : tuple, bob):
+        """Ajouter un Bob déjà crée à la grille
+
+        Args:
+            pos (tuple): tuble de la position du bob
+            bob (Bob): bob à ajouter
+        """
+        self.map[pos].append(bob)
+
+    def fusion(self, grid : defaultdict):
+        """Fusionner une grille avec celle-ci
+
+        Args:
+            grid (defaultdict): grille à fusionner
+        """
+        for pos, items in grid.map.items():
+            self.map[pos].extend(items)
+
