@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 
 #define BROADCAST_PORT 12345  // Le port sur lequel écouter les broadcasts
-#define MAX_BUF_SIZE 1024
+#define MAX_BUF_SIZE 50
 
 int main() {
     int sockfd;

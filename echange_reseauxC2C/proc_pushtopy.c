@@ -25,24 +25,26 @@ int main() {
     server_addr.sin_port = htons(PORT);             // Port de destination
     server_addr.sin_addr.s_addr = inet_addr(DEST_IP); // Adresse IP du serveur
 
-    printf("Entrez le message à envoyer : ");
-    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
-        perror("Erreur de lecture depuis stdin");
-        close(sockfd);
-        exit(EXIT_FAILURE);
-    }
-    
-    buffer[strcspn(buffer, "\n")] = '\0';
+    while(1){
+        printf("Entrez le message à envoyer : ");
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+            perror("Erreur de lecture depuis stdin");
+            close(sockfd);
+            exit(EXIT_FAILURE);
+        }
+        
+        buffer[strcspn(buffer, "\n")] = '\0';
 
-    // Envoi du message à Python
-    ssize_t sent_bytes = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    if (sent_bytes == -1) {
-        perror("Erreur lors de l'envoi du message");
-        close(sockfd);
-        exit(EXIT_FAILURE);
-    }
+        // Envoi du message à Python
+        ssize_t sent_bytes = sendto(sockfd, buffer, strlen(buffer), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
+        if (sent_bytes == -1) {
+            perror("Erreur lors de l'envoi du message");
+            close(sockfd);
+            exit(EXIT_FAILURE);
+        }
 
-    printf("Message envoyé : %s\n", buffer);
+        printf("Message envoyé : %s\n", buffer);
+    }
 
     close(sockfd);
 

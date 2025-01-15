@@ -1,19 +1,31 @@
 from logic.bob import Bob
+from logic.grid import Grid
 
 class ActionBuffer:
-    buffer = {}
+    buffer = Grid()
 
     @staticmethod
     def get_buffer():
+        """Obtenir le contenu du buffer
+
+        Returns:
+            Grid: buffer d'une grille 
+        """
         temp = ActionBuffer.buffer
-        ActionBuffer.buffer = {}
+        ActionBuffer.buffer = Grid()
         return temp
 
     @staticmethod
     def add_move(p1, p2):
+        """Ajouter un déplacement d'un bob au buffer
+
+        Args:
+            p1 (tuple): position A
+            p2 (tuple): position B
+        """
         b = Bob()
         b.set_last_move(p1)
-        ActionBuffer.buffer[p2] = b 
+        ActionBuffer.buffer.add_bob(p2, b)
 
 
 if __name__ == '__main__':
