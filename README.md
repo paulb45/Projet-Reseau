@@ -93,15 +93,43 @@ Un message de disparition aura la structure suivante :
 |---------------|---------|---------|---------|
 |      `DSP`    |   id    |    x1   |    y1   |
 
+#### Annonce de nouveau joueur
+
+| Type d'action | id joueur |
+|---------------|-----------|
+|      `NEW`    |     id    |
+
+#### Utilisation d'un id
+
+| Type d'action |
+|---------------|
+|      `UID`    |
+
+#### Demande de propriété réseau
+
+| Type d'action | Coord x | Coord y |
+|---------------|---------|---------|
+|      `ANP`    |    x    |    y    |
+
+#### Céder une propriété réseau
+| Type d'action | id joueur | Coord x | Coord y | Type d'item1 | Energie1 | (Masse1) | (Mouvement1) | Type d'item2 | Energie2 |
+|---------------|-----------|---------|---------|--------------|----------|----------|--------------|--------------|----------|
+|      `GNP`    |     id    |    x    |    y    |     item1    |    E1    |    M1    |      M1      |     item2    |    E2    |
+
+#### Réfuser de céder une propriété réseau
+| Type d'action | Coord x | Coord y | 
+|---------------|---------|---------|
+|      `RNP`    |    x    |    y    |
+
 ---
 
 #### **Connexion d'un joueur**
 
 Le protocole pour rejoindre une partie en cours est le suivant :
 
-1. Le nouveau joueur envoie un id.
-2. Si personne n'a le même id, il envoie les stats de ses items (bob et nourriture).
-3. Le joueur place ses items.
+1. Le nouveau joueur envoie un id et attend 5s.
+1. 1. Si il reçoit un de non acceptation d'id (parce qu'un autre joueur utilise cet id), il refait 1.
+2. Le joueur place ses items.
 
 #### **Déconnexion d'un joueur**
 
