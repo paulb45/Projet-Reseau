@@ -96,6 +96,7 @@ class GameMenu(pygame.Surface):
         # self.new_game.add.text_input('Energie necessaire pour ce cloner :', default='200',textinput_id='energy_to_clone',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Energie du bob enfant :', default='100',textinput_id='bob_child_energy',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
+        self.new_game.add.selector('Skin :', self.skins, selector_id='theme_selector')
         self.new_game.add.button('Jouer', lambda : self.change_game_is_on("singleplayer"))
         self.new_game.add.vertical_margin(10)
         self.new_game.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)
