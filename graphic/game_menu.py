@@ -36,7 +36,10 @@ class GameMenu(pygame.Surface):
         #CONSTANT FOR MULTIPLAYER MENU :
         self.credit_max = 100
 
-
+        #CONSTANT FOR SKINS
+        #BUG : Le skin christmas n'apparait pas, je l'enlève et je le remettrais quand j'aurais trouvé le problème
+        #self.skins = [ ('default', ''), ('christmas', ''), ('pirate', ''), ('space', ''), ('halloween', '')]
+        self.skins = [ ('default', ''), ('pirate', ''), ('space', ''), ('halloween', '')]
         self.main_menu = pygame_menu.Menu('EVOlution',pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
         self.game_screen = pygame_menu.Menu('Gaming',pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme1)
         self.new_game = pygame_menu.Menu('New Game', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
@@ -133,7 +136,7 @@ class GameMenu(pygame.Surface):
                 data = self.caracteristic_selector_client.get_input_data()
                 print("DATA MULTIPLAYER JOINING : " + str(data))
                 Config.host_ip = data['host_ip']
-
+        Config.sprite_path = f"sprites/{data['theme_selector'][0][0]}/"
         Config.P0 = data['population_bob']
         Config.quantity_food = data['daily_food']
         Config.energy_food = data['energy_food']
@@ -254,6 +257,7 @@ class GameMenu(pygame.Surface):
         value_format=lambda x: str(int(round(x)))
         )
         caracteristic_selector.add.toggle_switch('Bouger avec la souris ? :', False, toggleswitch_id='move_with_mouse')
+        caracteristic_selector.add.selector('Skin :', self.skins, selector_id='theme_selector')
         caracteristic_selector.add.button('Jouer', lambda : self.check_and_change_game_is_on("multiplayer/" + game_status))
         caracteristic_selector.add.vertical_margin(10)
         caracteristic_selector.add.button("Restaurer les valeurs d'origine", self.new_game.reset_value)

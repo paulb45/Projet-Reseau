@@ -29,13 +29,14 @@ class Interface(pygame.Surface):
         """
             Charge les images nécessaires au jeu
         """
-        self.tileset = self.load_image('Tileset.png')
-        self.grass_tile = self.cut_in_image('Tileset.png', (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset))
+        self.tileset = self.load_image(Config.tileset_sprite)
+        self.grass_tile = self.cut_in_image(Config.tileset_sprite, (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset))
 
-        self.bob = self.load_sprite('bob.png')
+        self.bob = self.load_sprite(Config.bob_sprite)
         self.bob_with_border = self.load_sprite_with_halo(self.bob, 10)
-        self.apple = self.load_sprite('food.png')
-        self.apple = pygame.transform.scale_by(self.apple, 0.5)
+        self.apple = self.load_sprite(Config.food_sprite)
+        if Config.sprite_path == "sprites/default/": #HO HO HO ALERTE A LA DETTE TECHNIQUE 
+            self.apple = pygame.transform.scale_by(self.apple, 0.5)
     
     def scale_sprite(self, image: pygame.image) -> pygame.image:
         return pygame.transform.scale(image, (tile_size, int(tile_size * image.get_height() / image.get_width() )))
@@ -49,7 +50,7 @@ class Interface(pygame.Surface):
         if image_path in self._images:
             return self._images[image_path]
         try:
-            image = pygame.image.load(f"{sprite_path}{image_path}").convert_alpha()
+            image = pygame.image.load(f"{Config.sprite_path}{image_path}").convert_alpha()
             self._images[image_path] = image
             return image
         except pygame.error as e:
