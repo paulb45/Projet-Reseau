@@ -7,7 +7,7 @@
 //                Programme pour réceptionner un message provenant de python
 //     Emmission du message en broadcast au receiver en C (autre machine théoriquement)
 // =========================================================================================
-#define PORT 55006 //Port sur lequel Python envoie les informations
+#define PORT 55006 //Port sur lequel Python envoie les informations, port d'écoute
 #define LOCALHOST_ADDRESS "127.0.0.1" // addresse de reception du message de python
 #define BROADCAST_PORT 50002  // Le port sur lequel envoyer les broadcasts
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
