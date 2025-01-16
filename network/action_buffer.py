@@ -1,8 +1,36 @@
+from collections import defaultdict
+
 from logic.bob import Bob
 from logic.grid import Grid
 
+# class ActionBuffer:
+#     buffer = Grid()
+
+#     @staticmethod
+#     def get_buffer():
+#         """Obtenir le contenu du buffer
+
+#         Returns:
+#             Grid: buffer d'une grille 
+#         """
+#         temp = ActionBuffer.buffer
+#         ActionBuffer.buffer = Grid()
+#         return temp
+
+#     @staticmethod
+#     def add_move(p1, p2):
+#         """Ajouter un déplacement d'un bob au buffer
+
+#         Args:
+#             p1 (tuple): position A
+#             p2 (tuple): position B
+#         """
+#         b = Bob()
+#         b.set_last_move(p1)
+#         ActionBuffer.buffer.add_bob(p2, b)
+
 class ActionBuffer:
-    buffer = Grid()
+    buffer = defaultdict(lambda:[])
 
     @staticmethod
     def get_buffer():
@@ -12,7 +40,7 @@ class ActionBuffer:
             Grid: buffer d'une grille 
         """
         temp = ActionBuffer.buffer
-        ActionBuffer.buffer = Grid()
+        ActionBuffer.buffer = defaultdict(lambda:[])
         return temp
 
     @staticmethod
@@ -23,9 +51,7 @@ class ActionBuffer:
             p1 (tuple): position A
             p2 (tuple): position B
         """
-        b = Bob()
-        b.set_last_move(p1)
-        ActionBuffer.buffer.add_bob(p2, b)
+        ActionBuffer.buffer[p1].append(p2)
 
 
 if __name__ == '__main__':

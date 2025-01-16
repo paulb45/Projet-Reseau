@@ -1,15 +1,26 @@
+import sys, os
+from threading import Thread
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from config import *
+
 from logic.bob import Bob
 from logic.food import Food
 from logic.grid import Grid
-import sys, os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from config import *
+
+from network.listener import startlisten
+from network.action_buffer import ActionBuffer
+from network.pytoc_sender import send_bob
 
 class Game():
     def __init__(self):
         self.grid=Grid()
         self.init_bobs()
         self.spawn_food()
+
+        if True: # TODO si on est en solo / multi ?
+            # Initialisation de l'écoute réseau
+            self.network_thread = Thread(target=startlisten)
+            self.network_thread.start()
         
     
     def init_bobs(self):
@@ -67,11 +78,32 @@ class Game():
                 bob.reset_last_move()
 
     def bobs_play_day(self):
+        network_map = ActionBuffer.get_buffer()
         bobs_map = self.grid.get_all_bobs()
         for pos, bobs in bobs_map.items():
             for bob in bobs:
-                if (bob.is_local()):
+                if bob.is_local():
                     self.bob_play_tick(bob, pos)
+                    send_bob(pos, bob)
+                
+                # Partie bob non local
+                elif pos in network_map: # TODO partie à revoir avec la notion d'identifiant
+                    pos2 = network_map[pos][0]
+                    bob.set_last_move((pos[0] - pos2[0], pos[1] - pos2[1]))
+                    self.grid.map[pos2].append(bob)
+                    self.grid.destroy_object(bob, pos)
+                    network_map[pos].pop(0)
+
+                # Bob qui n'existe plus ?
+                else:
+                    self.grid.destroy_object(bob, pos)
+
+        # Bob non local et non présent dans la grille
+        for pos in network_map:
+            for pos2 in network_map[pos]:
+                bob.set_last_move((pos[0] - pos2[0], pos[1] - pos2[1]))
+                self.grid.map[pos2].append(bob)
+
                 
     def day_play(self):
         self.reset_bobs_last_move()
