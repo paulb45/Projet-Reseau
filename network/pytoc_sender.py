@@ -28,9 +28,8 @@ def send_bob(pos, bob):
         bob (Bob): bob à envoyer
     """
     x1, y1 = [a+b for a,b in zip(pos, bob.get_last_move())]
-    id = '000000000000000'
     # DPL	id	x1	y1	x2	y2
-    s = f"DPL{id}{x1:4}{y1:}{pos[0]:4}{pos[1]:4}"
+    s = f"DPL{bob.get_id():15}{x1:4}{y1:}{pos[0]:4}{pos[1]:4}"
     #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
     send_info_to_C(MSG=s.encode('ascii'))
 

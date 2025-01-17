@@ -13,8 +13,8 @@ class Bob(Item):
     Echild=50
     
     
-    def __init__(self,E=Emax//2, speed=0, mass=0, memory=0, perception=0, local=True, player_id=0):
-        super().__init__(local_item=local, player_id=player_id)
+    def __init__(self,E=Emax//2, speed=0, mass=0, memory=0, perception=0, local=True, player_id=0, bob_id=0):
+        super().__init__(local_item=local, player_id=player_id, item_id=bob_id)
         self.E=E
         self.apply_stats(speed, mass, memory, perception)
         self.last_move=[0,0]
