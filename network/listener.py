@@ -52,18 +52,18 @@ def startlisten(IP="127.0.0.1",port=55005):
     boolstop=True
     #the while loop analyses the messages as they arrive if a message matches the protocol adds an acction to the action buffer
     while boolstop:
-        print("inloop")
+        #print("inloop")
         data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
-        print(data)
+        #print(data)
         data=data.decode('ascii')
-        print(data)
+        #print(data)
         #socket messages arrive encoded in ASCII they are decoded for ease of use
         #check if sender wants to stop probably not useful but I don't like infinite loops
         if data == 'STOP':
             boolstop=False
         #test if the sender wants to perform a DPL action
         elif data.startswith("DPL"): 
-            print("startswith works")
+            #print("startswith works")
             data=data[3:] #degage l'entete action
             #print("received message: %s" % data)
             id=readidfromtext(data)
@@ -71,10 +71,10 @@ def startlisten(IP="127.0.0.1",port=55005):
             #print("id = %i ",id)
             lastpostion=readpositionfromtext(data)
             data=data[8:]# degage les données 
-            print(f"lastposition =  {lastpostion}") # might be usefull for further testing
+            #print(f"lastposition =  {lastpostion}") # might be usefull for further testing
             nextposition=readpositionfromtext(data)
             data=data[8:]# degage les données
-            print(f"nextposition = {nextposition}") # might be usefull for further testing
+            #print(f"nextposition = {nextposition}") # might be usefull for further testing
             ActionBuffer.add_move(lastpostion,nextposition)
             #ActionBuffer.add_move(id,lastpostion,nextposition) id n'est pas pris en compte pour l'instant
             
