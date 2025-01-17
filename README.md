@@ -5,6 +5,7 @@
 - `pygame_menu`
 - `numpy`
 - `shapely`
+- `TKinter`
 
 Toutes ces bibliothèques sont installables avec l'outil **pip**.
 
