@@ -20,6 +20,21 @@ def send_grid(grid):
                     s = f"DEPLACE|{x1:02},{y1:02}|{x2:02},{y2:02} \0"
                     send_info_to_C(MSG=s.encode('ascii'))
 
+
+def send_bob(pos, bob):
+    """Extraire le déplacement du bob pour l'envoyer
+    Args:
+        pos (tuple): tuple des coordonnées du bob
+        bob (Bob): bob à envoyer
+    """
+    x1, y1 = [a+b for a,b in zip(pos, bob.get_last_move())]
+    id = '0000000000'
+    # DPL	id	x1	y1	x2	y2
+    # s = f"DPL{id}{x1:5}{y1:5}{pos[0]:5}{pos[1]:5}"
+    s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
+    send_info_to_C(MSG=s.encode('ascii'))
+
+
 def turnmsg_dpl_tobinary(oldposition, newposition):
     oldx=str(format(oldposition[0],'b'))
     oldy=str(format(oldposition[1],'b'))
