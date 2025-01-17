@@ -10,6 +10,38 @@
 #define BROADCAST_PORT 50002  // Le port sur lequel écouter les broadcasts
 #define MAX_BUF_SIZE 50
 
+// Initialise et renvoie une socket UDP en IPv4
+int init_sck_c2py(){
+    int socket_c2py = socket(AF_INET, SOCK_DGRAM, 0);
+    if (socket_c2py < 0) {
+        perror("Erreur de création du socket de transmission à Python");
+        exit(EXIT_FAILURE);
+    }
+    return socket_c2py;
+}
+
+// Configuration de l'adresse de Python
+void init_py_addr(int sckfd, struct sockaddr_in *py_addr){
+    memset(py_addr, 0, sizeof(*py_addr));  // Initialiser à 0
+    py_addr->sin_family = AF_INET;               // Protocole IPv4
+    py_addr->sin_port = htons(PORT);             // Port de destination
+    py_addr->sin_addr.s_addr = inet_addr(DEST_IP); // Adresse IP de Python
+}
+
+// Activer l'option  SO_BROADCAST pour le socket
+void init_brd_sck(int sckfd);
+
+// Configuration de l'adresse de broadcast pour le socket
+void init_brd_addr(int sckfd, struct sockaddr_in *brd_addr);
+
+// Configuration de la taille du buffer de réception
+void init_buf_size(int sckfd);
+
+// Réception du message
+char* msg_receive(int sckfd, struct sockaddr_in *from_addr, socklen_t from_len);
+
+//Envoi du message
+void send_msg(int sckfd, char* message, struct sockaddr_in *brd_addr);
 int main() {
 
     //Init du socket 
@@ -19,11 +51,11 @@ int main() {
     socklen_t from_len = sizeof(from_addr);
 
     // Création du socket UDP 
-    socket_c2py = socket(AF_INET, SOCK_DGRAM, 0);
-    if (socket_c2py < 0) {
-        perror("Erreur de création du socket de transmission à Python");
-        exit(EXIT_FAILURE);
-    }
+    // socket_c2py = socket(AF_INET, SOCK_DGRAM, 0);
+    // if (socket_c2py < 0) {
+    //     perror("Erreur de création du socket de transmission à Python");
+    //     exit(EXIT_FAILURE);
+    // }
 
     // Configuration de l'adresse de Python
     memset(&py_addr, 0, sizeof(py_addr));  // Initialiser à 0

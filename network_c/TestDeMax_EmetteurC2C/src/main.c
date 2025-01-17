@@ -4,8 +4,8 @@
 #include <arpa/inet.h>  // Pour la gestion des adresses réseau
 #include <unistd.h>     // Pour la fonction close()
 
-#include "c2c.h"
-#include "c2py.h"
+#include "include/c2c.h"
+#include "include/c2py.h"
 
 int main()
 {
@@ -30,7 +30,8 @@ int main()
     while(1){
         // Réception du message (c2c)
         printf("En écoute d'un message python en UDP sur le port %d...\n", PORT);
-        char message[MAX_BUF_SIZE] = msg_receive(socket_c2c, &from_addr, from_len);
+        char message[MAX_BUF_SIZE];
+        *message = msg_receive(socket_c2c, &from_addr, from_len);
         //Envoi du message (c2c)
         send_msg(socket_c2c, message, &broadcast_addr);
         printf("(c2c) Message envoyé en Broadcast !");
