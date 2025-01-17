@@ -9,8 +9,9 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
 class Grid():
-    def __init__(self):
+    def __init__(self, player_id=0):
         self.map=defaultdict(lambda:[])
+        self.player_id = player_id
     
     def get_position(self,obj) -> tuple:
         """ la fonction get_position permet de donner la position dans la grille d'un objet passe en parametres
@@ -78,8 +79,8 @@ class Grid():
                 self.destroy_object(food, coord)
 
     def create_bob(self, pos: tuple, stats=None):
-        if stats == None: bob = logic.bob.Bob()
-        else: bob = logic.bob.Bob(*stats)
+        if stats == None: bob = logic.bob.Bob(player_id=self.player_id)
+        else: bob = logic.bob.Bob(*stats, player_id=self.player_id)
         self.map[pos].append(bob)
     
     def place_child(self, bob, pos: tuple):

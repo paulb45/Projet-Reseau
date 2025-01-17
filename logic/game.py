@@ -1,5 +1,6 @@
 import sys, os
 from threading import Thread
+from random import randint
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
@@ -13,15 +14,19 @@ from network.pytoc_sender import send_bob
 
 class Game():
     def __init__(self):
-        self.grid=Grid()
-        self.init_bobs()
-        self.spawn_food()
+        # TODO prévoir la cohérence en cas de deux id identiques
+        self.player_id = randint(0, 100000)
+
+        self.grid = Grid(player_id=self.player_id)
 
         if True: # TODO si on est en solo / multi ?
             # Initialisation de l'écoute réseau
             self.network_thread = Thread(target=startlisten)
             self.network_thread.start()
-        
+
+        self.init_bobs()
+        self.spawn_food()
+
     
     def init_bobs(self):
         """init bob
@@ -40,7 +45,7 @@ class Game():
         """
         for _ in range(Config.quantity_food):
             pos = self.grid.choose_random_tile()
-            self.grid.map[pos].append(Food())
+            self.grid.map[pos].append(Food(local=True, player_id=self.player_id))
 
     def bob_play_tick(self, bob: Bob, pos=None):
         if pos == None:
