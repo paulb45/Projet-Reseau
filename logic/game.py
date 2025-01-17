@@ -87,38 +87,44 @@ class Game():
                 bob.reset_last_move()
 
     def bobs_play_day(self):
-        network_map = ActionBuffer.get_buffer()
         bobs_map = self.grid.get_all_bobs()
         for pos, bobs in bobs_map.items():
             for bob in bobs:
                 if bob.is_local():
                     self.bob_play_tick(bob, pos)
                     send_bob(pos, bob)
-                
-                # Partie bob non local
-                elif pos in network_map: # TODO partie à revoir avec la notion d'identifiant
-                    pos2 = network_map[pos][0]
-                    bob.set_last_move((pos[0] - pos2[0], pos[1] - pos2[1]))
-                    self.grid.map[pos2].append(bob)
-                    self.grid.destroy_object(bob, pos)
-                    network_map[pos].pop(0)
-                    
-                    if network_map[pos] == []:
-                        del network_map[pos]
-                # Bob qui n'existe plus ?
+
+
+    def network_day(self):
+        """Toutes les actions sur le jeu pour les items du réseau
+        """
+        # Déplacement des Bobs
+        network_buffer = ActionBuffer.get_buffer()
+        for item_id, pos in network_buffer.items():
+            # vérifier si le bob n'est pas local
+            if self.player_id != int(item_id // 10**10):
+                info = self.grid.get_item_by_id(item_id)
+
+                # le Bob n'est pas connu en local
+                if info is None: 
+                    print(f"Création de Bob -> {item_id}")
+                    bob = Bob(local=False, bob_id=item_id)
+                    bob.set_last_move((pos[0][0] - pos[1][0], pos[0][1] - pos[1][1])) # TODO à vérif
+                    self.grid.map[pos[1]].append(bob)
+
+                # le Bob est connu en local
                 else:
-                    self.grid.destroy_object(bob, pos)
+                    local_pos, bob = info
+                    bob.set_last_move((local_pos[0] - pos[1][0], local_pos[1] - pos[1][1])) # TODO à vérif
+                    self.grid.map[pos[1]].append(bob)
+                    self.grid.destroy_object(bob, local_pos)
+                    
 
-        # Bob non local et non présent dans la grille
-        for pos in network_map:
-            for pos2 in network_map[pos]:
-                bob = Bob(local=False, bob_id='000000000000000') # TODO
-                bob.set_last_move((pos[0] - pos2[0], pos[1] - pos2[1]))
-                self.grid.map[pos2].append(bob)
-
-                
     def day_play(self):
         self.reset_bobs_last_move()
         self.bobs_play_day()
         self.grid.destroy_all_foods()
         self.spawn_food()
+
+        if not Config.singleplayer:
+            self.network_day()

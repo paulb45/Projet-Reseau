@@ -30,7 +30,7 @@ from logic.grid import Grid
 #         ActionBuffer.buffer.add_bob(p2, b)
 
 class ActionBuffer:
-    buffer = defaultdict(lambda:[])
+    buffer = {}
 
     @staticmethod
     def get_buffer():
@@ -40,18 +40,18 @@ class ActionBuffer:
             Grid: buffer d'une grille 
         """
         temp = ActionBuffer.buffer
-        ActionBuffer.buffer = defaultdict(lambda:[])
+        ActionBuffer.buffer = {}
         return temp
 
     @staticmethod
-    def add_move(p1, p2):
+    def add_move(p1, p2, bob_id):
         """Ajouter un déplacement d'un bob au buffer
 
         Args:
             p1 (tuple): position A
             p2 (tuple): position B
         """
-        ActionBuffer.buffer[p1].append(p2)
+        ActionBuffer.buffer[bob_id] = (p1, p2)
 
 
 if __name__ == '__main__':

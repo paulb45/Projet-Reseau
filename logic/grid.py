@@ -25,6 +25,20 @@ class Grid():
         """ Retourne la liste des objets à la clé (x, y), ou une liste vide s'il n'y a pas d'objet à cet endroit
         """
         return self.map[pos]
+
+    def get_item_by_id(self, item_id:int) -> tuple():
+        """Obtenir la position et l'item par rapport à un id
+
+        Args:
+            item_id (int): identifiant de l'objet
+
+        Returns:
+            tuple: (position, instance dans le jeu de l'item recherché)
+        """
+        for key, itms in self.map.items():
+            for itm in itms:
+                if itm.get_id() == item_id:
+                    return (key, itm)
     
     def has_object(self, obj, pos):
         for item in self.get_items(pos):
