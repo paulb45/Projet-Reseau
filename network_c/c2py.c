@@ -62,8 +62,8 @@ int main() {
     while(1){
         
         // Ecouter les messages broadcast
-        ssize_t len = recvfrom(socket_c2py, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&from_addr, &from_len);
-        if (len < 0) {
+        ssize_t n = recvfrom(socket_c2py, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&from_addr, &from_len);
+        if (n < 0) {
             perror("Erreur lors de la réception des données");
             close(socket_c2py);
             exit(EXIT_FAILURE);
@@ -73,7 +73,7 @@ int main() {
         printf("Message: %s\n", message);
 
         // Envoi du message à Python
-        ssize_t sent_bytes = sendto(socket_c2py, message, MAX_BUF_SIZE, 0, (struct sockaddr *)&py_addr, sizeof(py_addr));
+        ssize_t sent_bytes = sendto(socket_c2py, message, strlen(message), 0, (struct sockaddr *)&py_addr, sizeof(py_addr));
         if (sent_bytes == -1) {
             perror("Erreur lors de l'envoi du message");
             close(socket_c2py);
