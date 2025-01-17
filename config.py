@@ -22,8 +22,8 @@ assets_path = "assets/"
 
 # Variables pour les sprites
 tileset_x_offset, tileset_y_offset = 0, 0
-pos_x_tile, pos_y_tile = 2,2
-tile_size = 32
+pos_x_tile, pos_y_tile = 0,0
+tile_size = 64
 
 # activation ou non du déplacement avec le curseur de la souris sur les bords de la fenètre
 move_with_mouse = False
@@ -64,4 +64,4 @@ class Config():
     sprite_path = "sprites/halloween/"
     bob_sprite = "bob.png"
     food_sprite = "food.png"
-    tileset_sprite = "Tileset.png"
+    tileset_sprite = "tile.png"
