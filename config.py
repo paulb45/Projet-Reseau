@@ -59,6 +59,7 @@ class Config():
 
     # Variables pour le mode multijoueur
     host_ip = "127.0.0.1"
+    hosting = True
 
     #Variable pour le choix du sprite
     sprite_path = "sprites/halloween/"

@@ -127,16 +127,19 @@ class GameMenu(pygame.Surface):
                 print("DATA SINGLEPLAYER : " + str(data))
                 Config.width_map = data['map_width']
                 Config.height_map = data['map_height']
+                Config.hosting = True
             case "multiplayer/hosting":
                 data = self.caracteristic_selector_host.get_input_data()
                 Config.width_map = data['map_width']
                 Config.height_map = data['map_height']
+                Config.hosting = True
                 print("DATA MULTIPLAYER HOSTING : " + str(data))
 
             case "multiplayer/joining":
                 data = self.caracteristic_selector_client.get_input_data()
                 print("DATA MULTIPLAYER JOINING : " + str(data))
                 Config.host_ip = data['host_ip']
+                Config.hosting = False
         Config.sprite_path = f"sprites/{data['theme_selector'][0][0]}/"
         Config.P0 = data['population_bob']
         Config.quantity_food = data['daily_food']
