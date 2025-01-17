@@ -2,8 +2,11 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
-class Food():
+from logic.item import Item
+
+class Food(Item):
     def __init__(self,energy=Config.energy_food):
+        super().__init__()
         self.energy=energy
         
     """ GETTERS """

@@ -4,7 +4,9 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 
-class Bob():
+from logic.item import Item
+
+class Bob(Item):
     
     Emax=200
     Emother=150
@@ -12,6 +14,7 @@ class Bob():
     
     
     def __init__(self,E=Emax//2, speed=0, mass=0, memory=0, perception=0, local=True):
+        super().__init__()
         self.E=E
         self.apply_stats(speed, mass, memory, perception)
         self.last_move=[0,0]
