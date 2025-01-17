@@ -103,7 +103,9 @@ class Game():
                     self.grid.map[pos2].append(bob)
                     self.grid.destroy_object(bob, pos)
                     network_map[pos].pop(0)
-
+                    
+                    if network_map[pos] == []:
+                        del network_map[pos]
                 # Bob qui n'existe plus ?
                 else:
                     self.grid.destroy_object(bob, pos)
@@ -111,6 +113,7 @@ class Game():
         # Bob non local et non présent dans la grille
         for pos in network_map:
             for pos2 in network_map[pos]:
+                bob = Bob(local=False, bob_id='000000000000000') # TODO
                 bob.set_last_move((pos[0] - pos2[0], pos[1] - pos2[1]))
                 self.grid.map[pos2].append(bob)
 
