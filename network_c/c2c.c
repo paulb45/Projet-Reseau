@@ -11,7 +11,7 @@
 #define LOCALHOST_ADDRESS "127.0.0.1" // addresse de reception du message de python
 #define BROADCAST_PORT 50002  // Le port sur lequel envoyer les broadcasts
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
-#define MAX_BUF_SIZE 50  // Taille du message
+#define MAX_BUF_SIZE 100  // Taille du message
 
 int main() {
     //Init du socket de réception et d'émission
@@ -63,6 +63,16 @@ int main() {
         close(socket_c2c);
         exit(EXIT_FAILURE);
     }
+
+    // Configuration de la taille du buffer de réception
+    int max_buf_size;
+    setsockopt(socket_c2c, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int));
+    if (setsockopt(socket_c2c, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int)) == -1) {
+        perror("Problème de configuration de la taille du buffer de réception");
+        close(socket_c2c);
+        exit(EXIT_FAILURE);
+    }
+    //SO_SND définit la taille limite d'un datagram
 
     printf("En écoute d'un message python en UDP sur le port %d...\n", PORT);
 
