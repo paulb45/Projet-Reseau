@@ -11,6 +11,7 @@ from logic.grid import Grid
 from network.listener import startlisten
 from network.action_buffer import ActionBuffer
 from network.pytoc_sender import send_bob
+from network.network_property import Network_property
 
 class Game():
     def __init__(self):
@@ -26,6 +27,10 @@ class Game():
 
         self.init_bobs()
         self.spawn_food()
+
+        if Config.hosting : #Si on host, on doit setup toutes les cases des networks-property comme étant à nous.
+                Network_property.init_np_grid(self.grid)
+                print("network properties : " + str(Network_property.get_np_grid()))
 
     
     def init_bobs(self):

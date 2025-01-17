@@ -1,5 +1,7 @@
 from collections import defaultdict
-
+from logic.bob import Bob
+from logic.food import Food
+from config import Config
 #CONSTANTES :
 CASE_VIDE = 1
 BOB = 2
@@ -20,6 +22,25 @@ class Network_property:
     #network_property_grid : contient l'information d'appartenance des cases de la grilles. 
     np_grid = defaultdict(lambda: int())
 
+    @staticmethod
+    def init_np_grid(grid):
+        """Initialise np_grid when you host the game. All cases have to be initialized when hosting
+
+        Returns:
+            void
+        """
+        #Je vois pas d'autre moyen de parcourir toute la map pour l'initalisation au début malheuresement. 
+        for x in range(Config.height_map):
+            for y in range (Config.width_map):
+                if not grid.get_items((x,y)):
+                    #case vide
+                    Network_property.add_case(x,y)
+                elif isinstance(grid.map[x,y][0], Bob): 
+                    #Il y a un bob
+                    Network_property.add_bob(x, y, grid.get_items((x,y))[0].get_mass())
+                elif isinstance(grid.map[x,y][0], Food):
+                    #Il y a un food
+                    Network_property.add_food(x, y, grid.get_items((x,y))[0].get_energy())
     @staticmethod
     def get_np_grid():
         """Obtenir le contenu de np_grid
