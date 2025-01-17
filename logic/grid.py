@@ -33,10 +33,10 @@ class Grid():
         return False
         
     def has_bob(self, pos) -> bool:
-        return self.has_object(logic.bob.Bob(), pos)
+        return self.has_object(logic.bob.Bob(local=False), pos)
     
     def has_food(self, pos) -> bool:
-        return self.has_object(logic.food.Food(), pos)
+        return self.has_object(logic.food.Food(local=False), pos)
     
     def choose_random_tile(self):
         return random.randint(0, Config.width_map-1), random.randint(0, Config.height_map-1)
@@ -63,10 +63,10 @@ class Grid():
         return obj_dict
     
     def get_all_bobs(self):
-        return self.get_all_object_in_map(logic.bob.Bob())
+        return self.get_all_object_in_map(logic.bob.Bob(local=False))
     
     def get_all_foods(self):
-        return self.get_all_object_in_map(logic.food.Food())
+        return self.get_all_object_in_map(logic.food.Food(local=False))
     
     def is_pos_in_map(self, pos: tuple) -> bool:
         if 0<=pos[0]<=Config.width_map-1 and 0<=pos[1]<=Config.height_map-1:

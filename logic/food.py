@@ -5,8 +5,8 @@ from config import *
 from logic.item import Item
 
 class Food(Item):
-    def __init__(self, energy=Config.energy_food, local=True, player_id=0):
-        super().__init__(local_item=True, player_id=player_id)
+    def __init__(self, energy=Config.energy_food, local=True, player_id=0, food_id=0):
+        super().__init__(local_item=local, player_id=player_id, item_id=food_id)
         self.energy=energy
         
     """ GETTERS """
