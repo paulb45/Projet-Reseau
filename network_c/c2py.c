@@ -56,7 +56,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    printf("En attente de messages broadcast depuis %d...\n", ntohs(bind_addr.sin_port));
+    //printf("En attente de messages broadcast depuis %d...\n", ntohs(bind_addr.sin_port));
 
 
     while(1){
@@ -68,9 +68,9 @@ int main() {
             close(socket_c2py);
             exit(EXIT_FAILURE);
         }
-        printf("Message reçu de %s:%d\n", inet_ntoa(from_addr.sin_addr), ntohs(from_addr.sin_port));
+        //printf("Message reçu de %s:%d\n", inet_ntoa(from_addr.sin_addr), ntohs(from_addr.sin_port));
 
-        printf("Message: %s\n", message);
+        //printf("Message: %s\n", message);
 
         // Envoi du message à Python
         ssize_t sent_bytes = sendto(socket_c2py, message, strlen(message), 0, (struct sockaddr *)&py_addr, sizeof(py_addr));
@@ -80,7 +80,7 @@ int main() {
             exit(EXIT_FAILURE);
         }
 
-        printf("Message envoyé à python %s:%d\n", inet_ntoa(py_addr.sin_addr), ntohs(py_addr.sin_port));
+        //printf("Message envoyé à python %s:%d\n", inet_ntoa(py_addr.sin_addr), ntohs(py_addr.sin_port));
     }
 
     close(socket_c2py);

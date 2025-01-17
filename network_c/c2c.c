@@ -89,11 +89,11 @@ int main() {
             exit(EXIT_FAILURE);
         }
 
-        message[n] = '\0';
+        //message[n] = '\0';
 
-        printf("Message reçu de %s:%d\n", inet_ntoa(from_addr.sin_addr), ntohs(from_addr.sin_port));
+        //printf("Message reçu de %s:%d\n", inet_ntoa(from_addr.sin_addr), ntohs(from_addr.sin_port));
 
-        printf("Message: %s\n", message);
+        //printf("Message: %s\n", message);
 
         //Envoi du message
         ssize_t bytes_sent = sendto(socket_c2c, message, strlen(message), 0,(struct sockaddr *)&broadcast_addr, sizeof(broadcast_addr));
@@ -103,7 +103,7 @@ int main() {
             exit(EXIT_FAILURE);
         }
 
-        printf("Message envoyé en broadcast %s:%d\n", inet_ntoa(broadcast_addr.sin_addr), ntohs(broadcast_addr.sin_port));
+        //printf("Message envoyé en broadcast %s:%d\n", inet_ntoa(broadcast_addr.sin_addr), ntohs(broadcast_addr.sin_port));
 
 
 
