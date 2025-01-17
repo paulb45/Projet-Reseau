@@ -87,7 +87,7 @@ class GameMenu(pygame.Surface):
         self.new_game.add.text_input('Largeur de la carte :', default=str(N),textinput_id='map_width',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Hauteur de la carte :', default=str(M),textinput_id='map_height',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Population de depart :', default=str(pop_init),textinput_id='population_bob',input_type=pygame_menu.locals.INPUT_INT)
-        self.new_game.add.text_input('Nouriture par jour :', default='100',textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
+        self.new_game.add.text_input('Nouriture par jour :', default=Config.quantity_food,textinput_id='daily_food',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Mouvement de bob :', default='1',textinput_id='movement_bob',input_type=pygame_menu.locals.INPUT_INT)
         # self.new_game.add.text_input('Vision de bob :', default='1',textinput_id='vision_bob',input_type=pygame_menu.locals.INPUT_INT)
         self.new_game.add.text_input('Masse de bob :', default='1',textinput_id='mass_bob',input_type=pygame_menu.locals.INPUT_INT)
@@ -128,6 +128,7 @@ class GameMenu(pygame.Surface):
                 Config.width_map = data['map_width']
                 Config.height_map = data['map_height']
                 Config.hosting = True
+                Config.singleplayer = True
             case "multiplayer/hosting":
                 data = self.caracteristic_selector_host.get_input_data()
                 Config.width_map = data['map_width']

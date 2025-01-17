@@ -20,7 +20,7 @@ class Game():
 
         self.grid = Grid(player_id=self.player_id)
 
-        if True: # TODO si on est en solo / multi ?
+        if not Config.singleplayer: # TODO si on est en solo / multi ?
             # Initialisation de l'écoute réseau
             self.network_thread = Thread(target=startlisten)
             self.network_thread.start()
@@ -30,7 +30,6 @@ class Game():
 
         if Config.hosting : #Si on host, on doit setup toutes les cases des networks-property comme étant à nous.
                 Network_property.init_np_grid(self.grid)
-                print("network properties : " + str(Network_property.get_np_grid()))
 
     
     def init_bobs(self):
