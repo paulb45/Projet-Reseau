@@ -31,7 +31,7 @@ def send_bob(pos, bob):
     # DPL	id	x1	y1	x2	y2
     s = f"DPL{bob.get_id():15}{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}"
     #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
-    send_info_to_C(55006,MSG=s.encode('ascii'))
+    send_info_to_C(MSG=s.encode('ascii'))
 
 def send_info_to_C (portnum=55005, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     UDP_IP = "127.0.0.1"
