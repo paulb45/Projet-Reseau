@@ -1,6 +1,7 @@
 import socket
-import re
-
+import re 
+import sys ,os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from network.action_buffer  import ActionBuffer
 
 def splitwithpipe(input_str,i):
@@ -24,6 +25,20 @@ def readposistionfrombynary(data):
     y =int(data[32:64],2)
     return (x,y)
 
+def readintfromtext(data):
+    entier=int(data[0:4])
+    return entier
+
+def readidfromtext(data):
+    id=int(data[0:15])
+    return id
+
+def readpositionfromtext(data):
+    x=readintfromtext(data)
+    data=data[4:]
+    y=readintfromtext(data)
+    return (x,y)
+    
 def startlisten(IP="127.0.0.1",port=55005):
     #opens a socket to listen to the C process
     UDP_IP =  IP
@@ -37,78 +52,95 @@ def startlisten(IP="127.0.0.1",port=55005):
     boolstop=True
     #the while loop analyses the messages as they arrive if a message matches the protocol adds an acction to the action buffer
     while boolstop:
-        #print("inloop")
+        print("inloop")
         data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
-        #print(data)
+        print(data)
         data=data.decode('ascii')
-        #print(data)
+        print(data)
         #socket messages arrive encoded in ASCII they are decoded for ease of use
         #check if sender wants to stop probably not useful but I don't like infinite loops
         if data == 'STOP':
             boolstop=False
         #test if the sender wants to perform a DPL action
-        elif data.startswith('010001000101000001001100'): #code binaire pour DPL
-            #print("startswith works")
-            data=data[24:] #degage l'entete action
+        elif data.startswith("DPL"): 
+            print("startswith works")
+            data=data[3:] #degage l'entete action
             #print("received message: %s" % data)
-            lastpostion=readposistionfrombynary(data)
-            data=data[64:]# degage les données 
-            #print(f"lastposition =  {lastpostion}") # might be usefull for further testing
-            nextposition=readposistionfrombynary(data)
-            data=data[64:]# degage les données
-            #print("deplace works") 
-            #print(f"nextposition = {nextposition}") # might be usefull for further testing
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
+            lastpostion=readpositionfromtext(data)
+            data=data[8:]# degage les données 
+            print(f"lastposition =  {lastpostion}") # might be usefull for further testing
+            nextposition=readpositionfromtext(data)
+            data=data[8:]# degage les données
+            print(f"nextposition = {nextposition}") # might be usefull for further testing
             ActionBuffer.add_move(lastpostion,nextposition)
+            #ActionBuffer.add_move(id,lastpostion,nextposition) id n'est pas pris en compte pour l'instant
             
-        elif data.startswith('010100000100110001000011'): # code binaire pour PLC
-            data=data[24:] #degage l'entete 
-            Position = readposistionfrombynary(data)
-            data=data[64:]
-            Type = int(data[0:32],2)
-            data=data[32:]
-            Energie = int(data[0:32],2)
-            data=data[32:]
-            Masse = int(data[0:32],2)
-            data=data[32:]
-            Mouvement = int(data[0:32],2)
+        elif data.startswith('PLC'):
+            data=data[3:] #degage l'entete 
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
+            Position = readpositionfromtext(data)
+            data=data[8:]
+            Type = readintfromtext(data)
+            data=data[4:]
+            Energie = readintfromtext(data)
+            data=data[4:]
+            Masse = readintfromtext(data)
+            data=data[4:]
+            Mouvement = readintfromtext(data)
+            data=data[4:]
             #print("place works")
             # Type d'action | Timestamp  | Coord x | Coord y | Type d'item | Energie | Masse | Mouvement |
             #ActionBuffer.add_place(Postion,Type,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
         
-        elif data.startswith('010001010100000101010100'): #code bianire pour EAT
-            data=data[24:] #degaae l'entente action
-            to_eat=int(data[0:32],2)
-            data=data[32:]
-            position=readposistionfrombynary(data)
-            data=data[64:]
+        elif data.startswith('EAT'): 
+            data=data[3:] #degaae l'entente action
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
+            position=readpositionfromtext(data)
+            data=data[8:]
+            to_eat=readintfromtext(data)
+            data=data[4:]
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
             #print("eat works")
             #| Type d'action | Timestamp  | Max to eat | Coord x | Coord y |
             #ActionBuffer.add_eat(to_eat,position)   # TO DO after implémentation dans action_buffer
 
-        elif data.startswith('010000010101010001001011'): #code bianire pour ATK
-            data=data[24:] #degaae l'entente action
-            position=readposistionfrombynary(data)
-            data=data[64:]
+        elif data.startswith('ATK'):
+            data=data[3:] #degaae l'entente action
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
+            position=readpositionfromtext(data)
+            data=data[8:]
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
             #print("atk works")
             #| Type d'action | Timestamp  | Coord x | Coord y |
             #ActionBuffer.add_eat(position)   # TO DO after implémentation dans action_buffer
         
-        elif data.startswith('010001000101001101010000'): #code bianire pour DSP
-            data=data[24:] #degaae l'entente action
+        elif data.startswith('DSP'): 
+            data=data[3:] #degaae l'entente action
+            id=readidfromtext(data)
+            data=data[15:]
+            #print("id = %i ",id)
             position=readposistionfrombynary(data)
-            data=data[64:]
-            type=int(data[0:32],2)
-            data=data[32:]
+            data=data[8:]
             #print("dsp works")
             #| Type d'action | Timestamp  | Coord x | Coord y | Type d'item |
             #ActionBuffer.add_eat(position,type)   # TO DO after implémentation dans action_buffer
 
-        elif data.startswith('010011100100010101010111'): #code bianire pour NEW
+        elif data.startswith('NEW'): 
             data=data[24:] #degaae l'entente action
-            masse=int(data[0:32],2)
-            data=data[32:]
-            statmouvement=int(data[0:32],2)
-            data=data[32:]
+            idjoueur=int(data[5:])
             #print("new works")
             #| Type d'action | Timestamp  | Masse | Mouvement des Bobs |
             #ActionBuffer.add_eat(masse,statmouvement)   # TO DO after implémentation dans action_buffer
@@ -118,4 +150,5 @@ def startlisten(IP="127.0.0.1",port=55005):
     
 if __name__ =='__main__': #allows to run for tests  without breaking everything 
     startlisten()
+
 
