@@ -147,7 +147,7 @@ class Bob(Item):
                 child_stat = 0
             child_stats.append(child_stat)
             
-        return Bob(Bob.Echild, *child_stats)   
+        return Bob(Bob.Echild, *child_stats, local=True, player_id=self.player_id)   
         
     def get_stats(self):
         return [self.E, self.speed, self.mass, self.memory, self.perception]
