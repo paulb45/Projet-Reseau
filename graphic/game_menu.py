@@ -144,10 +144,10 @@ class GameMenu(pygame.Surface):
                 Config.host_ip = data['host_ip']
                 Config.hosting = False
         Config.sprite_path = f"sprites/{data['theme_selector'][0][0]}/"
-        Config.P0 = data['population_bob']
-        Config.quantity_food = data['daily_food']
-        Config.energy_food = data['energy_food']
-        Config.bob_speed = data['movement_bob']
+        Config.P0 = int(round(data['population_bob']))
+        Config.quantity_food = int(round(data['daily_food']))
+        Config.energy_food = int(round(data['energy_food']))
+        Config.bob_speed = int(round(data['movement_bob']))
         Config.move_with_cursor = data['move_with_mouse']
         # Variables d'interface
         Config.screen_size = [ np.ceil(tile_size*(Config.width_map+Config.height_map)/2 / i) for i in range(1,3)]
