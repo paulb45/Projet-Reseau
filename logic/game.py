@@ -10,7 +10,7 @@ from logic.grid import Grid
 
 from network.listener import startlisten
 from network.action_buffer import ActionBuffer
-from network.pytoc_sender import send_bob, send_PLC
+from network.pytoc_sender import send_DPL, send_PLC
 from network.network_property import Network_property
 
 class Game():
@@ -98,7 +98,7 @@ class Game():
             for bob in bobs:
                 if bob.is_local():
                     self.bob_play_tick(bob, pos)
-                    send_bob(pos, bob, self.sending_port)
+                    send_DPL(pos, bob, self.sending_port)
 
 
     def network_day(self):
