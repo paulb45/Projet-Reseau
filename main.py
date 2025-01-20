@@ -1,9 +1,18 @@
-import threading
+import threading, sys
 from copy import deepcopy
 
 from graphic.mainSurface import MainSurface
 from config import *
 from logic.game import Game
+
+if sys.argv != None:
+    listen_port = int(sys.argv[1])
+    sending_port = int(sys.argv[2])
+else:
+    listen_port = 55005
+    sending_port = 55005
+
+   
 
 # initialisation de la fenetre principale
 window = MainSurface()
@@ -14,7 +23,7 @@ while not window.menu.game_is_on:
 
 # Initilisation de la logique
 window.start_game()
-game = Game()
+game = Game(listen_port, sending_port)
 
 while True:
     grid_copy = deepcopy(game.grid)

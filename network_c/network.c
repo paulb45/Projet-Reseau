@@ -32,7 +32,7 @@ void test_print(){
     printf("Test\n");
 }
 
-void configure_sending_addr(struct sockaddr_in* addr, int port, const char* send_ip){
+void configure_python_addr(struct sockaddr_in* addr, int port, const char* send_ip){
     memset(addr, 0, sizeof(*addr));
     addr->sin_family = AF_INET;
     addr->sin_port = htons(port);
@@ -51,7 +51,7 @@ void authorized_broadcast(int socket){
     }
 }
 
-void configure_listening_addr(struct sockaddr_in* addr, int port){
+void configure_broadcast_addr(struct sockaddr_in* addr, int port){
     memset(addr, 0, sizeof(*addr));
     addr->sin_family = AF_INET;
     addr->sin_port = htons(port);
