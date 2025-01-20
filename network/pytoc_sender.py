@@ -96,7 +96,7 @@ def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
 def send_ANP(pos,portnum=default_port):
     #Envoie une demande de prop réseau
     #|      `ANP`   |    x1   |    y1   
-    s = f"ANP{pos[0]:4}{pos[1]:4}"
+    s = f"ANP{pos[0]:4}{pos[1]:4}\0"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
