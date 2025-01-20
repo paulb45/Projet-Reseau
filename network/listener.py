@@ -104,37 +104,37 @@ def startlisten(IP="127.0.0.1",port=55005):
             data=data[4:]
             #print("place works")
             # Type d'action | Timestamp  | Coord x | Coord y | Type d'item | Energie | Masse | Mouvement |
-            #ActionBuffer.add_place(Postion,Type,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
+            ActionBuffer.add_place(id,Type,Position,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
         
         elif data.startswith('EAT'): 
             data=data[3:] #degaae l'entente action
-            id=readidfromtext(data)
+            idbob=readidfromtext(data)
             data=data[15:]
             #print("id = %i ",id)
             position=readpositionfromtext(data)
             data=data[8:]
             to_eat=readintfromtext(data)
             data=data[4:]
-            id=readidfromtext(data)
+            idfood=readidfromtext(data)
             data=data[15:]
             #print("id = %i ",id)
             #print("eat works")
             #| Type d'action | Timestamp  | Max to eat | Coord x | Coord y |
-            #ActionBuffer.add_eat(to_eat,position)   # TO DO after implémentation dans action_buffer
+            ActionBuffer.add_eat(idbob,position,to_eat,idfood)   # TO DO after implémentation dans action_buffer
 
         elif data.startswith('ATK'):
             data=data[3:] #degaae l'entente action
-            id=readidfromtext(data)
+            idattacker=readidfromtext(data)
             data=data[15:]
             #print("id = %i ",id)
             position=readpositionfromtext(data)
             data=data[8:]
-            id=readidfromtext(data)
+            idtarget=readidfromtext(data)
             data=data[15:]
             #print("id = %i ",id)
             #print("atk works")
             #| Type d'action | Timestamp  | Coord x | Coord y |
-            #ActionBuffer.add_eat(position)   # TO DO after implémentation dans action_buffer
+            ActionBuffer.add_attack(idattacker,position,idtarget)   # TO DO after implémentation dans action_buffer
         
         elif data.startswith('DSP'): 
             data=data[3:] #degaae l'entente action
@@ -145,14 +145,14 @@ def startlisten(IP="127.0.0.1",port=55005):
             data=data[8:]
             #print("dsp works")
             #| Type d'action | Timestamp  | Coord x | Coord y | Type d'item |
-            #ActionBuffer.add_eat(position,type)   # TO DO after implémentation dans action_buffer
+            ActionBuffer.add_dead(id,position)   # TO DO after implémentation dans action_buffer
 
         elif data.startswith('NEW'): 
             data=data[24:] #degaae l'entente action
             idjoueur=int(data[5:])
             #print("new works")
             #| Type d'action | Timestamp  | Masse | Mouvement des Bobs |
-            #ActionBuffer.add_eat(masse,statmouvement)   # TO DO after implémentation dans action_buffer
+            #ActionBuffer.add_dead(masse,statmouvement)   # TO DO after implémentation dans action_buffer
     
     sock.close() # ends the connection
     #print("ended successfuly")
