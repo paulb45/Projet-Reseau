@@ -38,6 +38,9 @@ def readpositionfromtext(data):
     data=data[4:]
     y=readintfromtext(data)
     return (x,y)
+
+def readtype(data):
+    return data[0:1]
     
 def startlisten(IP="127.0.0.1",port=55005):
     #opens a socket to listen to the C process
@@ -80,18 +83,24 @@ def startlisten(IP="127.0.0.1",port=55005):
             
         elif data.startswith('PLC'):
             data=data[3:] #degage l'entete 
+            #print("received message: %s" % data)
             id=readidfromtext(data)
             data=data[15:]
             #print("id = %i ",id)
             Position = readpositionfromtext(data)
+            #print(f"Position =  {Position}")
             data=data[8:]
-            Type = readintfromtext(data)
-            data=data[4:]
+            Type = readtype(data)
+            #print("type = %s ",Type)
+            data=data[1:]
             Energie = readintfromtext(data)
+            #print("energie = %i ",Energie)
             data=data[4:]
             Masse = readintfromtext(data)
+            #print("masse = %i ",Masse)
             data=data[4:]
             Mouvement = readintfromtext(data)
+            #print("move = %i ",Mouvement)
             data=data[4:]
             #print("place works")
             # Type d'action | Timestamp  | Coord x | Coord y | Type d'item | Energie | Masse | Mouvement |

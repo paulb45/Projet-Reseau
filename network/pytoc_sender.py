@@ -37,15 +37,19 @@ def send_bob(pos, bob, portnum=default_port):
 
 
 def send_PLC(pos,boborfood, thing,portnum=default_port):
+    #
     #|      `PLC`    |   id   |    x1   |    y1   |     item    |    E    |    M    |      M      |
-    id = '000000000000000'
+    id = thing.get_id()
     x1, y1 = [a+b for a,b in zip(pos, thing.get_last_move())]
     if boborfood: #boborfood is a boolean if true then is bob
-        typeitem = 'bob' #pas sur qu'on ecrive vraiment comme sa le type TODO
+        typeitem = 'B' #pas sur qu'on ecrive vraiment comme sa le type TODO
     else:
-        typeitem = 'food'
-    energy = thing.get_E
-    masse=thing.get_E()
+        typeitem = 'F'
+    energy = thing.get_E()
+    masse =thing.get_mass()
+    move = thing.get_move()
+    s = f"PLC{id:15}{x1:4}{y1:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
 def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
@@ -63,4 +67,4 @@ def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
     else: portnum = default_port
-    send_info_to_C(portnum)
+    send_PLC(True,portnum)
