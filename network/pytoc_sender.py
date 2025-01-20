@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from logic.bob import Bob
 from logic.food import Food
-
+from logic.item import Item
 default_port = 55005
 
 def send_grid(grid):
@@ -30,7 +30,7 @@ def send_bob(pos, bob, portnum=default_port):
         pos (tuple): tuple des coordonnées du bob
         bob (Bob): bob à envoyer
     """
-    x1, y1 = [a+b for a,b in zip(pos, bob.get_last_move())]
+    x1, y1 = [a-b for a,b in zip(pos, bob.get_last_move())]
     # DPL	id	x1	y1	x2	y2
     s = f"DPL{bob.get_id():15}{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}"
     #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
@@ -72,6 +72,11 @@ def send_ATK(atk:Bob,pos,target:Bob,portnum):
     idatk = atk.get_id()
     idtgt = target.get_id()
     s = f"ATK{idatk:15}{pos[0]:4}{pos[1]:4}{idtgt:15}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
+def send_DSP(thing:Item,pos,portnum):
+    id = thing.get_id()
+    s = f"DSP{id:15}{pos[0]:4}{pos[1]:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
