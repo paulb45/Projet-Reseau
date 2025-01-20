@@ -110,7 +110,7 @@ def startlisten(IP="127.0.0.1",port=55005):
             data=data[INTsize:]
             #print("place works")
             # Type d'action | Timestamp  | Coord x | Coord y | Type d'item | Energie | Masse | Mouvement |
-            ActionBuffer.add_place(id,Type,Position,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
+            ActionBuffer.add_placement(id,Type,Position,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
         
         elif data.startswith('EAT'): 
             data=data[ACTsize:] #degaae l'entente action
