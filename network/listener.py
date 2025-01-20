@@ -75,7 +75,7 @@ def startlisten(IP="127.0.0.1",port=55005):
             nextposition=readpositionfromtext(data)
             data=data[8:]# degage les données
             #print(f"nextposition = {nextposition}") # might be usefull for further testing
-            ActionBuffer.add_move(lastpostion,nextposition,id)
+            ActionBuffer.add_move(lastpostion,nextposition)
             #ActionBuffer.add_move(id,lastpostion,nextposition) id n'est pas pris en compte pour l'instant
             
         elif data.startswith('PLC'):
@@ -149,6 +149,7 @@ def startlisten(IP="127.0.0.1",port=55005):
     #print("ended successfuly")
     
 if __name__ =='__main__': #allows to run for tests  without breaking everything 
-    startlisten()
+    if sys.argv != None: startlisten(port=int(sys.argv[1]))
+    else: startlisten()
 
 
