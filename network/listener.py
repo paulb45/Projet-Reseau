@@ -161,10 +161,55 @@ def startlisten(IP="127.0.0.1",port=55005):
             #ActionBuffer.add_dead(masse,statmouvement)   # TO DO after implémentation dans action_buffer
 
         elif data.startswith('ANP'): 
+            print("received ANP")
             data=data[ACTsize:] #degaae l'entente action
             position = readpositionfromtext(data)
+            if Network_property.get_appartenance(position[0],position[1]):
+                pass
+                #TODO : envoyer la requête GNP
+            else :
+                pass
+                #TODO : envoyer la requête RNP
+
+        elif data.startswith('GNP'): 
+            #GNP | id | x | y | idbob | M1 | idfood | E2
+
+            # print("received GNP")
+            data=data[ACTsize:] #degaae l'entente action
+            id=readidfromtext(data)
+            # print("id : ", id)
+
+            data=data[IDsize:]
+            position = readpositionfromtext(data)
+            # print("Position : ", position)
+
+            data=data[2*INTsize:]
+            idbob = readidfromtext(data)
+            # print("id_bob : ",idbob)
+
+
+            data=data[IDsize:]
+            masse_bob = readintfromtext(data)
+            # print("masse_bob : ",masse_bob)
+
+            data=data[INTsize:]
+            id_food = readidfromtext(data)
+            # print("id_food : ",id_food)
+            
+            data = data[IDsize:]
+            energy_food = readintfromtext(data)
+            # print("energy_food : ",energy_food)
             Network_property.add_appartenance(position[0],position[1])
-        
+
+        elif data.startswith('RNP'): 
+            #GNP | id | x | y | idbob | M1 | idfood | E2
+
+            print("received RNP")
+            data=data[ACTsize:] #degaae l'entente action
+            position=readpositionfromtext(data)
+            print("position :" + str(position))
+            #TODO cancel action. 
+
     sock.close() # ends the connection
     #print("ended successfuly")
     
