@@ -100,3 +100,19 @@ void send_message(int socket, char* message, struct sockaddr_in* addr, int debug
         printf("Message envoyé %s:%d\n", inet_ntoa(addr->sin_addr), ntohs(addr->sin_port));
     }
 }
+
+void setup_udp_buffer(int socket){
+    int max_buf_size = 4*16 + 54*8 + 500; // Entete UDP + Max protocole + marge
+    setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int));
+    if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int)) == -1) {
+        perror("Problème de configuration de la taille du buffer de réception");
+        close(socket);
+        exit(EXIT_FAILURE);
+    }
+    setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &max_buf_size, sizeof(int));
+    if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int)) == -1) {
+        perror("Problème de configuration de la taille du buffer d'envoie");
+        close(socket);
+        exit(EXIT_FAILURE);
+    }
+}

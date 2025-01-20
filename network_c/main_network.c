@@ -56,20 +56,9 @@ int main(int argc, char *argv[]){
     convert_address(BROADCAST_ADDRESS, &broadcast_addr);
 // config sending address socket_c2py
     configure_python_addr(&py_addr, port_python_c2py, LOCALHOST_ADDRESS);
-//=============================================================
-    // // PAS TOUCHE !!!
-    // //---------------------------------------------------------
-    // // Configuration de la taille du buffer de réception
-    // int max_buf_size;
-    // setsockopt(socket_c2c, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int));
-    // if (setsockopt(socket_c2c, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int)) == -1) {
-    //     perror("Problème de configuration de la taille du buffer de réception");
-    //     close(socket_c2c);
-    //     exit(EXIT_FAILURE);
-    // }
-    // //SO_SND définit la taille limite d'un datagram
-    // //---------------------------------------------------------
 
+    setup_udp_buffer(socket_c2c);
+    setup_udp_buffer(socket_c2py);
 
     printf("En écoute d'un message python en UDP sur le port %d...\n",  port_python_c2c);
     

@@ -28,4 +28,6 @@ void listen_socket(int socket, char* message, int max_size, struct sockaddr_in* 
 
 void send_message(int socket, char* message, struct sockaddr_in* addr, int debug);
 
+void setup_udp_buffer(int socket);
+
 #endif
