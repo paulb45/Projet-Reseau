@@ -11,7 +11,7 @@
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
 #define MAX_BUF_SIZE 1024 // Taille du message
 
-void setup_ports(int argc, char *argv[], int *port_python_c2c, int *port_broadcast, int *port_python_c2py);
+void setup_ports(int argc, char *argv[], int *port_python_c2c, int *port_broadcast, int *port_python_c2py, int *port_test);
 
 int create_udp_socket();
 

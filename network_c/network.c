@@ -8,17 +8,19 @@
 
 #include "network.h"
 
-void setup_ports(int argc, char *argv[], int *port_python_c2c, int *port_broadcast, int *port_python_c2py){
-    if (argc == 4) {
-        *port_python_c2c = atoi(argv[1]);
-        *port_broadcast = atoi(argv[2]);
-        *port_python_c2py = atoi(argv[3]);
+void setup_ports(int argc, char *argv[], int *port_rcv_py, int *port_send_broadcast, int *port_send_py, int *port_rcv_boadcast){
+    if (argc == 5) {
+        *port_rcv_py = atoi(argv[1]);
+        *port_send_broadcast = atoi(argv[2]);
+        *port_send_py = atoi(argv[3]);
+        *port_rcv_boadcast = atoi(argv[4]);
 
     }
     else{
-        *port_python_c2c = 50000;
-        *port_broadcast = 60000;
-        *port_python_c2py = 55005;
+        *port_rcv_py = 50000;
+        *port_send_broadcast = 60000;
+        *port_send_py = 55005;
+        *port_rcv_boadcast = 50001;
     }
 }
 
