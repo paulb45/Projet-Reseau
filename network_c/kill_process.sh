@@ -1,3 +1,3 @@
 #!/bin/bash
 
-killall main && pkill python
+killall main_network && pkill python

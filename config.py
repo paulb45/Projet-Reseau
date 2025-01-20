@@ -67,3 +67,4 @@ class Config():
     bob_sprite = "bob.png"
     food_sprite = "food.png"
     tileset_sprite = "tile.png"
+    my_property_sprite = "my_prop_tile.png"

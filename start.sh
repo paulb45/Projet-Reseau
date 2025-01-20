@@ -8,14 +8,14 @@ bash -c "make -C $script_dir/network_c"
 # Start dans une première console
 bash -c "
 source $script_dir/venv/bin/activate;
-./$script_dir/network_c/main 55001 30001 55005 &
+./$script_dir/network_c/main_network 55001 30001 55005 &
 python3 $script_dir/main.py 55005 55001 &
 wait" &
 
 # Start dans une deuxième console
 bash -c "
 source $script_dir/venv/bin/activate;
-./$script_dir/network_c/main 55002 30002 55006 &
+./$script_dir/network_c/main_network 55002 30002 55006 &
 python3 $script_dir/main.py 55006 55002 &
 wait" &
 

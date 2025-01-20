@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from config import *
 import logic.bob
 import logic.food
+import network.network_property
 
 class Interface(pygame.Surface):
     """
@@ -31,6 +32,8 @@ class Interface(pygame.Surface):
         """
         self.tileset = self.load_image(Config.tileset_sprite)
         self.grass_tile = self.cut_in_image(Config.tileset_sprite, (pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset))
+        self.tileset = self.load_image(Config.my_property_sprite)
+        self.network_property_tile = self.cut_in_image(Config.my_property_sprite ,(pos_x_tile,pos_y_tile), (tileset_x_offset, tileset_y_offset))
 
         self.bob = self.load_sprite(Config.bob_sprite)
         self.bob_with_border = self.load_sprite_with_halo(self.bob, 10)
@@ -104,21 +107,11 @@ class Interface(pygame.Surface):
         for key, foods in grid.get_all_foods().items():
             for food in foods:
                 self.place_entity(self.apple, key)
-    """
-    def print_bobs(self):
-        for bob_info in self._bobs_infos:
-            incremente_dep = [0,0]
-            for i in range(len(bob_info["buffer_dep"])):
-                bob_info["buffer_dep"][i] += bob_info["unit_dep"][i]
-                #print(bob_info["buffer_dep"][i])
-                if abs(bob_info["buffer_dep"][i]) - 0.999 >= 0: # Check comparaison proche de 0
-                    # Update des buffers
-                    incremente_dep[i] = int(bob_info["buffer_dep"][i])
-                    bob_info["buffer_dep"][i] -= incremente_dep[i]
-                    
-                    bob_info["start_coords"][i] += incremente_dep[i]
-            self.place_entity(bob_info["image"], (bob_info["start_coords"][0], bob_info["start_coords"][1]))
-    """
+    
+    def load_network_property_tiles(self):
+        network_property_grid = network.network_property.Network_property.get_np_grid()
+        for key, _ in network_property_grid.items():
+            self.place_tile(self.network_property_tile, key)
     
     def move_bob(self, end_coord, last_move, bob_sprite, current_tick):
         # Calcul de l'incrément de déplacement sur le prochain tick
@@ -130,8 +123,6 @@ class Interface(pygame.Surface):
     def move_bobs(self, current_tick):
         for bob_info in self._bobs_infos:
             self.move_bob(bob_info["end_coords"], bob_info["last_move"], bob_info["image"], current_tick)
-
-       
     
     # --- Génération ---
     
@@ -166,11 +157,12 @@ class Interface(pygame.Surface):
     """
 
     def render_game(self, grid, current_tick):
+        if current_tick == 1:
+            self.generate_ground(self.grass_tile)
+            self.load_network_property_tiles()
         self.print_ground()
         self.print_food(grid)
         self.move_bobs(current_tick)
-        
-        #self.generate_map(map)
     
     # --- Gestion du liseré ---
     
