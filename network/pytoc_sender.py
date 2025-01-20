@@ -60,9 +60,9 @@ def send_PLC(pos, thing,portnum=default_port):
 def send_EAT(pos,bob:Bob,food:Food,portnum):
     idbob = bob.get_id()
     idfood = food.get_id()
-    hunger = bob.get_Emax() - bob.get_E()
+    hunger = int(bob.get_Emax() - bob.get_E())
     if hunger > food.get_energy():
-        to_eat = food.get_energy()
+        to_eat = int(food.get_energy())
     else:
         to_eat = hunger
 
