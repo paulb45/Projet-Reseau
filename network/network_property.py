@@ -5,11 +5,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from logic.bob import Bob
 from logic.food import Food
 from config import Config
-from pytoc_sender import send_info_to_C
-#CONSTANTES :
-CASE_VIDE = 1
-BOB = 2
-FOOD = 3
+
+
 
 
 class Network_property:
@@ -17,9 +14,7 @@ class Network_property:
     Propriétés réseaux : 
 
     Les propriétés réseaux représente l'appartenance à un joueur d'une case de la grille. 
-    Si la case [x,y] appartiens au joueur, le dictionnaire np_grid aura pour valeur un tuple (x, y) avec :
-    x : le type d'objet sur la case (CASE_VIDE = 1, BOB = 2, FOOD = 3)
-    y : info sur l'objet, la masse du bob et l'énergie de la food
+    Si la case [x,y] appartiens au joueur, le dictionnaire np_grid aura pour valeur 1
     Sinon, le dictionnaire aura une valeur par défaut (0).
     """
 
@@ -36,15 +31,8 @@ class Network_property:
         #Je vois pas d'autre moyen de parcourir toute la map pour l'initalisation au début malheuresement. 
         for x in range(Config.height_map):
             for y in range (Config.width_map):
-                if not grid.get_items((x,y)):
-                    #case vide
-                    Network_property.add_case(x,y)
-                elif isinstance(grid.map[x,y][0], Bob): 
-                    #Il y a un bob
-                    Network_property.add_bob(x, y, grid.get_items((x,y))[0].get_mass())
-                elif isinstance(grid.map[x,y][0], Food):
-                    #Il y a un food
-                    Network_property.add_food(x, y, grid.get_items((x,y))[0].get_energy())
+               Network_property.add_appartenance(x,y)
+    
     @staticmethod
     def get_np_grid():
         """Obtenir le contenu de np_grid
@@ -53,33 +41,15 @@ class Network_property:
             defaultdict
         """
         return Network_property.np_grid
-
-    @staticmethod
-    def add_bob(x,y, masse):
-        """Ajouter une appartenance sur la case de coordonnée x,y, avec un bob dessus
-
-        Returns:
-            void
-        """
-        Network_property.np_grid[(x,y)] = (BOB, masse)
-
-    @staticmethod
-    def add_food(x,y, energie):
-        """Ajouter une appartenance sur la case de coordonnée x,y, avec de la food dessus
-
-        Returns:
-            void
-        """
-        Network_property.np_grid[(x,y)] = (FOOD, energie)
     
     @staticmethod
-    def add_case(x,y):
-        """Ajouter une appartenance sur la case de coordonnée x,y, avec une case dessus
+    def add_appartenance(x,y):
+        """Ajouter une appartenance sur la case de coordonnée x,y
 
         Returns:
             void
         """
-        Network_property.np_grid[(x,y)] = (CASE_VIDE)
+        Network_property.np_grid[(x,y)] = 1
 
     @staticmethod
     def remove_appartenance(x,y):
@@ -104,6 +74,7 @@ class Network_property:
         Returns:
             un boolean en fonction de la réponse.
         """
+        from network.pytoc_sender import send_info_to_C
         #Il faudrait une méthode dédié dans pytoc sender pour la demande d'appartennance, qui renverrai un boolean en fonction de la réponse de l'autre ordi
         if (send_info_to_C(MSG=f'ANP|{x}, {y}\0'.encode())):
             add_case(x,y)
@@ -114,11 +85,8 @@ class Network_property:
 if __name__ == '__main__':
     #test
     print(Network_property.np_grid)
-    Network_property.add_bob(1,2, 3)
-    Network_property.add_food(3,4, 4)
-    Network_property.add_case(5,6)
-    print(Network_property.get_np_grid())
-    Network_property.remove_appartenance(3,4)
+    Network_property.add_appartenance(5,6)
+    Network_property.add_appartenance(2,3)
     print(Network_property.get_np_grid())
     print(Network_property.get_appartenance(3,4))
-    print(Network_property.get_appartenance(1,2))
+    print(Network_property.get_appartenance(2,3))

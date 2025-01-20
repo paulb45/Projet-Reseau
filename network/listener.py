@@ -3,6 +3,12 @@ import re
 import sys ,os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from network.action_buffer  import ActionBuffer
+from network.network_property import Network_property
+
+INTsize = 4
+IDsize = 15
+TYPEsize = 1
+ACTsize = 3
 
 def splitwithpipe(input_str,i):
     #splits text along the pipe use i=0 for first half i=1 for second half
@@ -26,21 +32,21 @@ def readposistionfrombynary(data):
     return (x,y)
 
 def readintfromtext(data):
-    entier=int(data[0:4])
+    entier=int(data[0:INTsize])
     return entier
 
 def readidfromtext(data):
-    id=int(data[0:15])
+    id=int(data[0:IDsize])
     return id
 
 def readpositionfromtext(data):
     x=readintfromtext(data)
-    data=data[4:]
+    data=data[INTsize:]
     y=readintfromtext(data)
     return (x,y)
 
 def readtype(data):
-    return data[0:1]
+    return data[0:TYPEsize]
     
 def startlisten(IP="127.0.0.1",port=55005):
     #opens a socket to listen to the C process
@@ -67,82 +73,82 @@ def startlisten(IP="127.0.0.1",port=55005):
         #test if the sender wants to perform a DPL action
         elif data.startswith("DPL"): 
             #print("startswith works")
-            data=data[3:] #degage l'entete action
+            data=data[ACTsize:] #degage l'entete action
             #print("received message: %s" % data)
             id=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
             lastpostion=readpositionfromtext(data)
-            data=data[8:]# degage les données 
+            data=data[2*INTsize:]# degage les données 
             #print(f"lastposition =  {lastpostion}") # might be usefull for further testing
             nextposition=readpositionfromtext(data)
-            data=data[8:]# degage les données
+            data=data[2*INTsize:]# degage les données
             #print(f"nextposition = {nextposition}") # might be usefull for further testing
             ActionBuffer.add_move(lastpostion,nextposition,id)
             #ActionBuffer.add_move(id,lastpostion,nextposition) id n'est pas pris en compte pour l'instant
             
         elif data.startswith('PLC'):
-            data=data[3:] #degage l'entete 
+            data=data[ACTsize:] #degage l'entete 
             #print("received message: %s" % data)
             id=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
             Position = readpositionfromtext(data)
             #print(f"Position =  {Position}")
-            data=data[8:]
+            data=data[2*INTsize:]
             Type = readtype(data)
             #print("type = %s ",Type)
-            data=data[1:]
+            data=data[TYPEsize:]
             Energie = readintfromtext(data)
             #print("energie = %i ",Energie)
-            data=data[4:]
+            data=data[INTsize:]
             Masse = readintfromtext(data)
             #print("masse = %i ",Masse)
-            data=data[4:]
+            data=data[INTsize:]
             Mouvement = readintfromtext(data)
             #print("move = %i ",Mouvement)
-            data=data[4:]
+            data=data[INTsize:]
             #print("place works")
             # Type d'action | Timestamp  | Coord x | Coord y | Type d'item | Energie | Masse | Mouvement |
             ActionBuffer.add_place(id,Type,Position,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
         
         elif data.startswith('EAT'): 
-            data=data[3:] #degaae l'entente action
+            data=data[ACTsize:] #degaae l'entente action
             idbob=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
             position=readpositionfromtext(data)
-            data=data[8:]
+            data=data[2*INTsize:]
             to_eat=readintfromtext(data)
-            data=data[4:]
+            data=data[INTsize:]
             idfood=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
             #print("eat works")
             #| Type d'action | Timestamp  | Max to eat | Coord x | Coord y |
             ActionBuffer.add_eat(idbob,position,to_eat,idfood)   # TO DO after implémentation dans action_buffer
 
         elif data.startswith('ATK'):
-            data=data[3:] #degaae l'entente action
+            data=data[ACTsize:] #degaae l'entente action
             idattacker=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
             position=readpositionfromtext(data)
-            data=data[8:]
+            data=data[2*INTsize:]
             idtarget=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
             #print("atk works")
             #| Type d'action | Timestamp  | Coord x | Coord y |
             ActionBuffer.add_attack(idattacker,position,idtarget)   # TO DO after implémentation dans action_buffer
         
         elif data.startswith('DSP'): 
-            data=data[3:] #degaae l'entente action
+            data=data[ACTsize:] #degaae l'entente action
             id=readidfromtext(data)
-            data=data[15:]
+            data=data[IDsize:]
             #print("id = %i ",id)
-            position=readposistionfrombynary(data)
-            data=data[8:]
+            position=readpositionfromtext(data)
+            data=data[2*INTsize:]
             #print("dsp works")
             #| Type d'action | Timestamp  | Coord x | Coord y | Type d'item |
             ActionBuffer.add_dead(id,position)   # TO DO after implémentation dans action_buffer
@@ -153,7 +159,12 @@ def startlisten(IP="127.0.0.1",port=55005):
             #print("new works")
             #| Type d'action | Timestamp  | Masse | Mouvement des Bobs |
             #ActionBuffer.add_dead(masse,statmouvement)   # TO DO after implémentation dans action_buffer
-    
+
+        elif data.startswith('ANP'): 
+            data=data[ACTsize:] #degaae l'entente action
+            position = readpositionfromtext(data)
+            Network_property.add_appartenance(position[0],position[1])
+        
     sock.close() # ends the connection
     #print("ended successfuly")
     

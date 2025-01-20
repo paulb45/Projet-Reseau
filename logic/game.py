@@ -10,7 +10,7 @@ from logic.grid import Grid
 
 from network.listener import startlisten
 from network.action_buffer import ActionBuffer
-from network.pytoc_sender import send_bob
+from network.pytoc_sender import send_DPL, send_PLC
 from network.network_property import Network_property
 
 class Game():
@@ -43,20 +43,25 @@ class Game():
                 pos = self.grid.choose_random_tile()
                 if not self.grid.has_bob(pos):
                     is_spawn = True
-            self.grid.create_bob(pos)
-          
+            bob = self.grid.create_bob(pos)
+            send_PLC(pos, bob, self.sending_port)
+
     def spawn_food(self):
         """generer la nouritures
         """
         for _ in range(Config.quantity_food):
             pos = self.grid.choose_random_tile()
-            self.grid.map[pos].append(Food(local=True, player_id=self.player_id))
+            food = Food(local=True, player_id=self.player_id)
+            self.grid.map[pos].append(food)
+            send_PLC(pos, food, self.sending_port)
 
     def bob_play_tick(self, bob: Bob, pos=None):
         if pos == None:
             pos = self.grid.get_position(bob)
         if bob.get_E() == Bob.get_Emax():
-            self.grid.place_child(bob.parthenogenesis(), pos)          
+            child = bob.parthenogenesis()
+            self.grid.place_child(child, pos)
+            send_PLC(pos, bob, self.sending_port)
         elif (food := self.grid.has_food(pos)):
             if bob.eat(food):
                 self.grid.destroy_object(food, pos)
@@ -93,12 +98,28 @@ class Game():
             for bob in bobs:
                 if bob.is_local():
                     self.bob_play_tick(bob, pos)
-                    send_bob(pos, bob, self.sending_port)
+                    send_DPL(pos, bob, self.sending_port)
 
 
     def network_day(self):
         """Toutes les actions sur le jeu pour les items du réseau
         """
+        # Placement des items
+        placement_buffer = ActionBuffer.get_buffer_placement()
+        for item_id, infos in placement_buffer.items():
+            # vérifier si l'item n'est pas local
+            if self.player_id != int(item_id // 10**10):
+                # si bob
+                if infos[1] == 'B':
+                    bob = Bob(E=infos[2], speed=infos[4], mass=infos[3], local=False, bob_id=item_id)
+                    self.grid.map[infos[0]].append(bob)
+
+                # si food
+                elif infos[1] == 'F':
+                    food = Food(energy=infos[2], local=False, food_id=item_id)
+                    self.grid.map[infos[0]].append(food)
+
+
         # Déplacement des Bobs
         network_buffer = ActionBuffer.get_buffer_move()
         for item_id, pos in network_buffer.items():
@@ -108,15 +129,14 @@ class Game():
 
                 # le Bob n'est pas connu en local
                 if info is None: 
-                    print(f"Création de Bob -> {item_id}")
                     bob = Bob(local=False, bob_id=item_id)
-                    bob.set_last_move((pos[0][0] - pos[1][0], pos[0][1] - pos[1][1])) # TODO à vérif
+                    bob.set_last_move((pos[1][0] - pos[0][0], pos[1][1] - pos[0][1]))
                     self.grid.map[pos[1]].append(bob)
 
                 # le Bob est connu en local
                 else:
                     local_pos, bob = info
-                    bob.set_last_move((local_pos[0] - pos[1][0], local_pos[1] - pos[1][1])) # TODO à vérif
+                    bob.set_last_move((pos[1][0] - local_pos[0], pos[1][1] - local_pos[1]))
                     self.grid.map[pos[1]].append(bob)
                     self.grid.destroy_object(bob, local_pos)
                     

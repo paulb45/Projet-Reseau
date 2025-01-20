@@ -4,7 +4,8 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from logic.bob import Bob
-
+from logic.food import Food
+from logic.item import Item
 default_port = 55005
 
 def send_grid(grid):
@@ -23,17 +24,18 @@ def send_grid(grid):
                     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
-def send_bob(pos, bob, portnum=default_port):
+def send_DPL(pos, bob, portnum=default_port):
     """Extraire le déplacement du bob pour l'envoyer
     Args:
         pos (tuple): tuple des coordonnées du bob
         bob (Bob): bob à envoyer
     """
-    x1, y1 = [a+b for a,b in zip(pos, bob.get_last_move())]
-    # DPL	id	x1	y1	x2	y2
-    s = f"DPL{bob.get_id():15}{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}"
-    #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
-    send_info_to_C(portnum, MSG=s.encode('ascii'))
+    x1, y1 = [a-b for a,b in zip(pos, bob.get_last_move())]
+    if (x1 == pos[0]) and (y1 == pos[1]):
+        # DPL	id	x1	y1	x2	y2
+        s = f"DPL{bob.get_id():15}{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}"
+        #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
+        send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
 def send_PLC(pos, thing,portnum=default_port):
@@ -55,6 +57,29 @@ def send_PLC(pos, thing,portnum=default_port):
     s = f"PLC{id:15}{pos[0]:4}{pos[1]:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
+def send_EAT(pos,bob:Bob,food:Food,portnum):
+    idbob = bob.get_id()
+    idfood = food.get_id()
+    hunger = bob.get_Emax() - bob.get_E()
+    if hunger > food.get_energy():
+        to_eat = food.get_energy()
+    else:
+        to_eat = hunger
+
+    s = f"EAT{idbob:15}{pos[0]:4}{pos[1]:4}{to_eat:4}{idfood:15}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
+def send_ATK(atk:Bob,pos,target:Bob,portnum):
+    idatk = atk.get_id()
+    idtgt = target.get_id()
+    s = f"ATK{idatk:15}{pos[0]:4}{pos[1]:4}{idtgt:15}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
+def send_DSP(thing:Item,pos,portnum):
+    id = thing.get_id()
+    s = f"DSP{id:15}{pos[0]:4}{pos[1]:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
 
 def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     #print(f'sending on {portnum} port')
@@ -67,6 +92,12 @@ def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
  
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
     sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+
+def send_ANP(pos,portnum=default_port):
+    #Envoie une demande de prop réseau
+    #|      `ANP`   |    x1   |    y1   
+    s = f"ANP{pos[0]:4}{pos[1]:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
