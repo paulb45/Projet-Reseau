@@ -113,9 +113,9 @@ Un message de disparition aura la structure suivante :
 |      `ANP`    |    x    |    y    |
 
 #### Céder une propriété réseau
-| Type d'action | id joueur | Coord x | Coord y | Type d'item1 | Energie1 | (Masse1) | (Mouvement1) | Type d'item2 | Energie2 |
-|---------------|-----------|---------|---------|--------------|----------|----------|--------------|--------------|----------|
-|      `GNP`    |     id    |    x    |    y    |     item1    |    E1    |    M1    |      M1      |     item2    |    E2    |
+| Type d'action | id joueur | Coord x | Coord y | id Bob | Masse Bob | id nourriture | Energie |
+|---------------|-----------|---------|---------|--------|-----------|---------------|---------|
+|      `GNP`    |     id    |    x    |    y    |   id   |     M     |       id      |    E
 
 #### Réfuser de céder une propriété réseau
 | Type d'action | Coord x | Coord y | 
