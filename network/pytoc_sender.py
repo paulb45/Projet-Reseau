@@ -99,7 +99,41 @@ def send_ANP(pos,portnum=default_port):
     s = f"ANP{pos[0]:4}{pos[1]:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
+def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
+    #Réponse a un ANP pour donner la propriété réseau.
+
+    #On indique l'item qui est sur la case (food ou bob), par défaut None.
+    #GNP | id | x | y | idbob | M1 | idfood | E2
+    #Idjoueur est l'id du joueur à qui on cède la propriété
+
+    #Valeurs pas défaut: 
+    bob_id = 0
+    bob_masse = 0
+    food_id = 0
+    food_energy = 0
+
+    if bob is not None:
+        bob_id = bob.get_id()
+        bob_masse = bob.get_mass()
+        print("bob_id = ", bob_id)
+    if food is not None :
+        food_id = food.get_id()
+        food_energy = food.get_energy()
+        
+    s = f"GNP{idjoueur:15}{pos[0]:4}{pos[1]:4}{bob_id:15}{bob_masse:4}{food_id:15}{food_energy:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
+def send_RNP(pos, portnum=default_port):
+    #Réponse a un ANP pour REFUSER de donner la propriété réseau.
+
+    #GNP | x | y         
+    s = f"RNP{pos[0]:4}{pos[1]:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
     else: portnum = default_port
-    send_PLC(True,portnum)
+    # bob  = Bob(bob_id=3, mass=10, local=False)
+    # food = Food(food_id=4, energy = 15, local=False)
+    # send_GNP((1,2), 1, bob, food)
+    send_RNP((1,2))
