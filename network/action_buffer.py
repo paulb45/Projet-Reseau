@@ -30,38 +30,121 @@ from logic.grid import Grid
 #         ActionBuffer.buffer.add_bob(p2, b)
 
 class ActionBuffer:
-    buffer = {}
+    buffer_placement = {}
+    buffer_move = {}
+    buffer_eat = {}
+    buffer_attack = {}
+    buffer_dead = {}
 
     @staticmethod
-    def get_buffer():
-        """Obtenir le contenu du buffer
+    def get_buffer_placement() -> dict:
+        """Obtenir le contenu du buffer des placements de nouveau bob
 
         Returns:
-            Grid: buffer d'une grille 
+            dict: {id_bob : (coordonnées, type, énergie, masse, mouvement)}
         """
-        temp = ActionBuffer.buffer
-        ActionBuffer.buffer = {}
+        temp = ActionBuffer.buffer_placement
+        ActionBuffer.buffer_placement = {}
         return temp
 
     @staticmethod
-    def add_move(p1, p2, bob_id):
+    def get_buffer_move() -> dict:
+        """Obtenir le contenu du buffer des déplacements des bobs de A à B
+
+        Returns:
+            dict: {id_bob : (coordonnées A, coordonnées B)}
+        """
+        temp = ActionBuffer.buffer_move
+        ActionBuffer.buffer_move = {}
+        return temp
+
+    @staticmethod
+    def get_buffer_eat() -> dict:
+        """Obtenir le contenu du buffer des action "manger" des bobs
+
+        Returns:
+            dict: {id_bob : (coordonnées de l'action, énergie gagnée, id de l'objet mangé)}
+        """
+        temp = ActionBuffer.buffer_eat
+        ActionBuffer.buffer_eat = {}
+        return temp
+
+    @staticmethod
+    def get_buffer_attack() -> dict:
+        """Obtenir le contenu du buffer des attaques
+
+        Returns:
+            dict: {id_bob : (coordonnées de l'attaque, id de l'adversaire)}
+        """
+        temp = ActionBuffer.buffer_attack
+        ActionBuffer.buffer_attack = {}
+        return temp
+
+    @staticmethod
+    def get_buffer_dead() -> dict:
+        """Obtenir le contenu du buffer des morts
+
+        Returns:
+            dict: {id_bob : coordonnées}
+        """
+        temp = ActionBuffer.buffer_dead
+        ActionBuffer.buffer_dead = {}
+        return temp
+
+
+    @staticmethod
+    def add_placement(item_id:int, type_item:str, pos:tuple, energy:int, mass:int, speed:int):
+        """Ajouter un item à notre jeu
+
+        Args:
+            item_id (int): id de l'item à ajouter
+            type_item (str): type de l'item (B ou F)
+            pos (tuple): coordonnées de l'item
+            energy (int): énergie de l'item
+            mass (int): masse de l'item (si le type est B)
+            speed (int): vitesse de l'item (si le type est B)
+        """
+        return
+
+    @staticmethod
+    def add_move(p1:tuple, p2:tuple, bob_id:int):
         """Ajouter un déplacement d'un bob au buffer
 
         Args:
             p1 (tuple): position A
             p2 (tuple): position B
         """
-        ActionBuffer.buffer[bob_id] = (p1, p2)
+        ActionBuffer.buffer_move[bob_id] = (p1, p2)
 
+    @staticmethod
+    def add_eat(bob_id:int, pos:tuple, energy_get:int, food_id:int):
+        """Ajouter une action "manger" d'un bob sur une nourriture
 
-if __name__ == '__main__':
-    ActionBuffer.add_move((0,0),(1,1))
-    ActionBuffer.add_move((1,7),(4,9))
-    print(ActionBuffer.get_buffer())
-    ActionBuffer.add_move((4,8),(6,9))
-    ActionBuffer.add_move((1,4),(9,6))
-    print(ActionBuffer.get_buffer())
-    ActionBuffer.add_move((4,0),(1,7))
-    ActionBuffer.add_move((0,3),(1,9))
-    ActionBuffer.add_move((0,8),(3,1))
-    print(ActionBuffer.get_buffer())
+        Args:
+            bob_id (int): id du mangeur
+            pos (tuple): coordonnées de l'action
+            energy_get (int): énéergies gagnées
+            food_id (int): id de la nourriture
+        """
+        return
+
+    @staticmethod
+    def add_attack(bob_id:int, pos:tuple, bob_cible_id:int):
+        """Ajouter une action "attaquer" d'un bob sur un autre bob
+
+        Args:
+            bob_id (int): id de l'attaquant
+            pos (tuple): coordonnées de l'attaque
+            bob_cible_id (int): id de la victime
+        """ 
+        return
+
+    @staticmethod
+    def add_dead(item_id:int, pos:tuple):
+        """Ajouter une disparition d'un item
+
+        Args:
+            item_id (int): id de l'item disparu
+            pos (tuple): coordonnées de la disparition
+        """
+        return
