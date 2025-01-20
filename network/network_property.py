@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from logic.bob import Bob
 from logic.food import Food
 from config import Config
-from pytoc_sender import send_info_to_C
+
 
 
 
@@ -74,6 +74,7 @@ class Network_property:
         Returns:
             un boolean en fonction de la réponse.
         """
+        from pytoc_sender import send_info_to_C
         #Il faudrait une méthode dédié dans pytoc sender pour la demande d'appartennance, qui renverrai un boolean en fonction de la réponse de l'autre ordi
         if (send_info_to_C(MSG=f'ANP|{x}, {y}\0'.encode())):
             add_case(x,y)

@@ -3,6 +3,7 @@ import re
 import sys ,os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from network.action_buffer  import ActionBuffer
+from network.network_property import Network_property
 
 def splitwithpipe(input_str,i):
     #splits text along the pipe use i=0 for first half i=1 for second half
@@ -153,7 +154,12 @@ def startlisten(IP="127.0.0.1",port=55005):
             #print("new works")
             #| Type d'action | Timestamp  | Masse | Mouvement des Bobs |
             #ActionBuffer.add_dead(masse,statmouvement)   # TO DO after implémentation dans action_buffer
-    
+
+        elif data.startswith('ANP'): 
+            data=data[3:] #degaae l'entente action
+            position = readpositionfromtext(data)
+            Network_property.add_appartenance(position[0],position[1])
+        
     sock.close() # ends the connection
     #print("ended successfuly")
     

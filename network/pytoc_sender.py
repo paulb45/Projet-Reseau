@@ -93,6 +93,12 @@ def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
     sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
+def send_ANP(pos,portnum=default_port):
+    #Envoie une demande de prop réseau
+    #|      `ANP`   |    x1   |    y1   
+    s = f"ANP{pos[0]:4}{pos[1]:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
     else: portnum = default_port
