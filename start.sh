@@ -8,21 +8,17 @@ bash -c "make -C $script_dir/network_c"
 # Start dans une première console
 bash -c "
 source $script_dir/venv/bin/activate;
-./$script_dir/network_c/c2c 30001 40000 &
-./$script_dir/network_c/c2py 20000 40001 &
-python3 $script_dir/network/listener.py 20001 &
-python3 $script_dir/network/pytoc_sender.py 30000 &
-python3 $script_dir/main.py &
+./$script_dir/network_c/c2c 30000 30001 &
+./$script_dir/network_c/c2py 30005 30004 &
+python3 $script_dir/main.py 30005 30000 &
 wait" &
 
 # Start dans une deuxième console
 bash -c "
 source $script_dir/venv/bin/activate;
-./$script_dir/network_c/c2c 3001 4000 &
-./$script_dir/network_c/c2py 2000 4001 &
-python3 $script_dir/network/listener.py 2001 &
-python3 $script_dir/network/pytoc_sender.py 3000 &
-python3 $script_dir/main.py &
+./$script_dir/network_c/c2c 30003 30004 &
+./$script_dir/network_c/c2py 30002 30001 &
+python3 $script_dir/main.py 30002 30003 &
 wait" &
 
 # Attend la fin des deux processus

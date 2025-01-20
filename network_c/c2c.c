@@ -23,14 +23,14 @@ int main(int argc, char *argv[]) {
     setup_ports(argc, argv, &port_python, &port_broadcast);
     int socket_c2c = create_udp_socket();
 
-    configure_sending_addr(&bind_addr, port_python, "NO");
+    configure_python_addr(&bind_addr, port_python, "NO");
     convert_address(LOCALHOST_ADDRESS, &bind_addr);
 
     link_socket_to_listen_addr(socket_c2c, &bind_addr);
     authorized_broadcast(socket_c2c);
 
 
-    configure_sending_addr(&broadcast_addr, port_broadcast, "NO");
+    configure_broadcast_addr(&broadcast_addr, port_broadcast, "NO");
     convert_address(BROADCAST_ADDRESS, &broadcast_addr);
 
 

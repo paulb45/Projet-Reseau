@@ -30,13 +30,34 @@ def send_bob(pos, bob, portnum=default_port):
         bob (Bob): bob à envoyer
     """
     x1, y1 = [a+b for a,b in zip(pos, bob.get_last_move())]
-    id = '000000000000000'
     # DPL	id	x1	y1	x2	y2
-    s = f"DPL{id}{x1:4}{y1:}{pos[0]:4}{pos[1]:4}"
+    s = f"DPL{bob.get_id():15}{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}"
     #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
+
+def send_PLC(pos, thing,portnum=default_port):
+    #
+    #|      `PLC`    |   id   |    x1   |    y1   |     item    |    E    |    M    |      M      |
+    id = thing.get_id()
+    energy = 0
+    masse = 0
+    move = 0
+    if isinstance(thing,Bob) : #boborfood is a boolean if true then is bob
+        typeitem = 'B' #pas sur qu'on ecrive vraiment comme sa le type TODO
+        energy = thing.get_E()
+        masse =thing.get_mass()
+        move = thing.get_speed()
+    else:
+        typeitem = 'F'
+        energy = thing.get_energy()
+    
+    s = f"PLC{id:15}{pos[0]:4}{pos[1]:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
+
 def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
+    #print(f'sending on {portnum} port')
     UDP_IP = "127.0.0.1"
     UDP_PORT = portnum
     MESSAGE = MSG
@@ -50,4 +71,4 @@ def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
     else: portnum = default_port
-    send_info_to_C(portnum)
+    send_PLC(True,portnum)

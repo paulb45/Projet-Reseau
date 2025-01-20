@@ -15,10 +15,10 @@ void setup_ports(int argc, char *argv[], int *port_python_c2c, int *port_broadca
 
 int create_udp_socket();
 
-void configure_sending_addr(struct sockaddr_in* addr, int port, const char* ip);
+void configure_python_addr(struct sockaddr_in* addr, int port, const char* ip);
 
 void authorized_broadcast(int socket);
-void configure_listening_addr(struct sockaddr_in* addr, int port);
+void configure_broadcast_addr(struct sockaddr_in* addr, int port);
 
 void link_socket_to_listen_addr(int socket, struct sockaddr_in* addr);
 

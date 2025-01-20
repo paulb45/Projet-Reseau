@@ -1,7 +1,11 @@
 from collections import defaultdict
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from logic.bob import Bob
 from logic.food import Food
 from config import Config
+from pytoc_sender import send_info_to_C
 #CONSTANTES :
 CASE_VIDE = 1
 BOB = 2
@@ -85,6 +89,27 @@ class Network_property:
             void
         """
         del Network_property.np_grid[(x,y)]
+    
+    def get_appartenance(x,y):
+        """Demande le status d'appartenance de la case. 
+        Returns:
+            boolean
+        """
+        return not Network_property.np_grid[(x,y)] == 0
+
+    @staticmethod
+    def ask_appartenance(x,y):
+        """Envoie une demande d'appartenance sur la case de coordonnée x,y
+
+        Returns:
+            un boolean en fonction de la réponse.
+        """
+        #Il faudrait une méthode dédié dans pytoc sender pour la demande d'appartennance, qui renverrai un boolean en fonction de la réponse de l'autre ordi
+        if (send_info_to_C(MSG=f'ANP|{x}, {y}\0'.encode())):
+            add_case(x,y)
+            return True
+        else : 
+            return False #dans ce cas l'appelant fait quelque chose d'autre
 
 if __name__ == '__main__':
     #test
@@ -95,3 +120,5 @@ if __name__ == '__main__':
     print(Network_property.get_np_grid())
     Network_property.remove_appartenance(3,4)
     print(Network_property.get_np_grid())
+    print(Network_property.get_appartenance(3,4))
+    print(Network_property.get_appartenance(1,2))
