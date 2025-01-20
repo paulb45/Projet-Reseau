@@ -18,4 +18,4 @@ class Item():
         return self.id
 
     def is_local(self):
-        return local_item
+        return self.local

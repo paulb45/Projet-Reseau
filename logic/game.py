@@ -73,6 +73,7 @@ class Game():
             if self.grid.is_pos_in_map(new_pos):
                 self.grid.map[new_pos].append(bob)
                 self.grid.destroy_object(bob, pos)
+                send_DPL(new_pos, bob, self.sending_port)
                 if (food := self.grid.has_food(new_pos)):
                     bob.E += 0.5 # Compence l'effet de manger juste après
                     if bob.eat(food):
@@ -109,8 +110,6 @@ class Game():
             for bob in bobs:
                 if bob.is_local():
                     self.bob_play_tick(bob, pos)
-                    send_DPL(pos, bob, self.sending_port)
-
 
     def network_day(self):
         """Toutes les actions sur le jeu pour les items du réseau
@@ -136,7 +135,7 @@ class Game():
                 info = self.grid.get_item_by_id(item_id)
 
                 # le Bob n'est pas connu en local
-                if info is None: 
+                if info is None:
                     bob = Bob(local=False, bob_id=item_id)
                     bob.set_last_move((pos[1][0] - pos[0][0], pos[1][1] - pos[0][1]))
                     self.grid.map[pos[1]].append(bob)
