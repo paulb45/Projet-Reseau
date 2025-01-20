@@ -37,19 +37,19 @@ int main(int argc, char *argv[]){
 
 //=================== Config socket ========================
 // config bind address socket_c2c
-    configure_sending_addr(&bind_addr_c2c,  port_python_c2c, "NO");
+    configure_python_addr(&bind_addr_c2c,  port_python_c2c, "NO");
     convert_address(LOCALHOST_ADDRESS, &bind_addr_c2c);
     link_socket_to_listen_addr(socket_c2c, &bind_addr_c2c);
 // config bind address socket_c2py
     authorized_broadcast(socket_c2py);
-    configure_listening_addr(&bind_addr_c2py, port_broadcast);
+    configure_broadcast_addr(&bind_addr_c2py, port_broadcast);
     link_socket_to_listen_addr(socket_c2py, &bind_addr_c2py);
 // config sending address socket_c2c
     authorized_broadcast(socket_c2c);
-    configure_sending_addr(&broadcast_addr, port_broadcast, "NO");
+    configure_broadcast_addr(&broadcast_addr, port_broadcast);
     convert_address(BROADCAST_ADDRESS, &broadcast_addr);
 // config sending address socket_c2py
-    configure_sending_addr(&py_addr, port_python_c2py, LOCALHOST_ADDRESS);
+    configure_python_addr(&py_addr, port_python_c2py, LOCALHOST_ADDRESS);
 //=============================================================
     // // PAS TOUCHE !!!
     // //---------------------------------------------------------
