@@ -130,13 +130,13 @@ class Game():
                 # le Bob n'est pas connu en local
                 if info is None: 
                     bob = Bob(local=False, bob_id=item_id)
-                    bob.set_last_move((pos[0][0] - pos[1][0], pos[0][1] - pos[1][1])) # TODO à vérif
+                    bob.set_last_move((pos[1][0] - pos[0][0], pos[1][1] - pos[0][1]))
                     self.grid.map[pos[1]].append(bob)
 
                 # le Bob est connu en local
                 else:
                     local_pos, bob = info
-                    bob.set_last_move((local_pos[0] - pos[1][0], local_pos[1] - pos[1][1])) # TODO à vérif
+                    bob.set_last_move((pos[1][0] - local_pos[0], pos[1][1] - local_pos[1]))
                     self.grid.map[pos[1]].append(bob)
                     self.grid.destroy_object(bob, local_pos)
                     
