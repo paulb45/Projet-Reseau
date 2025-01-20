@@ -1,34 +1,3 @@
-from collections import defaultdict
-
-from logic.bob import Bob
-from logic.grid import Grid
-
-# class ActionBuffer:
-#     buffer = Grid()
-
-#     @staticmethod
-#     def get_buffer():
-#         """Obtenir le contenu du buffer
-
-#         Returns:
-#             Grid: buffer d'une grille 
-#         """
-#         temp = ActionBuffer.buffer
-#         ActionBuffer.buffer = Grid()
-#         return temp
-
-#     @staticmethod
-#     def add_move(p1, p2):
-#         """Ajouter un déplacement d'un bob au buffer
-
-#         Args:
-#             p1 (tuple): position A
-#             p2 (tuple): position B
-#         """
-#         b = Bob()
-#         b.set_last_move(p1)
-#         ActionBuffer.buffer.add_bob(p2, b)
-
 class ActionBuffer:
     buffer_placement = {}
     buffer_move = {}
@@ -104,7 +73,7 @@ class ActionBuffer:
             mass (int): masse de l'item (si le type est B)
             speed (int): vitesse de l'item (si le type est B)
         """
-        return
+        ActionBuffer.buffer_placement[item_id] = (pos, type_item, energy, mass, speed)
 
     @staticmethod
     def add_move(p1:tuple, p2:tuple, bob_id:int):
@@ -126,7 +95,7 @@ class ActionBuffer:
             energy_get (int): énéergies gagnées
             food_id (int): id de la nourriture
         """
-        return
+        ActionBuffer.buffer_eat[bob_id] = (pos, energy_get, food_id)
 
     @staticmethod
     def add_attack(bob_id:int, pos:tuple, bob_cible_id:int):
@@ -137,7 +106,7 @@ class ActionBuffer:
             pos (tuple): coordonnées de l'attaque
             bob_cible_id (int): id de la victime
         """ 
-        return
+        ActionBuffer.buffer_attack[bob_id] = (pos, bob_cible_id)
 
     @staticmethod
     def add_dead(item_id:int, pos:tuple):
@@ -147,4 +116,4 @@ class ActionBuffer:
             item_id (int): id de l'item disparu
             pos (tuple): coordonnées de la disparition
         """
-        return
+        ActionBuffer.buffer_dead[item_id] = pos
