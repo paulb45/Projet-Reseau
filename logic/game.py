@@ -99,7 +99,7 @@ class Game():
         """Toutes les actions sur le jeu pour les items du réseau
         """
         # Déplacement des Bobs
-        network_buffer = ActionBuffer.get_buffer()
+        network_buffer = ActionBuffer.get_buffer_move()
         for item_id, pos in network_buffer.items():
             # vérifier si le bob n'est pas local
             if self.player_id != int(item_id // 10**10):
