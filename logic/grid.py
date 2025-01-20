@@ -96,6 +96,7 @@ class Grid():
         if stats == None: bob = logic.bob.Bob(player_id=self.player_id)
         else: bob = logic.bob.Bob(*stats, player_id=self.player_id)
         self.map[pos].append(bob)
+        return bob
     
     def place_child(self, bob, pos: tuple):
         if self.is_pos_in_map(new_pos :=(pos[0]+1,pos[1])):
