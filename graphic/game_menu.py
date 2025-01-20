@@ -20,7 +20,7 @@ class GameMenu(pygame.Surface):
         self.mytheme1.background_color=(0, 0, 0 ,0)
         self.mytheme1.widget_alignment = pygame_menu.locals.ALIGN_RIGHT
         self.mytheme1.widget_font = self.myfont
-        self.mytheme1.widget_font_color = "black"
+        self.mytheme1.widget_font_color = "Cyan"
         self.mytheme1.widget_font_size = self.myfontsize
         self.mytheme1.widget_title_font = self.myfont
         self.mytheme1.title = False
