@@ -113,7 +113,7 @@ void setup_udp_buffer(int socket){
     }
     setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &max_buf_size, sizeof(int));
     if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int)) == -1) {
-        perror("Problème de configuration de la taille du buffer d'envoie");
+        perror("Problème de configuration de la taille du buffer d'envoi");
         close(socket);
         exit(EXIT_FAILURE);
     }

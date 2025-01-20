@@ -15,7 +15,7 @@
 
 // ====================================================================================================
 //     Programme pour Emmettre un message provenant de C broadcast (d'une autre machine théoriquement)
-//                      Emmission du message au receiver en pyhton
+//                      Emmission du message au receiver en python
 // ====================================================================================================
 
 
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
     int port_send_py=0;
     int port_receive_broadcast=0;
 
-    // ensemble de socket
+//  ensemble de socket
     fd_set socket_set;
     int socket_resolver;
 
