@@ -56,7 +56,7 @@ def send_PLC(pos, thing,portnum=default_port):
     s = f"PLC{id:15}{pos[0]:4}{pos[1]:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
-def send_EAT(pos,bob:Bob,food:Food):
+def send_EAT(pos,bob:Bob,food:Food,portnum):
     idbob = bob.get_id()
     idfood = food.get_id()
     hunger = bob.get_Emax() - bob.get_E()
@@ -65,9 +65,15 @@ def send_EAT(pos,bob:Bob,food:Food):
     else:
         to_eat = hunger
 
-    s = f"PLC{idbob:15}{pos[0]:4}{pos[1]:4}{to_eat:4}{idfood:15}"
+    s = f"EAT{idbob:15}{pos[0]:4}{pos[1]:4}{to_eat:4}{idfood:15}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
-    
+
+def send_ATK(atk:Bob,pos,target:Bob,portnum):
+    idatk = atk.get_id()
+    idtgt = target.get_id()
+    s = f"ATK{idatk:15}{pos[0]:4}{pos[1]:4}{idtgt:15}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+
 
 def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     #print(f'sending on {portnum} port')
