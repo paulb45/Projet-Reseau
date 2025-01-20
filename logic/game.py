@@ -10,7 +10,7 @@ from logic.grid import Grid
 
 from network.listener import startlisten
 from network.action_buffer import ActionBuffer
-from network.pytoc_sender import send_DPL, send_PLC
+from network.pytoc_sender import send_DPL, send_PLC, send_DSP, send_ATK
 from network.network_property import Network_property
 
 class Game():
@@ -65,6 +65,7 @@ class Game():
         elif (food := self.grid.has_food(pos)):
             if bob.eat(food):
                 self.grid.destroy_object(food, pos)
+                send_DSP(food, pos, self.sending_port)
             
         else:
             mouv = bob.move()
@@ -76,15 +77,25 @@ class Game():
                     bob.E += 0.5 # Compence l'effet de manger juste après
                     if bob.eat(food):
                         self.grid.destroy_object(food, new_pos)
+                        send_DSP(food, new_pos, self.sending_port)
                 if bob.is_dead():
                     self.grid.destroy_object(bob, new_pos)
+                    send_DSP(bob, new_pos, self.sending_port)
                 else:
                     bobs=self.grid.bobs_in_case(new_pos)
                     for target in bobs :
                         if bob.attack(target):
                             self.grid.destroy_object(target,new_pos)
+                            # si la cible est en local -> simple destruction pour le réseau
+                            if target.is_local():
+                                send_DSP(target, new_pos, self.sending_port)
+                            # si la cible n'est pas local -> envoi de l'attaque
+                            else:
+                                send_ATK(bob, new_pos, target, self.sending_port)
                             break
-            else: self.grid.destroy_object(bob, pos)
+            else: 
+                self.grid.destroy_object(bob, pos)
+                send_DSP(bob, pos, self.sending_port)
 
     def reset_bobs_last_move(self):
         bobs_map = self.grid.get_all_bobs()
@@ -146,10 +157,10 @@ class Game():
                 self.grid.destroy_object(items[0], pos)
             # 2 - sans la position
             else:
-                item, pos = self.grid.get_item_by_id(item_id)
+                item = self.grid.get_item_by_id(item_id)
                 if item is not None:
-                    self.grid.destroy_object(item, pos)
-                    
+                    self.grid.destroy_object(item[0], item[1])
+
 
     def day_play(self):
         self.reset_bobs_last_move()
