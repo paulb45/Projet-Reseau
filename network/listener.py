@@ -148,7 +148,11 @@ def startlisten(IP="127.0.0.1",port=55005):
     sock.close() # ends the connection
     #print("ended successfuly")
     
+<<<<<<< Updated upstream
 if __name__ =='__main__': #allows to run for tests  without breaking everything
+=======
+if __name__ =='__main__': #allows to run for tests  without breaking everything 
+>>>>>>> Stashed changes
     if sys.argv != None: startlisten(port=int(sys.argv[1]))
     else: startlisten()
 

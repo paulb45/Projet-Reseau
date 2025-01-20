@@ -5,7 +5,13 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from logic.bob import Bob
 
+<<<<<<< Updated upstream
 def send_grid(grid, portnum):
+=======
+default_port = 55005
+
+def send_grid(grid):
+>>>>>>> Stashed changes
     """Extraire les déplacements des bobs pour les envoyer
 
     Args:
@@ -21,7 +27,11 @@ def send_grid(grid, portnum):
                     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
+<<<<<<< Updated upstream
 def send_bob(pos, bob, portnum):
+=======
+def send_bob(pos, bob, portnum=default_port):
+>>>>>>> Stashed changes
     """Extraire le déplacement du bob pour l'envoyer
     Args:
         pos (tuple): tuple des coordonnées du bob
@@ -34,7 +44,11 @@ def send_bob(pos, bob, portnum):
     #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
+<<<<<<< Updated upstream
 def send_info_to_C (portnum, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
+=======
+def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
+>>>>>>> Stashed changes
     UDP_IP = "127.0.0.1"
     UDP_PORT = portnum
     MESSAGE = MSG
@@ -47,6 +61,11 @@ def send_info_to_C (portnum, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
 
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
+<<<<<<< Updated upstream
     else: portnum = 55005
     send_info_to_C(portnum)
     
+=======
+    else: portnum = default_port
+    send_info_to_C(portnum)
+>>>>>>> Stashed changes

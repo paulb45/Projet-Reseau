@@ -1,20 +1,29 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
 
-# Nom des programmes
+# Noms des programmes
 EXEC1 = c2c
 EXEC2 = c2py
 INCL = init_port
 
+<<<<<<< Updated upstream
 # Compilation des programmes
 $(INCL): init_port.c
 	$(CC) $(CFLAGS) -o $(INCL) init_port.c
 
 $(EXEC1): c2c.c
 	$(CC) $(CFLAGS) -o $(EXEC1) c2c.c
+=======
+# Cible par défaut : compiler les deux programmes
+all: $(EXEC1) $(EXEC2)
+>>>>>>> Stashed changes
 
-$(EXEC2): c2py.c
-	$(CC) $(CFLAGS) -o $(EXEC2) c2py.c
+# Compilation des programmes
+$(EXEC1): c2c.c network.c
+	$(CC) $(CFLAGS) -o $(EXEC1) c2c.c network.c
+
+$(EXEC2): c2py.c network.c
+	$(CC) $(CFLAGS) -o $(EXEC2) c2py.c network.c
 
 # Kill des processus
 kill_processes:
@@ -31,6 +40,6 @@ run: $(EXEC1) $(EXEC2) kill_processes
 
 # Nettoyage des fichiers compilés
 clean: kill_processes
-	rm -f $(EXEC1) $(EXEC2)
+	rm -f $(EXEC1) $(EXEC2) network
 
 

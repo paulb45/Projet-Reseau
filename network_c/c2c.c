@@ -3,7 +3,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+<<<<<<< Updated upstream
 #include "init_port.h"
+=======
+
+#include "network.h"
+>>>>>>> Stashed changes
 // =========================================================================================
 //                Programme pour réceptionner un message provenant de python
 //     Emmission du message en broadcast au receiver en C (autre machine théoriquement)
@@ -13,6 +18,7 @@
 #define MAX_BUF_SIZE 100  // Taille du message
 
 int main(int argc, char *argv[]) {
+<<<<<<< Updated upstream
     // Définit les ports de réception et d'émission
     int port_python=0;
     int port_broadcast=0;
@@ -22,17 +28,21 @@ int main(int argc, char *argv[]) {
 
     //Init du socket de réception et d'émission
     int socket_c2c;
+=======
+    int port_python=0;
+    int port_broadcast=0;
+    
+>>>>>>> Stashed changes
     struct sockaddr_in bind_addr, broadcast_addr, from_addr;
     socklen_t from_len = sizeof(from_addr);
 
+    setup_ports(argc, argv, &port_python, &port_broadcast);
+    int socket_c2c = create_udp_socket();
 
-    // Création du socket UDP réception
-    socket_c2c = socket(AF_INET, SOCK_DGRAM, 0);
-    if  (socket_c2c < 0) {
-        perror("Erreur de création du socket");
-        exit(EXIT_FAILURE);
-    }
+    configure_sending_addr(&bind_addr, port_python, "NO");
+    convert_address(LOCALHOST_ADDRESS, &bind_addr);
 
+<<<<<<< Updated upstream
     // Configuration de l'adresse de connexion du socket (bind)
     memset(&bind_addr, 0, sizeof(bind_addr));  // Initialiser à 0
     bind_addr.sin_family = AF_INET;               // Protocole IPv4
@@ -43,15 +53,16 @@ int main(int argc, char *argv[]) {
         close(socket_c2c);
         exit(EXIT_FAILURE);
     }
+=======
+    link_socket_to_listen_addr(socket_c2c, &bind_addr);
+    authorized_broadcast(socket_c2c);
+>>>>>>> Stashed changes
 
 
-    // Lier le socket_c2c à l'adresse et au port de reception du python
-    if (bind(socket_c2c, (struct sockaddr *)&bind_addr, sizeof(bind_addr)) < 0) {
-        perror("Erreur de bind sur le socket_entry");
-        close(socket_c2c);
-        exit(EXIT_FAILURE);
-    }
+    configure_sending_addr(&broadcast_addr, port_broadcast, "NO");
+    convert_address(BROADCAST_ADDRESS, &broadcast_addr);
 
+<<<<<<< Updated upstream
     // Activer l'option  SO_BROADCAST pour le socket
     int broadcast = 1;
     if(setsockopt(socket_c2c,SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast)) < 0) {
@@ -69,7 +80,11 @@ int main(int argc, char *argv[]) {
         close(socket_c2c);
         exit(EXIT_FAILURE);
     }
+=======
+>>>>>>> Stashed changes
 
+    // PAS TOUCHE !!!
+    //-----------------------------------------------------------------------------------
     // Configuration de la taille du buffer de réception
     int max_buf_size;
     setsockopt(socket_c2c, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int));
@@ -79,11 +94,14 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     //SO_SND définit la taille limite d'un datagram
+    //-----------------------------------------------------------------------------------
 
     printf("En écoute d'un message python en UDP sur le port %d...\n", port_python);
 
     // Boucle pour recevoir et traiter les messages
+    char message[MAX_BUF_SIZE];
     while (1) {
+<<<<<<< Updated upstream
 
         char message[MAX_BUF_SIZE];
 
@@ -113,10 +131,11 @@ int main(int argc, char *argv[]) {
 
 
 
+=======
+        listen_socket(socket_c2c, message, MAX_BUF_SIZE, &from_addr, from_len, 0);
+        send_message(socket_c2c, message, &broadcast_addr, 0);
+>>>>>>> Stashed changes
     }
-
     close(socket_c2c);
-    
-
     return 0;
 }
