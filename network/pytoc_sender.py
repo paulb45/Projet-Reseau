@@ -40,15 +40,19 @@ def send_PLC(pos, thing,portnum=default_port):
     #
     #|      `PLC`    |   id   |    x1   |    y1   |     item    |    E    |    M    |      M      |
     id = thing.get_id()
-    x1, y1 = [a+b for a,b in zip(pos, thing.get_last_move())]
+    energy = 0
+    masse = 0
+    move = 0
     if isinstance(thing,Bob) : #boborfood is a boolean if true then is bob
         typeitem = 'B' #pas sur qu'on ecrive vraiment comme sa le type TODO
+        energy = thing.get_E()
+        masse =thing.get_mass()
+        move = thing.get_speed()
     else:
         typeitem = 'F'
-    energy = thing.get_E()
-    masse =thing.get_mass()
-    move = thing.get_speed()
-    s = f"PLC{id:15}{x1:4}{y1:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
+        energy = thing.get_energy()
+    
+    s = f"PLC{id:15}{pos[0]:4}{pos[1]:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
