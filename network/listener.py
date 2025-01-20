@@ -65,7 +65,7 @@ def startlisten(IP="127.0.0.1",port=55005):
         data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
         #print(data)
         data=data.decode('ascii')
-        print(data)
+        #print(data)
         #socket messages arrive encoded in ASCII they are decoded for ease of use
         #check if sender wants to stop probably not useful but I don't like infinite loops
         if data == 'STOP':
@@ -110,7 +110,7 @@ def startlisten(IP="127.0.0.1",port=55005):
             data=data[INTsize:]
             #print("place works")
             # Type d'action | Timestamp  | Coord x | Coord y | Type d'item | Energie | Masse | Mouvement |
-            ActionBuffer.add_place(id,Type,Position,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
+            ActionBuffer.add_placement(id,Type,Position,Energie,Masse, Mouvement) # TO DO after implémentation dans action_buffer
         
         elif data.startswith('EAT'): 
             data=data[ACTsize:] #degaae l'entente action

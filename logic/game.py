@@ -105,8 +105,7 @@ class Game():
         """Toutes les actions sur le jeu pour les items du réseau
         """
         # Placement des items
-        placement_buffer = ActionBuffer.get_buffer_placement()
-        for item_id, infos in placement_buffer.items():
+        for item_id, infos in ActionBuffer.get_buffer_placement().items():
             # vérifier si l'item n'est pas local
             if self.player_id != int(item_id // 10**10):
                 # si bob
@@ -119,10 +118,8 @@ class Game():
                     food = Food(energy=infos[2], local=False, food_id=item_id)
                     self.grid.map[infos[0]].append(food)
 
-
         # Déplacement des Bobs
-        network_buffer = ActionBuffer.get_buffer_move()
-        for item_id, pos in network_buffer.items():
+        for item_id, pos in ActionBuffer.get_buffer_move().items():
             # vérifier si le bob n'est pas local
             if self.player_id != int(item_id // 10**10):
                 info = self.grid.get_item_by_id(item_id)
@@ -139,6 +136,19 @@ class Game():
                     bob.set_last_move((pos[1][0] - local_pos[0], pos[1][1] - local_pos[1]))
                     self.grid.map[pos[1]].append(bob)
                     self.grid.destroy_object(bob, local_pos)
+
+        # Disparition d'un item
+        for item_id, pos in ActionBuffer.get_buffer_dead().items():
+            # Récupération de l'instance de notre item
+            # 1 - avec la position
+            items = [item for item in self.grid.get_items(pos) if item.get_id() == item_id]
+            if items != []:
+                self.grid.destroy_object(items[0], pos)
+            # 2 - sans la position
+            else:
+                item, pos = self.grid.get_item_by_id(item_id)
+                if item is not None:
+                    self.grid.destroy_object(item, pos)
                     
 
     def day_play(self):
