@@ -21,9 +21,9 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in py_addr, bind_addr, from_addr;
 
     // Configuration de l'adresse de Python
-    configure_sending_addr(&py_addr, port_python, DEST_IP);
+    configure_python_addr(&py_addr, port_python, DEST_IP);
     authorized_broadcast(socket_c2py);
-    configure_listening_addr(&bind_addr, port_broadcast);
+    configure_broadcast_addr(&bind_addr, port_broadcast);
     link_socket_to_listen_addr(socket_c2py, &bind_addr);
 
     char message[MAX_BUF_SIZE];

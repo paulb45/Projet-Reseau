@@ -56,7 +56,7 @@ def startlisten(IP="127.0.0.1",port=55005):
         data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
         #print(data)
         data=data.decode('ascii')
-        #print(data)
+        print(data)
         #socket messages arrive encoded in ASCII they are decoded for ease of use
         #check if sender wants to stop probably not useful but I don't like infinite loops
         if data == 'STOP':
@@ -76,6 +76,7 @@ def startlisten(IP="127.0.0.1",port=55005):
             data=data[8:]# degage les données
             #print(f"nextposition = {nextposition}") # might be usefull for further testing
             ActionBuffer.add_move(lastpostion,nextposition)
+            print(data, port)
             #ActionBuffer.add_move(id,lastpostion,nextposition) id n'est pas pris en compte pour l'instant
             
         elif data.startswith('PLC'):

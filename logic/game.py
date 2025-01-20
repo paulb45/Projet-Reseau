@@ -14,7 +14,8 @@ from network.pytoc_sender import send_bob
 from network.network_property import Network_property
 
 class Game():
-    def __init__(self):
+    def __init__(self, listen_port=None, sending_port=None):
+        self.sending_port = sending_port
         # TODO prévoir la cohérence en cas de deux id identiques
         self.player_id = randint(0, 100000)
 
@@ -22,7 +23,7 @@ class Game():
 
         if not Config.singleplayer: # TODO si on est en solo / multi ?
             # Initialisation de l'écoute réseau
-            self.network_thread = Thread(target=startlisten)
+            self.network_thread = Thread(target=startlisten, args=["127.0.0.1", listen_port])
             self.network_thread.start()
 
         self.init_bobs()
@@ -92,7 +93,7 @@ class Game():
             for bob in bobs:
                 if bob.is_local():
                     self.bob_play_tick(bob, pos)
-                    send_bob(pos, bob)
+                    send_bob(pos, bob, self.sending_port)
 
 
     def network_day(self):

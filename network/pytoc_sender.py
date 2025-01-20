@@ -37,6 +37,7 @@ def send_bob(pos, bob, portnum=default_port):
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
+    #print(f'sending on {portnum} port')
     UDP_IP = "127.0.0.1"
     UDP_PORT = portnum
     MESSAGE = MSG
