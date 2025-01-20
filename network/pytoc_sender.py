@@ -31,7 +31,7 @@ def send_DPL(pos, bob, portnum=default_port):
         bob (Bob): bob à envoyer
     """
     x1, y1 = [a-b for a,b in zip(pos, bob.get_last_move())]
-    if (x1 == pos[0]) and (y1 == pos[1]):
+    if (x1 != pos[0] or y1 != pos[1]):
         # DPL	id	x1	y1	x2	y2
         s = f"DPL{bob.get_id():15}{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}\0"
         #s = f"DPL{x1:4}{y1:4}{pos[0]:4}{pos[1]:4}" # pour tester
