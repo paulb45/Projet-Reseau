@@ -36,18 +36,18 @@ def send_bob(pos, bob, portnum=default_port):
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
-def send_PLC(pos,boborfood, thing,portnum=default_port):
+def send_PLC(pos, thing,portnum=default_port):
     #
     #|      `PLC`    |   id   |    x1   |    y1   |     item    |    E    |    M    |      M      |
     id = thing.get_id()
     x1, y1 = [a+b for a,b in zip(pos, thing.get_last_move())]
-    if boborfood: #boborfood is a boolean if true then is bob
+    if isinstance(thing,Bob) : #boborfood is a boolean if true then is bob
         typeitem = 'B' #pas sur qu'on ecrive vraiment comme sa le type TODO
     else:
         typeitem = 'F'
     energy = thing.get_E()
     masse =thing.get_mass()
-    move = thing.get_move()
+    move = thing.get_speed()
     s = f"PLC{id:15}{x1:4}{y1:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
