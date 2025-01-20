@@ -4,6 +4,7 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from logic.bob import Bob
+from logic.food import Food
 
 default_port = 55005
 
@@ -55,6 +56,18 @@ def send_PLC(pos, thing,portnum=default_port):
     s = f"PLC{id:15}{pos[0]:4}{pos[1]:4}{typeitem:1}{energy:4}{masse:4}{move:4}"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
+def send_EAT(pos,bob:Bob,food:Food):
+    idbob = bob.get_id()
+    idfood = food.get_id()
+    hunger = bob.get_Emax() - bob.get_E()
+    if hunger > food.get_energy():
+        to_eat = food.get_energy()
+    else:
+        to_eat = hunger
+
+    s = f"PLC{idbob:15}{pos[0]:4}{pos[1]:4}{to_eat:4}{idfood:15}"
+    send_info_to_C(portnum, MSG=s.encode('ascii'))
+    
 
 def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     #print(f'sending on {portnum} port')
