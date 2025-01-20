@@ -8,14 +8,17 @@
 
 #include "network.h"
 
-void setup_ports(int argc, char *argv[], int *port_python, int *port_broadcast){
-    if (argc == 3) {
-        *port_python = atoi(argv[1]);
+void setup_ports(int argc, char *argv[], int *port_python_c2c, int *port_broadcast, int *port_python_c2py){
+    if (argc == 4) {
+        *port_python_c2c = atoi(argv[1]);
         *port_broadcast = atoi(argv[2]);
+        *port_python_c2py = atoi(argv[3]);
+
     }
     else{
-        *port_python = 50000;
+        *port_python_c2c = 50000;
         *port_broadcast = 60000;
+        *port_python_c2py = 55005;
     }
 }
 
@@ -69,7 +72,6 @@ void link_socket_to_listen_addr(int socket, struct sockaddr_in* addr){
 void convert_address(char* ip, struct sockaddr_in* addr){
     if (inet_pton(AF_INET, ip, &addr->sin_addr) <= 0) {
         perror("Erreur lors de la conversion de l'adresse IP");
-        close(socket);
         exit(EXIT_FAILURE);
     }
 }

@@ -11,7 +11,7 @@
 // =========================================================================================
 #define LOCALHOST_ADDRESS "127.0.0.1" // addresse de reception du message de python
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
-#define MAX_BUF_SIZE 100  // Taille du message
+#define MAX_BUF_SIZE 1024 // Taille du message
 
 int main(int argc, char *argv[]) {
     int port_python=0;
