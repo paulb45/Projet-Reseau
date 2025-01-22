@@ -26,8 +26,8 @@ class Grid():
         """
         return self.map[pos]
 
-    def get_item_by_id(self, item_id:int) -> tuple():
-        """Obtenir la position et l'item par rapport à un id
+    def get_item_by_id(self, item_id:int, pos:tuple=None) -> tuple():
+        """Obtenir l'instance d'un item par rapport à son id et sa position potentielle
 
         Args:
             item_id (int): identifiant de l'objet
@@ -35,6 +35,11 @@ class Grid():
         Returns:
             tuple: (position, instance dans le jeu de l'item recherché)
         """
+        
+        if pos is not None:
+            items = [item for item in self.get_items(pos) if item.get_id() == item_id]
+            if items != []:
+                return (pos, items[0])
         for key, itms in self.map.items():
             for itm in itms:
                 if itm.get_id() == item_id:

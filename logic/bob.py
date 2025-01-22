@@ -71,6 +71,9 @@ class Bob(Item):
     def set_Echild(cls,E):
         cls.Echild=E  
 
+    def add_E(self, E):
+        self.E += E
+
     def apply_stats(self, speed=0, mass=0, memory=0, perception=0):
         if not speed: speed=Config.bob_speed
         if not mass: mass=Config.bob_mass

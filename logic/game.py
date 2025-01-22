@@ -86,12 +86,8 @@ class Game():
                     for target in bobs :
                         if bob.attack(target):
                             self.grid.destroy_object(target,new_pos)
-                            # si la cible est en local -> simple destruction pour le réseau
-                            if target.is_local():
-                                send_DSP(target, new_pos, self.sending_port)
-                            # si la cible n'est pas local -> envoi de l'attaque
-                            else:
-                                send_ATK(bob, new_pos, target, self.sending_port)
+                            send_ATK(bob, new_pos, target, self.sending_port)
+                            send_DSP(target, new_pos, self.sending_port)
                             break
             else: 
                 self.grid.destroy_object(bob, pos)
@@ -133,7 +129,7 @@ class Game():
         for item_id, pos in ActionBuffer.get_buffer_move().items():
             # vérifier si le bob n'est pas local
             if self.player_id != int(item_id // 10**10):
-                info = self.grid.get_item_by_id(item_id)
+                info = self.grid.get_item_by_id(item_id, pos)
 
                 # le Bob n'est pas connu en local
                 if info is None: 
@@ -148,6 +144,14 @@ class Game():
                     self.grid.map[pos[1]].append(bob)
                     self.grid.destroy_object(bob, local_pos)
 
+        # Attaque
+        for item_id, info in ActionBuffer.get_buffer_attack().items():
+            item_attack = self.grid.get_item_by_id(item_id, info[0])
+            item_target = self.grid.get_item_by_id(info[1], info[0])
+
+            if (item_attack is not None) and (item_target is not None):
+                item_attack[1].attack(item_target[1])
+
         # Disparition d'un item
         for item_id, pos in ActionBuffer.get_buffer_dead().items():
             # Récupération de l'instance de notre item
@@ -159,7 +163,7 @@ class Game():
             else:
                 item = self.grid.get_item_by_id(item_id)
                 if item is not None:
-                    self.grid.destroy_object(item[0], item[1])
+                    self.grid.destroy_object(item[1], item[0])
 
 
     def day_play(self):
