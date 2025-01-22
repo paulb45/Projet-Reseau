@@ -19,7 +19,7 @@ void configure_python_addr(struct sockaddr_in* addr, int port, const char* ip);
 
 void authorized_broadcast(int socket);
 
-void configure_broadcast_addr(struct sockaddr_in* addr, int port, char *send_or_recv);
+void configure_broadcast_addr(struct sockaddr_in* addr, int port, int addr_broadcast);
 
 void link_socket_to_listen_addr(int socket, struct sockaddr_in* addr);
 

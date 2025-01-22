@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 #include "network.h"
 
@@ -25,16 +26,13 @@ void setup_ports(int argc, char *argv[], int *port_rcv_py, int *port_send_broadc
 }
 
 int create_udp_socket(){
-    int so = socket(AF_INET, SOCK_DGRAM, 0);
+    int so = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (so < 0) {
         return -1;
         perror("Erreur de création du socket de transmission à Python");
         exit(EXIT_FAILURE);
     }
     return so;
-}
-void test_print(){
-    printf("Test\n");
 }
 
 void configure_python_addr(struct sockaddr_in* addr, int port, const char* send_ip){
@@ -56,17 +54,11 @@ void authorized_broadcast(int socket){
     }
 }
 
-void configure_broadcast_addr(struct sockaddr_in* addr, int port, char *send_or_recv){
+void configure_broadcast_addr(struct sockaddr_in* addr, int port, int addr_broadcast){
     memset(addr, 0, sizeof(*addr));
     addr->sin_family = AF_INET;
     addr->sin_port = htons(port);
-    if (strcmp(send_or_recv,"SEND")== 0){
-        addr->sin_addr.s_addr = INADDR_BROADCAST;
-    }
-    else{
-        addr->sin_addr.s_addr = INADDR_ANY;
-
-    }
+    addr->sin_addr.s_addr = addr_broadcast;
 }
 
 void link_socket_to_listen_addr(int socket, struct sockaddr_in* addr){
@@ -81,9 +73,7 @@ void convert_address(char* ip, struct sockaddr_in* addr){
     if (inet_pton(AF_INET, ip, &addr->sin_addr) <= 0) {
         perror("Erreur lors de la conversion de l'adresse IP");
         exit(EXIT_FAILURE);
-    }
-
-    
+    }   
 }
 
 void listen_socket(int socket, char* message, int max_size, struct sockaddr_in* from_addr, socklen_t from_len, int debug){
@@ -94,8 +84,7 @@ void listen_socket(int socket, char* message, int max_size, struct sockaddr_in* 
         exit(EXIT_FAILURE);
     }
     if (debug){
-        printf("Message reçu de %s:%d\n", inet_ntoa(from_addr->sin_addr), ntohs(from_addr->sin_port));
-        // printf("Message: %s\n", message);
+        printf("Message reçu\n");
     }
 }
 
@@ -107,6 +96,7 @@ void send_message(int socket, char* message, struct sockaddr_in* addr, int debug
         exit(EXIT_FAILURE);
     }
     if(debug){
+        //printf("Message envoye\n");
         printf("Message envoyé %s:%d\n", inet_ntoa(addr->sin_addr), ntohs(addr->sin_port));
     }
 }
