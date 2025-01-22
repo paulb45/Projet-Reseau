@@ -21,7 +21,6 @@
 
 int main(int argc, char *argv[]){
     char message[MAX_BUF_SIZE];
-    char message2[MAX_BUF_SIZE];
     int port_receive_py=0;
     int port_send_broadcast=0;
     int port_send_py=0;
@@ -50,12 +49,12 @@ int main(int argc, char *argv[]){
     link_socket_to_listen_addr(socket_c2c, &bind_addr_c2c);
 // config bind address socket_c2py
     //authorized_broadcast(socket_c2py);
-    configure_broadcast_addr(&bind_addr_c2py, port_receive_broadcast);
+    configure_broadcast_addr(&bind_addr_c2py, port_receive_broadcast,"RECV");
     link_socket_to_listen_addr(socket_c2py, &bind_addr_c2py);
 // config sending address socket_c2c
     authorized_broadcast(socket_c2c);
-    configure_broadcast_addr(&broadcast_addr, port_send_broadcast);
-    convert_address(BROADCAST_ADDRESS, &broadcast_addr);
+    configure_broadcast_addr(&broadcast_addr, port_send_broadcast,"SEND");
+    // convert_address(BROADCAST_ADDRESS, &broadcast_addr);
 // config sending address socket_c2py
     configure_python_addr(&py_addr, port_send_py, LOCALHOST_ADDRESS);
 

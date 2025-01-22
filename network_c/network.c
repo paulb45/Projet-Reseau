@@ -56,11 +56,17 @@ void authorized_broadcast(int socket){
     }
 }
 
-void configure_broadcast_addr(struct sockaddr_in* addr, int port){
+void configure_broadcast_addr(struct sockaddr_in* addr, int port, char *send_or_recv){
     memset(addr, 0, sizeof(*addr));
     addr->sin_family = AF_INET;
     addr->sin_port = htons(port);
-    addr->sin_addr.s_addr = INADDR_ANY;
+    if (strcmp(send_or_recv,"SEND")== 0){
+        addr->sin_addr.s_addr = INADDR_BROADCAST;
+    }
+    else{
+        addr->sin_addr.s_addr = INADDR_ANY;
+
+    }
 }
 
 void link_socket_to_listen_addr(int socket, struct sockaddr_in* addr){
@@ -76,6 +82,8 @@ void convert_address(char* ip, struct sockaddr_in* addr){
         perror("Erreur lors de la conversion de l'adresse IP");
         exit(EXIT_FAILURE);
     }
+
+    
 }
 
 void listen_socket(int socket, char* message, int max_size, struct sockaddr_in* from_addr, socklen_t from_len, int debug){

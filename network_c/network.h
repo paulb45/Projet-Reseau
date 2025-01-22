@@ -9,7 +9,7 @@
 
 #define LOCALHOST_ADDRESS "127.0.0.1" // addresse de reception du message de python
 #define BROADCAST_ADDRESS "255.255.255.255"  // Adresse de broadcast
-#define MAX_BUF_SIZE 1024 // Taille du message
+#define MAX_BUF_SIZE 1024 // Taille max du message
 
 void setup_ports(int argc, char *argv[], int *port_rcv_py, int *port_send_broadcast, int *port_send_py, int *port_rcv_boadcast);
 
@@ -18,7 +18,8 @@ int create_udp_socket();
 void configure_python_addr(struct sockaddr_in* addr, int port, const char* ip);
 
 void authorized_broadcast(int socket);
-void configure_broadcast_addr(struct sockaddr_in* addr, int port);
+
+void configure_broadcast_addr(struct sockaddr_in* addr, int port, char *send_or_recv);
 
 void link_socket_to_listen_addr(int socket, struct sockaddr_in* addr);
 
