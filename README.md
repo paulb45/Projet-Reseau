@@ -108,9 +108,9 @@ Un message de disparition aura la structure suivante :
 
 #### Demande de propriété réseau
 
-| Type d'action | Coord x | Coord y |
-|---------------|---------|---------|
-|      `ANP`    |    x    |    y    |
+| Type d'action | id joueur | Coord x | Coord y |
+|---------------|-----------|---------|---------|
+|      `ANP`    |     id    |    x    |    y    |
 
 #### Céder une propriété réseau
 | Type d'action | id joueur | Coord x | Coord y | id Bob | Masse Bob | id nourriture | Energie |
