@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from logic.bob import Bob
 from logic.food import Food
 from logic.item import Item
+from network_property import Network_property
 default_port = 55005
 
 def send_grid(grid):
@@ -93,10 +94,10 @@ def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
     sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
     sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
-def send_ANP(pos,portnum=default_port):
-    #Envoie une demande de prop réseau
-    #|      `ANP`   |    x1   |    y1   
-    s = f"ANP{pos[0]:4}{pos[1]:4}\0"
+def send_ANP(pos,myid, portnum=default_port):
+    #Envoie une demande de prop réseau, on précise son id de joueur
+    #|      `ANP`   |  myid |  x1   |    y1   
+    s = f"ANP{myid:15}{pos[0]:4}{pos[1]:4}\0"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
@@ -133,7 +134,9 @@ def send_RNP(pos, portnum=default_port):
 if __name__ =='__main__':
     if sys.argv[1]: portnum = int(sys.argv[1])
     else: portnum = default_port
-    # bob  = Bob(bob_id=3, mass=10, local=False)
-    # food = Food(food_id=4, energy = 15, local=False)
+    bob  = Bob(bob_id=3, mass=10, local=False)
+    food = Food(food_id=4, energy = 15, local=False)
     # send_GNP((1,2), 1, bob, food)
-    send_RNP((1,2))
+    Network_property.add_appartenance(1,2)
+    print(Network_property.get_np_grid())
+    send_ANP((1,2), 1)

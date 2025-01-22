@@ -4,7 +4,7 @@ import sys ,os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from network.action_buffer  import ActionBuffer
 from network.network_property import Network_property
-
+from network.pytoc_sender import send_GNP, send_RNP
 INTsize = 4
 IDsize = 15
 TYPEsize = 1
@@ -163,13 +163,24 @@ def startlisten(IP="127.0.0.1",port=55005):
         elif data.startswith('ANP'): 
             print("received ANP")
             data=data[ACTsize:] #degaae l'entente action
+            id_of_asker = readidfromtext(data)
+            data = data[IDsize:]
             position = readpositionfromtext(data)
-            if Network_property.get_appartenance(position[0],position[1]):
-                pass
-                #TODO : envoyer la requête GNP
+            print("appartenance : " + str(Network_property.get_appartenance(position[0],position[1])))
+            if Network_property.get_appartenance(position[0],position[1]): #= si la case nous appartiens
+                #items = grid.get_items() #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
+                #Le truc en dessous c'est pour recup l'info de ce qu'il y a sur la case, 
+                # et c'est sensé marcher car il y a au + 1 seul bob et une seul food sur une case. 
+                mybob = 0
+                myfood = 0
+                for el in items :
+                    if isinstance(el,Bob):
+                        mybob = el
+                    elif isinstance(el, Food):
+                        myfood = el
+                send_GNP(position,id_of_asker,mybob, myfood) #on give la case
             else :
-                pass
-                #TODO : envoyer la requête RNP
+                send_RNP(position) # on refuse de la donner
 
         elif data.startswith('GNP'): 
             #GNP | id | x | y | idbob | M1 | idfood | E2
@@ -177,28 +188,28 @@ def startlisten(IP="127.0.0.1",port=55005):
             # print("received GNP")
             data=data[ACTsize:] #degaae l'entente action
             id=readidfromtext(data)
-            # print("id : ", id)
+            print("id : ", id)
 
             data=data[IDsize:]
             position = readpositionfromtext(data)
-            # print("Position : ", position)
+            print("Position : ", position)
 
             data=data[2*INTsize:]
             idbob = readidfromtext(data)
-            # print("id_bob : ",idbob)
+            print("id_bob : ",idbob)
 
 
             data=data[IDsize:]
             masse_bob = readintfromtext(data)
-            # print("masse_bob : ",masse_bob)
+            print("masse_bob : ",masse_bob)
 
             data=data[INTsize:]
             id_food = readidfromtext(data)
-            # print("id_food : ",id_food)
+            print("id_food : ",id_food)
             
             data = data[IDsize:]
             energy_food = readintfromtext(data)
-            # print("energy_food : ",energy_food)
+            print("energy_food : ",energy_food)
             Network_property.add_appartenance(position[0],position[1])
 
         elif data.startswith('RNP'): 
