@@ -21,7 +21,7 @@ def send_grid(grid):
                 x2,y2 = l
                 if (x1 != x2 or y1 != y2):
                     s = f"DEPLACE|{x1:02},{y1:02}|{x2:02},{y2:02}\0"
-                    send_info_to_C(portnum, MSG=s.encode('ascii'))
+                    send_info_to_C(55005, MSG=s.encode('ascii'))
 
 
 def send_DPL(pos, bob, portnum=default_port):
@@ -81,17 +81,18 @@ def send_DSP(thing:Item,pos,portnum):
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 
-def send_info_to_C (portnum=default_port, MSG=b'DEPLACE|x1,y1|x2,y2 \0') :
-    #print(f'sending on {portnum} port')
-    UDP_IP = "127.0.0.1"
-    UDP_PORT = portnum
-    MESSAGE = MSG
+def send_info_to_C (portnum:int,MSG:str,socketfd:socket.socket=None) :
+    if socketfd != None:
+        socketfd.sendto(MSG,("127.0.0.1",portnum))
+        #print("sent message")
+    else:
+        sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+        sock.sendto(MSG,("127.0.0.1",portnum))
+
+
     # print("UDP target IP: %s" % UDP_IP)
     # print("UDP target port: %s" % UDP_PORT)
-    # print("message: %s" % MESSAGE)
- 
-    sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
-    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+    # print("message: %s" % MESSAGE)       
 
 def send_ANP(pos,portnum=default_port):
     #Envoie une demande de prop réseau
@@ -131,9 +132,10 @@ def send_RNP(pos, portnum=default_port):
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 if __name__ =='__main__':
-    if sys.argv[1]: portnum = int(sys.argv[1])
-    else: portnum = default_port
-    # bob  = Bob(bob_id=3, mass=10, local=False)
-    # food = Food(food_id=4, energy = 15, local=False)
-    # send_GNP((1,2), 1, bob, food)
-    send_RNP((1,2))
+    
+    #send_info_to_C(55005,"localhost",b'i am not passing a socket',None)
+
+    sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
+    sock.bind(("127.0.0.1", 55006))
+    send_info_to_C(55005,b'i am passing a socket and it works',sock)
+    sock.close()
