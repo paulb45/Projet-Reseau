@@ -87,7 +87,7 @@ void listen_socket(int socket, char* message, int max_size, struct sockaddr_in* 
     }
     if (debug){
         printf("Message reçu de %s:%d\n", inet_ntoa(from_addr->sin_addr), ntohs(from_addr->sin_port));
-        //printf("Message: %s\n", message);
+        // printf("Message: %s\n", message);
     }
 }
 
@@ -104,7 +104,7 @@ void send_message(int socket, char* message, struct sockaddr_in* addr, int debug
 }
 
 void setup_udp_buffer(int socket){
-    int max_buf_size = 4*16 + 54*8 + 500; // Entete UDP + Max protocole + marge
+    int max_buf_size = 4*16 + 54*8 + 500 + 10000; // Entete UDP + Max protocole + marge
     setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int));
     if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &max_buf_size, sizeof(int)) == -1) {
         perror("Problème de configuration de la taille du buffer de réception");
