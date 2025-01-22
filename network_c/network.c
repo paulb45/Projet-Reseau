@@ -87,7 +87,7 @@ void listen_socket(int socket, char* message, int max_size, struct sockaddr_in* 
     }
     if (debug){
         printf("Message reçu de %s:%d\n", inet_ntoa(from_addr->sin_addr), ntohs(from_addr->sin_port));
-        printf("Message: %s\n", message);
+        //printf("Message: %s\n", message);
     }
 }
 

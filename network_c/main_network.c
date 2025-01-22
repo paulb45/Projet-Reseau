@@ -21,13 +21,14 @@
 
 int main(int argc, char *argv[]){
     char message[MAX_BUF_SIZE];
+    char message2[MAX_BUF_SIZE];
     int port_receive_py=0;
     int port_send_broadcast=0;
     int port_send_py=0;
     int port_receive_broadcast=0;
 
 //  ensemble de socket
-    fd_set socket_set;
+    fd_set writing, reading;
     int socket_resolver;
 
     setup_ports(argc, argv,  &port_receive_py, &port_send_broadcast, &port_send_py, &port_receive_broadcast);
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]){
     convert_address(LOCALHOST_ADDRESS, &bind_addr_c2c);
     link_socket_to_listen_addr(socket_c2c, &bind_addr_c2c);
 // config bind address socket_c2py
-    authorized_broadcast(socket_c2py);
+    //authorized_broadcast(socket_c2py);
     configure_broadcast_addr(&bind_addr_c2py, port_receive_broadcast);
     link_socket_to_listen_addr(socket_c2py, &bind_addr_c2py);
 // config sending address socket_c2c
@@ -64,30 +65,48 @@ int main(int argc, char *argv[]){
     printf("En écoute d'un message python en UDP sur le port %d...\n",  port_receive_py);
     
     //Initialisation du socket_set
-    FD_ZERO(&socket_set);
-    FD_SET(socket_c2c,&socket_set); //socket_c2c = 3
-    FD_SET(socket_c2py, &socket_set); //socket_c2py = 4
-
+    FD_ZERO(&writing);
+    FD_ZERO(&reading);
+    FD_SET(socket_c2c,&writing); //socket_c2c = 3
+    FD_SET(socket_c2c,&reading);
+    FD_SET(socket_c2py, &writing); //socket_c2py = 4
+    FD_SET(socket_c2py, &reading);
 
 
     //=================== Reception et envoi des messages ========================
     while (1) {
 
-        socket_resolver = select(5,&socket_set,NULL,NULL,NULL); // 5 car 0,1 et 2 sont réservés
+        socket_resolver = select(5,&writing,&reading,NULL,NULL); // 5 car 0,1 et 2 sont réservés
         if(socket_resolver > 0){
 
             //================ c2c ==============================================
-            if(FD_ISSET(socket_c2c,&socket_set)){
-                listen_socket(socket_c2c, message, MAX_BUF_SIZE, &from_addr_c2c, from_len_c2c, 0);
-                send_message(socket_c2c, message, &broadcast_addr, 0);
+            if(FD_ISSET(socket_c2c,&reading)){
+                listen_socket(socket_c2c, message, MAX_BUF_SIZE, &from_addr_c2c, from_len_c2c, 1);
+                //send_message(socket_c2c, message, &broadcast_addr, 1);
+                //printf("Je suis le socket qui attends python");
+            }
+
+            //================ c2c ==============================================
+            if(FD_ISSET(socket_c2c,&writing)){
+                //listen_socket(socket_c2c, message, MAX_BUF_SIZE, &from_addr_c2c, from_len_c2c, 1);
+                send_message(socket_c2c, message, &broadcast_addr, 1);
+                //printf("Je suis le socket qui attends python");
             }
 
             //================ c2py ==============================================
-            if(FD_ISSET(socket_c2py,&socket_set)){
-                listen_socket(socket_c2py, message, MAX_BUF_SIZE, &from_addr_c2py, from_len_c2py, 0);
-                send_message(socket_c2py, message, &py_addr, 0); 
+            if(FD_ISSET(socket_c2py,&reading)){
+                listen_socket(socket_c2py, message2, MAX_BUF_SIZE, &from_addr_c2py, from_len_c2py, 1);
+                //send_message(socket_c2py, message, &py_addr, 1); 
+                //printf("je suis le socket qui reçois le c");
             }
-        }   
+
+            //================ c2py ==============================================
+            if(FD_ISSET(socket_c2py,&writing)){
+                //listen_socket(socket_c2py, message, MAX_BUF_SIZE, &from_addr_c2py, from_len_c2py, 1);
+                send_message(socket_c2py, message2, &py_addr, 1); 
+                //printf("je suis le socket qui reçois le c");
+            }   
+        }
     }
 
     close(socket_c2py);
