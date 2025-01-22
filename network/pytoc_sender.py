@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from logic.bob import Bob
 from logic.food import Food
 from logic.item import Item
-from network_property import Network_property
+
 default_port = 55005
 
 def send_grid(grid):
@@ -100,7 +100,8 @@ def send_ANP(pos,myid, portnum=default_port):
     s = f"ANP{myid:15}{pos[0]:4}{pos[1]:4}\0"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
-def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
+def send_GNP(pos, idjoueur, portnum=default_port):
+    from logic.grid import Grid
     #Réponse a un ANP pour donner la propriété réseau.
 
     #On indique l'item qui est sur la case (food ou bob), par défaut None.
@@ -108,6 +109,19 @@ def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
     #Idjoueur est l'id du joueur à qui on cède la propriété
 
     #Valeurs pas défaut: 
+    print("ENVOIE DE GNP")
+    print("POSITION : ", pos)
+    items = Grid.get_items(pos) #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
+                #Le truc en dessous c'est pour recup l'info de ce qu'il y a sur la case, 
+                # et c'est sensé marcher car il y a au + 1 seul bob et une seul food sur une case. 
+    bob = None
+    food = None
+    for el in items :
+        if isinstance(el,Bob):
+            bob = el
+        elif isinstance(el, Food):
+            food = el
+
     bob_id = 0
     bob_masse = 0
     food_id = 0
@@ -136,7 +150,8 @@ if __name__ =='__main__':
     else: portnum = default_port
     bob  = Bob(bob_id=3, mass=10, local=False)
     food = Food(food_id=4, energy = 15, local=False)
-    # send_GNP((1,2), 1, bob, food)
-    Network_property.add_appartenance(1,2)
-    print(Network_property.get_np_grid())
-    send_ANP((1,2), 1)
+    from network_property import Network_property
+    # # send_GNP((1,2), 1, bob, food)
+    # Network_property.add_appartenance(1,2)
+    # print(Network_property.get_np_grid())
+    # send_ANP((1,2), 1)

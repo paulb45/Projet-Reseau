@@ -10,7 +10,7 @@ from logic.grid import Grid
 
 from network.listener import startlisten
 from network.action_buffer import ActionBuffer
-from network.pytoc_sender import send_DPL, send_PLC, send_DSP, send_ATK
+from network.pytoc_sender import send_DPL, send_PLC, send_DSP, send_ATK, send_ANP
 from network.network_property import Network_property
 
 class Game():
@@ -71,6 +71,8 @@ class Game():
             mouv = bob.move()
             new_pos = pos[0] + mouv[0], pos[1] + mouv[1]
             if self.grid.is_pos_in_map(new_pos):
+                if not Network_property.get_appartenance(new_pos[0], new_pos[1]): #si nouvelle position ne nous appartient pas
+                    send_ANP(new_pos, self.player_id)
                 self.grid.map[new_pos].append(bob)
                 self.grid.destroy_object(bob, pos)
                 if (food := self.grid.has_food(new_pos)):

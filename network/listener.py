@@ -168,17 +168,8 @@ def startlisten(IP="127.0.0.1",port=55005):
             position = readpositionfromtext(data)
             print("appartenance : " + str(Network_property.get_appartenance(position[0],position[1])))
             if Network_property.get_appartenance(position[0],position[1]): #= si la case nous appartiens
-                #items = grid.get_items() #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
-                #Le truc en dessous c'est pour recup l'info de ce qu'il y a sur la case, 
-                # et c'est sensé marcher car il y a au + 1 seul bob et une seul food sur une case. 
-                mybob = 0
-                myfood = 0
-                for el in items :
-                    if isinstance(el,Bob):
-                        mybob = el
-                    elif isinstance(el, Food):
-                        myfood = el
-                send_GNP(position,id_of_asker,mybob, myfood) #on give la case
+                send_GNP(position,id_of_asker) #on give la case
+                Network_property.remove_appartenance(position[0], position[1])
             else :
                 send_RNP(position) # on refuse de la donner
 
