@@ -106,6 +106,12 @@ class Game():
                 if bob.is_local():
                     self.bob_play_tick(bob, pos)
                     send_DPL(pos, bob, self.sending_port)
+                else:
+                    # si le bob n'a pas été vu depuis plus de 10 jours local, on le vire
+                    if bob.get_nb_day_not_view() >= 10:
+                        self.grid.destroy_object(bob, pos)
+                    else:
+                        bob.add_nb_day_not_view(1)
 
 
     def network_day(self):
@@ -144,6 +150,7 @@ class Game():
                     bob.set_last_move((pos[1][0] - local_pos[0], pos[1][1] - local_pos[1]))
                     self.grid.map[pos[1]].append(bob)
                     self.grid.destroy_object(bob, local_pos)
+                    bob.reset_nb_day_not_view()
 
                 # consommation du bob
                 bob.add_E(-0.5 * bob.get_mass() * bob.get_speed()**2)
@@ -158,6 +165,7 @@ class Game():
 
             if bob is not None:
                 bob.add_E(info[1])
+                bob.reset_nb_day_not_view()
 
                 food = self.map.get_item_by_id(item_id, info[2])
                 if food is not None: 
