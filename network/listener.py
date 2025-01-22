@@ -48,7 +48,7 @@ def readpositionfromtext(data):
 def readtype(data):
     return data[0:TYPEsize]
     
-def startlisten(IP="127.0.0.1",port=55005):
+def startlisten(IP="127.0.0.1",port=55005, send_port = 55005):
     #opens a socket to listen to the C process
     UDP_IP =  IP
     UDP_PORT = port
@@ -168,15 +168,15 @@ def startlisten(IP="127.0.0.1",port=55005):
             position = readpositionfromtext(data)
             print("appartenance : " + str(Network_property.get_appartenance(position[0],position[1])))
             if Network_property.get_appartenance(position[0],position[1]): #= si la case nous appartiens
-                send_GNP(position,id_of_asker) #on give la case
+                send_GNP(position,id_of_asker, portnum=send_port) #on give la case
                 Network_property.remove_appartenance(position[0], position[1])
             else :
-                send_RNP(position) # on refuse de la donner
+                send_RNP(position, portnum=send_port) # on refuse de la donner
 
         elif data.startswith('GNP'): 
             #GNP | id | x | y | idbob | M1 | idfood | E2
 
-            # print("received GNP")
+            print("received GNP")
             data=data[ACTsize:] #degaae l'entente action
             id=readidfromtext(data)
             print("id : ", id)

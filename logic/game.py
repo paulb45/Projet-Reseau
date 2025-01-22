@@ -23,7 +23,7 @@ class Game():
 
         if not Config.singleplayer: # TODO si on est en solo / multi ?
             # Initialisation de l'écoute réseau
-            self.network_thread = Thread(target=startlisten, args=["127.0.0.1", listen_port])
+            self.network_thread = Thread(target=startlisten, args=["127.0.0.1", listen_port, sending_port])
             self.network_thread.start()
 
         self.init_bobs()
@@ -72,7 +72,7 @@ class Game():
             new_pos = pos[0] + mouv[0], pos[1] + mouv[1]
             if self.grid.is_pos_in_map(new_pos):
                 if not Network_property.get_appartenance(new_pos[0], new_pos[1]): #si nouvelle position ne nous appartient pas
-                    send_ANP(new_pos, self.player_id)
+                    send_ANP(new_pos, self.player_id,portnum=self.sending_port)
                 self.grid.map[new_pos].append(bob)
                 self.grid.destroy_object(bob, pos)
                 if (food := self.grid.has_food(new_pos)):
