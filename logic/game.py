@@ -130,6 +130,7 @@ class Game():
             # vérifier si le bob n'est pas local
             if self.player_id != int(item_id // 10**10):
                 info = self.grid.get_item_by_id(item_id, pos)
+                bob = None
 
                 # le Bob n'est pas connu en local
                 if info is None: 
@@ -143,6 +144,24 @@ class Game():
                     bob.set_last_move((pos[1][0] - local_pos[0], pos[1][1] - local_pos[1]))
                     self.grid.map[pos[1]].append(bob)
                     self.grid.destroy_object(bob, local_pos)
+
+                # consommation du bob
+                bob.add_E(-0.5 * bob.get_mass() * bob.get_speed()**2)
+
+                # vérification de l'énergie du bob (est-il mort ?)
+                if bob.is_dead():
+                    self.grid.destroy_object(bob, pos[1])
+
+        # Manger
+        for item_id, info in ActionBuffer.get_buffer_eat().items():
+            bob = self.map.get_item_by_id(item_id, info[0])
+
+            if bob is not None:
+                bob.add_E(info[1])
+
+                food = self.map.get_item_by_id(item_id, info[2])
+                if food is not None: 
+                    food.set_energy(food.get_energy - info[0])
 
         # Attaque
         for item_id, info in ActionBuffer.get_buffer_attack().items():
