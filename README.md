@@ -148,3 +148,32 @@ Cas 2 - déconnexion non propre :
 
 
 A noter : Dès qu'une personne demande la propriété réseau d'une personne deconnecté, il fait deux demande en broadcast et si personne ne répond, il s'approprit la propriété réseau. 
+
+
+## Test Réseau
+### Test du fichier c
+#### Test de python vers du broadcast
+On a besoin de 3 consoles (A, B, C)
+Console A :
+`gcc -o main_network main_network.c network.c; ./main_network 10000 10001 10002 10003`
+
+Console B :
+pour tester la réception d'un envoi en broadcast 
+`netcat -ul 10001`
+
+Console C :
+pour simuler l'envoi d'un message python
+`echo -n "PLC12345678901234500050005B010000010001" > /dev/udp/localhost/10000`
+
+#### Test du broadcast vers du python
+On a besoin de 3 consoles (A, B, C)
+Console A :
+`gcc -o main_network main_network.c network.c; ./main_network 10000 10001 10002 10003`
+
+Console B :
+pour tester la réception d'un envoi en broadcast 
+`netcat -ul 10001`
+
+Console C :
+pour simuler l'envoi d'un message python
+`echo -n "PLC12345678901234500050005B010000010001" > /dev/udp/localhost/10000`
