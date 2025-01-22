@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
     int port_receive_broadcast=0;
 
 //  ensemble de socket
-    fd_set writing, reading;
+    fd_set socket_set;
     int socket_resolver;
 
     setup_ports(argc, argv,  &port_receive_py, &port_send_broadcast, &port_send_py, &port_receive_broadcast);
@@ -88,13 +88,6 @@ int main(int argc, char *argv[]){
                 listen_socket(socket_c2py, message, MAX_BUF_SIZE, &from_addr_c2py, from_len_c2py, 1);
                 send_message(socket_c2py, message, &py_addr, 1); 
             }
-
-            //================ c2py ==============================================
-            if(FD_ISSET(socket_c2py,&writing)){
-                //listen_socket(socket_c2py, message, MAX_BUF_SIZE, &from_addr_c2py, from_len_c2py, 1);
-                send_message(socket_c2py, message2, &py_addr, 1); 
-                //printf("je suis le socket qui reçois le c");
-            }   
         }
     }
 
