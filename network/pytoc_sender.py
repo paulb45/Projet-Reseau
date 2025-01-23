@@ -100,8 +100,7 @@ def send_ANP(pos,myid, portnum=default_port):
     s = f"ANP{myid:15}{pos[0]:4}{pos[1]:4}\0"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
-def send_GNP(pos, idjoueur, portnum=default_port):
-    from logic.grid import Grid
+def send_GNP(pos, grid, idjoueur, portnum=default_port):
     #Réponse a un ANP pour donner la propriété réseau.
 
     #On indique l'item qui est sur la case (food ou bob), par défaut None.
@@ -111,7 +110,7 @@ def send_GNP(pos, idjoueur, portnum=default_port):
     #Valeurs pas défaut: 
     print("ENVOIE DE GNP")
     print("POSITION : ", pos)
-    items = Grid.get_items(pos) #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
+    items = grid.get_items(pos) #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
                 #Le truc en dessous c'est pour recup l'info de ce qu'il y a sur la case, 
                 # et c'est sensé marcher car il y a au + 1 seul bob et une seul food sur une case. 
     bob = None

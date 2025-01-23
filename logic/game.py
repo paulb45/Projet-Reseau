@@ -10,7 +10,7 @@ from logic.grid import Grid
 
 from network.listener import startlisten
 from network.action_buffer import ActionBuffer
-from network.pytoc_sender import send_DPL, send_PLC, send_DSP, send_ATK, send_ANP
+from network.pytoc_sender import send_DPL, send_PLC, send_DSP, send_ATK, send_ANP, send_GNP, send_RNP
 from network.network_property import Network_property
 
 class Game():
@@ -23,7 +23,7 @@ class Game():
 
         if not Config.singleplayer: # TODO si on est en solo / multi ?
             # Initialisation de l'écoute réseau
-            self.network_thread = Thread(target=startlisten, args=["127.0.0.1", listen_port, sending_port])
+            self.network_thread = Thread(target=startlisten, args=["127.0.0.1", listen_port])
             self.network_thread.start()
 
         self.init_bobs()
@@ -114,9 +114,21 @@ class Game():
                     send_DPL(pos, bob, self.sending_port)
 
 
+    def check_for_ANP_request(self):
+        if (ActionBuffer.buffer_ANP) : #pour checker si le dict n'est pas vide
+            for position, id_of_asker in list(ActionBuffer.buffer_ANP.items()):
+                if Network_property.get_appartenance(position[0],position[1]): #= si la case nous appartiens
+                    send_GNP(position, self.grid, id_of_asker, portnum=self.sending_port) #on give la case
+                    Network_property.remove_appartenance(position[0], position[1])
+                else :
+                    send_RNP(position, portnum=send_port) # on refuse de la donner
+                del ActionBuffer.buffer_ANP[position] #on delete la requête du buffer après
+
     def network_day(self):
         """Toutes les actions sur le jeu pour les items du réseau
         """
+        self.check_for_ANP_request()
+
         # Placement des items
         for item_id, infos in ActionBuffer.get_buffer_placement().items():
             # vérifier si l'item n'est pas local

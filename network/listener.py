@@ -167,11 +167,9 @@ def startlisten(IP="127.0.0.1",port=55005, send_port = 55005):
             data = data[IDsize:]
             position = readpositionfromtext(data)
             print("appartenance : " + str(Network_property.get_appartenance(position[0],position[1])))
-            if Network_property.get_appartenance(position[0],position[1]): #= si la case nous appartiens
-                send_GNP(position,id_of_asker, portnum=send_port) #on give la case
-                Network_property.remove_appartenance(position[0], position[1])
-            else :
-                send_RNP(position, portnum=send_port) # on refuse de la donner
+            
+            #On met la requête dans le buffer pour éviter un problème de scope de grid plus tard : 
+            ActionBuffer.add_ANP_request(position, id_of_asker)
 
         elif data.startswith('GNP'): 
             #GNP | id | x | y | idbob | M1 | idfood | E2
