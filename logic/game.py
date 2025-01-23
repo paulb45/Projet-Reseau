@@ -121,7 +121,7 @@ class Game():
                     send_GNP(position, self.grid, id_of_asker, portnum=self.sending_port) #on give la case
                     Network_property.remove_appartenance(position[0], position[1])
                 else :
-                    send_RNP(position, portnum=send_port) # on refuse de la donner
+                    send_RNP(position, portnum=self.sending_port) # on refuse de la donner
                 del ActionBuffer.buffer_ANP[position] #on delete la requête du buffer après
 
     def network_day(self):
