@@ -110,7 +110,7 @@ class Interface(pygame.Surface):
     
     def load_network_property_tiles(self):
         network_property_grid = network.network_property.Network_property.get_np_grid()
-        for key, _ in network_property_grid.items():
+        for key, _ in list(network_property_grid.items()):
             self.place_tile(self.network_property_tile, key)
     
     def move_bob(self, end_coord, last_move, bob_sprite, current_tick):

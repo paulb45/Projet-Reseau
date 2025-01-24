@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from logic.bob import Bob
 from logic.food import Food
 from logic.item import Item
+
 default_port = 55005
 
 def send_grid(grid):
@@ -92,15 +93,18 @@ def send_info_to_C (portnum:int,MSG:str,socketfd:socket.socket=None) :
 
     # print("UDP target IP: %s" % UDP_IP)
     # print("UDP target port: %s" % UDP_PORT)
-    # print("message: %s" % MESSAGE)       
+    # print("message: %s" % MESSAGE)
+ 
+    sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
+    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
-def send_ANP(pos,portnum=default_port):
-    #Envoie une demande de prop réseau
-    #|      `ANP`   |    x1   |    y1   
-    s = f"ANP{pos[0]:4}{pos[1]:4}\0"
+def send_ANP(pos,myid, portnum=default_port):
+    #Envoie une demande de prop réseau, on précise son id de joueur
+    #|      `ANP`   |  myid |  x1   |    y1   
+    s = f"ANP{myid:15}{pos[0]:4}{pos[1]:4}\0"
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
-def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
+def send_GNP(pos, grid, idjoueur, portnum=default_port):
     #Réponse a un ANP pour donner la propriété réseau.
 
     #On indique l'item qui est sur la case (food ou bob), par défaut None.
@@ -108,6 +112,19 @@ def send_GNP(pos, idjoueur, bob = None, food = None, portnum=default_port):
     #Idjoueur est l'id du joueur à qui on cède la propriété
 
     #Valeurs pas défaut: 
+    print("ENVOIE DE GNP")
+    print("POSITION : ", pos)
+    items = grid.get_items(pos) #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
+                #Le truc en dessous c'est pour recup l'info de ce qu'il y a sur la case, 
+                # et c'est sensé marcher car il y a au + 1 seul bob et une seul food sur une case. 
+    bob = None
+    food = None
+    for el in items :
+        if isinstance(el,Bob):
+            bob = el
+        elif isinstance(el, Food):
+            food = el
+
     bob_id = 0
     bob_masse = 0
     food_id = 0
@@ -132,10 +149,12 @@ def send_RNP(pos, portnum=default_port):
     send_info_to_C(portnum, MSG=s.encode('ascii'))
 
 if __name__ =='__main__':
-    
-    #send_info_to_C(55005,"localhost",b'i am not passing a socket',None)
-
-    sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
-    sock.bind(("127.0.0.1", 55006))
-    send_info_to_C(55005,b'i am passing a socket and it works',sock)
-    sock.close()
+    if sys.argv[1]: portnum = int(sys.argv[1])
+    else: portnum = default_port
+    bob  = Bob(bob_id=3, mass=10, local=False)
+    food = Food(food_id=4, energy = 15, local=False)
+    from network_property import Network_property
+    # # send_GNP((1,2), 1, bob, food)
+    # Network_property.add_appartenance(1,2)
+    # print(Network_property.get_np_grid())
+    # send_ANP((1,2), 1)

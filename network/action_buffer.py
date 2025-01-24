@@ -4,6 +4,7 @@ class ActionBuffer:
     buffer_eat = {}
     buffer_attack = {}
     buffer_dead = {}
+    buffer_ANP = {}
 
     @staticmethod
     def get_buffer_placement() -> dict:
@@ -117,3 +118,11 @@ class ActionBuffer:
             pos (tuple): coordonnées de la disparition
         """
         ActionBuffer.buffer_dead[item_id] = pos
+
+    def add_ANP_request(pos : tuple, id_of_asker : int):
+        """Ajouter une requête ANP au buffer pour une case
+
+        Args:
+            pos (tuple): coordonnées de la case 
+        """
+        ActionBuffer.buffer_ANP[pos] = id_of_asker

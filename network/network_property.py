@@ -60,6 +60,7 @@ class Network_property:
         """
         del Network_property.np_grid[(x,y)]
     
+    @staticmethod
     def get_appartenance(x,y):
         """Demande le status d'appartenance de la case. 
         Returns:

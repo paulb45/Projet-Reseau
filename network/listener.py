@@ -4,7 +4,7 @@ import sys ,os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from network.action_buffer  import ActionBuffer
 from network.network_property import Network_property
-
+from network.pytoc_sender import send_GNP, send_RNP
 INTsize = 4
 IDsize = 15
 TYPEsize = 1
@@ -48,7 +48,7 @@ def readpositionfromtext(data):
 def readtype(data):
     return data[0:TYPEsize]
     
-def startlisten(IP="127.0.0.1",port=55005):
+def startlisten(IP="127.0.0.1",port=55005, send_port = 55005):
     #opens a socket to listen to the C process
     UDP_IP =  IP
     UDP_PORT = port
@@ -163,42 +163,42 @@ def startlisten(IP="127.0.0.1",port=55005):
         elif data.startswith('ANP'): 
             print("received ANP")
             data=data[ACTsize:] #degaae l'entente action
+            id_of_asker = readidfromtext(data)
+            data = data[IDsize:]
             position = readpositionfromtext(data)
-            if Network_property.get_appartenance(position[0],position[1]):
-                pass
-                #TODO : envoyer la requête GNP
-            else :
-                pass
-                #TODO : envoyer la requête RNP
+            print("appartenance : " + str(Network_property.get_appartenance(position[0],position[1])))
+            
+            #On met la requête dans le buffer pour éviter un problème de scope de grid plus tard : 
+            ActionBuffer.add_ANP_request(position, id_of_asker)
 
         elif data.startswith('GNP'): 
             #GNP | id | x | y | idbob | M1 | idfood | E2
 
-            # print("received GNP")
+            print("received GNP")
             data=data[ACTsize:] #degaae l'entente action
             id=readidfromtext(data)
-            # print("id : ", id)
+            print("id : ", id)
 
             data=data[IDsize:]
             position = readpositionfromtext(data)
-            # print("Position : ", position)
+            print("Position : ", position)
 
             data=data[2*INTsize:]
             idbob = readidfromtext(data)
-            # print("id_bob : ",idbob)
+            print("id_bob : ",idbob)
 
 
             data=data[IDsize:]
             masse_bob = readintfromtext(data)
-            # print("masse_bob : ",masse_bob)
+            print("masse_bob : ",masse_bob)
 
             data=data[INTsize:]
             id_food = readidfromtext(data)
-            # print("id_food : ",id_food)
+            print("id_food : ",id_food)
             
             data = data[IDsize:]
             energy_food = readintfromtext(data)
-            # print("energy_food : ",energy_food)
+            print("energy_food : ",energy_food)
             Network_property.add_appartenance(position[0],position[1])
 
         elif data.startswith('RNP'): 
