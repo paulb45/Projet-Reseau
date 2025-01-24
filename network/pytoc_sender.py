@@ -95,8 +95,8 @@ def send_info_to_C (portnum:int,MSG:str,socketfd:socket.socket=None) :
     # print("UDP target port: %s" % UDP_PORT)
     # print("message: %s" % MESSAGE)
  
-    sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
-    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+    # sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
+    # sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
 def send_ANP(pos,myid, portnum=default_port):
     #Envoie une demande de prop réseau, on précise son id de joueur
