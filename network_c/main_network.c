@@ -43,7 +43,7 @@ int main(int argc, char *argv[]){
 
     setup_udp_buffer(socket_py);
 
-    fd_set readfds, writefds;
+    fd_set readfds;
     int socket_resolver;
 
     while(1){
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]){
                 printf("En attente de message de python\n");
                 listen_socket(socket_py, message, MAX_BUF_SIZE, &rcv_addr_py, sizeof(rcv_addr_py), 0);
                 printf("Message reçu de python\n");
-                send_message(socket_c, message, &send_addr_c, 1);
+                send_message(socket_c, message, &send_addr_c, 0);
             }
         }   
     }

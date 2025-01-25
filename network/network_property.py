@@ -20,6 +20,7 @@ class Network_property:
 
     #network_property_grid : contient l'information d'appartenance des cases de la grilles. 
     np_grid = defaultdict(lambda: int())
+    wait_anp_grid = {lambda: list()}
 
     @staticmethod
     def init_np_grid(grid):
@@ -66,22 +67,7 @@ class Network_property:
         Returns:
             boolean
         """
-        return not Network_property.np_grid[(x,y)] == 0
-
-    @staticmethod
-    def ask_appartenance(x,y):
-        """Envoie une demande d'appartenance sur la case de coordonnée x,y
-
-        Returns:
-            un boolean en fonction de la réponse.
-        """
-        from network.pytoc_sender import send_info_to_C
-        #Il faudrait une méthode dédié dans pytoc sender pour la demande d'appartennance, qui renverrai un boolean en fonction de la réponse de l'autre ordi
-        if (send_info_to_C(MSG=f'ANP|{x}, {y}\0'.encode())):
-            add_case(x,y)
-            return True
-        else : 
-            return False #dans ce cas l'appelant fait quelque chose d'autre
+        return not Network_property.np_grid[(x,y)]
 
 if __name__ == '__main__':
     #test

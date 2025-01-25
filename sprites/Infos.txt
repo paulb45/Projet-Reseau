@@ -1,3 +1,0 @@
-Tileset:
-	- https://gvituri.itch.io/isometric-trpg
-	- size : 16x16

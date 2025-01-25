@@ -79,9 +79,9 @@ Un message pour manger aura la structure suivante :
 
 Un message d'attaque aura la structure suivante :
 
-| Type d'action | acteur | Coord x | Coord y | Cible |
-|---------------|--------|---------|---------|-------|
-|      `ATK`    |   id   |    x1   |    y1   |  id   |
+| Type d'action | acteur | Coord x | Coord y | Energie gagnée |  Cible |
+|---------------|--------|---------|---------|----------------|-------|
+|      `ATK`    |   id   |    x1   |    y1   |       E        |  id   |
 
 ---
 
@@ -102,9 +102,9 @@ Un message de disparition aura la structure suivante :
 
 #### Utilisation d'un id
 
-| Type d'action |
-|---------------|
-|      `UID`    |
+| Type d'action | id joueur |
+|---------------|-----------|
+|      `UID`    |     id    |
 
 #### Demande de propriété réseau
 
@@ -118,9 +118,9 @@ Un message de disparition aura la structure suivante :
 |      `GNP`    |     id    |    x    |    y    |   id   |     M     |       id      |    E
 
 #### Réfuser de céder une propriété réseau
-| Type d'action | Coord x | Coord y | 
-|---------------|---------|---------|
-|      `RNP`    |    x    |    y    |
+| Type d'action | id joueur | Coord x | Coord y | 
+|---------------|-----------|---------|---------|
+|      `RNP`    |     id    |    x    |    y    |
 
 #### Annonce de déconnexion
 | Type d'action | id joueur |

@@ -10,7 +10,7 @@ if sys.argv != None:
     sending_port = int(sys.argv[2])
 else:
     listen_port = 55005
-    sending_port = 55005
+    sending_port = 55006
 
    
 

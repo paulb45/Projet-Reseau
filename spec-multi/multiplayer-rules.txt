@@ -1,9 +1,0 @@
-REGLE MULTIJOUEUR EVOLUTIONARY GAME OF LIFE :
-
-But du jeu : avoir la plus grosse colonie de slime;
-
--Jeu à la Agario. 
--Pas de fin en soit, un nouveau joueur peut rejoindre quand il le souhaite. 
--Quand on rejoint une partie : on peut dépenser un certain de points (même nombre de point pour tout les joueurs) pour personnaliser sa tribu de départ : nombre de bob, masse, vitesse, etc...
--Quand un joueur n'a plus de bob qui lui appartienne encore en vie, il a perdu, et est kick de la game.
-
