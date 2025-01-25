@@ -208,7 +208,8 @@ def startlisten(IP="127.0.0.1",port=55005, send_port = 55005):
             data=data[ACTsize:] #degaae l'entente action
             position=readpositionfromtext(data)
             print("position :" + str(position))
-            #TODO cancel action. 
+            Network_property.remove_actions_from_list(position) #remove les actions liés à cette case.
+             
 
     sock.close() # ends the connection
     #print("ended successfuly")

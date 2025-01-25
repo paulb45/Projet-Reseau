@@ -20,7 +20,8 @@ class Network_property:
 
     #network_property_grid : contient l'information d'appartenance des cases de la grilles. 
     np_grid = defaultdict(lambda: int())
-    wait_anp_grid = {lambda: list()}
+    wait_anp_grid = {lambda: list()} #La liste des actions qu'on prévoit de faire, et pour lesquels on a envoyer une requête ANP. 
+                                     #Un élément du dict se présente comme ça : (x,y) -> [action1, action2...] avec x,y la position de la case dont on veut la prop réseau. 
 
     @staticmethod
     def init_np_grid(grid):
@@ -68,6 +69,14 @@ class Network_property:
             boolean
         """
         return not Network_property.np_grid[(x,y)] == 0
+
+    @staticmethod
+    def add_actions_to_list(pos,action):
+        wait_anp_grid[pos].append(action)
+
+    @staticmethod
+    def remove_actions_from_list(pos):
+        del wait_anp_grid[pos] #delete toutes les actions de la position pos
 
 if __name__ == '__main__':
     #test
