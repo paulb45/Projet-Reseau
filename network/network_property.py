@@ -67,7 +67,7 @@ class Network_property:
         Returns:
             boolean
         """
-        return not Network_property.np_grid[(x,y)]
+        return not Network_property.np_grid[(x,y)] == 0
 
 if __name__ == '__main__':
     #test
