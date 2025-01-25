@@ -86,11 +86,13 @@ class Game():
                 else:
                     bobs=self.grid.bobs_in_case(new_pos)
                     for target in bobs :
-                        if bob.attack(target):
-                            self.grid.destroy_object(target,new_pos)
-                            send_ATK(bob, new_pos, target, self.sending_port)
-                            send_DSP(target, new_pos, self.sending_port)
-                            break
+                        # si on est en réseau, on vérifie que ce n'est pas un de nos bobs
+                        if Config.singleplayer or (not target.is_local()):
+                            if bob.attack(target):
+                                self.grid.destroy_object(target,new_pos)
+                                send_ATK(bob, new_pos, target, self.sending_port)
+                                send_DSP(target, new_pos, self.sending_port)
+                                break
             else: 
                 self.grid.destroy_object(bob, pos)
                 send_DSP(bob, pos, self.sending_port)
@@ -109,8 +111,8 @@ class Game():
                     self.bob_play_tick(bob, pos)
                     send_DPL(pos, bob, self.sending_port)
                 else:
-                    # si le bob n'a pas été vu depuis plus de 10 jours local, on le vire
-                    if bob.get_nb_day_not_view() >= 10:
+                    # si le bob n'a pas été vu depuis plus de 5 jours local, on le vire
+                    if bob.get_nb_day_not_view() >= 5:
                         self.grid.destroy_object(bob, pos)
                     else:
                         bob.add_nb_day_not_view(1)
@@ -208,10 +210,12 @@ class Game():
 
 
     def day_play(self):
-        self.reset_bobs_last_move()
-        self.bobs_play_day()
         self.grid.destroy_all_foods()
-        self.spawn_food()
+        self.reset_bobs_last_move()
 
         if not Config.singleplayer:
             self.network_day()
+
+        self.spawn_food()
+        self.bobs_play_day()
+        
