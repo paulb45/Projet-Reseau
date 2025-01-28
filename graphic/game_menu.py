@@ -111,8 +111,8 @@ class GameMenu(pygame.Surface):
         self.caracteristic_selector_client = pygame_menu.Menu('caracteristic_selector', pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height(),theme=self.mytheme2)
 
         #Menu pour choisir si on host ou pas :
-        self.host_or_client_menu.add.button("Hosting Game", self.create_caracteristic_selector(self.caracteristic_selector_host, True))
-        self.host_or_client_menu.add.button("Joining Game", self.create_caracteristic_selector(self.caracteristic_selector_client, False))
+        self.host_or_client_menu.add.button("Create Game", self.create_caracteristic_selector(self.caracteristic_selector_host, True))
+        self.host_or_client_menu.add.button("Join Game", self.create_caracteristic_selector(self.caracteristic_selector_client, False))
         self.host_or_client_menu.add.button('Retour au menu principal', pygame_menu.events.BACK)
         
         
