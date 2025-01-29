@@ -112,8 +112,8 @@ def send_GNP(pos, grid, idjoueur, portnum=default_port):
     #Idjoueur est l'id du joueur à qui on cède la propriété
 
     #Valeurs pas défaut: 
-    print("ENVOIE DE GNP")
-    print("POSITION : ", pos)
+    #print("ENVOIE DE GNP")
+    #print("POSITION : ", pos)
     items = grid.get_items(pos) #Comment récupérer les items de l'objet grid, sachant que grid n'est pas global ? 
                 #Le truc en dessous c'est pour recup l'info de ce qu'il y a sur la case, 
                 # et c'est sensé marcher car il y a au + 1 seul bob et une seul food sur une case. 

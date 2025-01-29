@@ -1,3 +1,4 @@
+#include <bits/types/struct_timeval.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <stdio.h>
@@ -45,24 +46,21 @@ int main(int argc, char *argv[]){
 
     fd_set readfds;
     int socket_resolver;
-
+    struct timeval t;
+    t.tv_sec = 1;
     while(1){
         FD_ZERO(&readfds);
         FD_SET(socket_c, &readfds);
         FD_SET(socket_py, &readfds);
         socket_resolver = select(FD_SETSIZE, &readfds, NULL,NULL,NULL);
-
+        memset(message, 0, MAX_BUF_SIZE);
         if(socket_resolver > 0){
             if(FD_ISSET(socket_c, &readfds)){
-                printf("En attente de message de C\n");
                 listen_socket(socket_c, message, MAX_BUF_SIZE, &rcv_addr_c, sizeof(rcv_addr_c), 0);
-                printf("Message reçu de C\n");
                 send_message(socket_py, message, &send_addr_py, 0);
             }
             if(FD_ISSET(socket_py, &readfds)){
-                printf("En attente de message de python\n");
                 listen_socket(socket_py, message, MAX_BUF_SIZE, &rcv_addr_py, sizeof(rcv_addr_py), 0);
-                printf("Message reçu de python\n");
                 send_message(socket_c, message, &send_addr_c, 0);
             }
         }   
